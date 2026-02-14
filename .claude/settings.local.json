@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(./gradlew tasks:*)",
+      "Bash(./gradlew:*)",
+      "Bash(gh auth status:*)"
+    ]
+  }
+}
