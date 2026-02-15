@@ -4,7 +4,9 @@
       "Bash(./gradlew tasks:*)",
       "Bash(./gradlew:*)",
       "Bash(gh auth status:*)",
-      "Bash(gradlew.bat compileJava:*)"
+      "Bash(gradlew.bat compileJava:*)",
+      "Bash(git checkout:*)",
+      "Bash(git add:*)"
     ]
   }
 }
