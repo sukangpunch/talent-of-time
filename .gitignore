@@ -38,3 +38,6 @@ out/
 
 ### application.yml ###
 application.yml
+
+### Claude Code local settings ###
+.claude/settings.local.json
