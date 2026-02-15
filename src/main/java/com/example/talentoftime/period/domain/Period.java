@@ -30,4 +30,12 @@ public class Period {
 
     @Column(name = "end_time", nullable = false)
     private LocalTime endTime;
+
+    public static Period create(int periodNumber, LocalTime startTime, LocalTime endTime) {
+        Period period = new Period();
+        period.periodNumber = periodNumber;
+        period.startTime = startTime;
+        period.endTime = endTime;
+        return period;
+    }
 }

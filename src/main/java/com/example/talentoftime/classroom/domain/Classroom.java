@@ -23,4 +23,10 @@ public class Classroom {
 
     @Column(name = "room_number", nullable = false)
     private int roomNumber;
+
+    public static Classroom create(int roomNumber) {
+        Classroom classroom = new Classroom();
+        classroom.roomNumber = roomNumber;
+        return classroom;
+    }
 }

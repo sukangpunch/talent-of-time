@@ -49,4 +49,23 @@ public class Schedule {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "crew_id", nullable = false)
     private Crew crew;
+
+    public static Schedule create(
+            LocalDate date,
+            Period period,
+            Classroom classroom,
+            TaskType taskType,
+            Crew crew) {
+        Schedule schedule = new Schedule();
+        schedule.date = date;
+        schedule.period = period;
+        schedule.classroom = classroom;
+        schedule.taskType = taskType;
+        schedule.crew = crew;
+        return schedule;
+    }
+
+    public void assignCrew(Crew crew) {
+        this.crew = crew;
+    }
 }
