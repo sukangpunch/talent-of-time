@@ -41,3 +41,7 @@ application.yml
 
 ### Claude Code local settings ###
 .claude/settings.local.json
+.claude/activity.log
+
+### Serena MCP ###
+.serena/cache/
