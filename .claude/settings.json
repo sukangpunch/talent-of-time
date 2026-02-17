@@ -1,12 +1,47 @@
 {
   "hooks": {
-    "PostToolUse": [
+    "PreToolUse": [
       {
-        "matcher": "Edit|Write|NotebookEdit",
+        "matcher": "",
         "hooks": [
           {
             "type": "command",
-            "command": "python3 .claude/hooks/post-edit-check.py"
+            "command": "python .claude/hooks/logger.py PRE"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python .claude/hooks/logger.py POST"
+          }
+        ]
+      },
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python .claude/hooks/post-edit-check.py"
+          },
+          {
+            "type": "command",
+            "command": "python .claude/hooks/logger.py HOOK post-edit-check"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python .claude/hooks/logger.py STOP"
           }
         ]
       }
