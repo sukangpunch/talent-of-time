@@ -29,4 +29,19 @@ public class Crew {
     @Enumerated(EnumType.STRING)
     @Column(name = "crew_type", nullable = false)
     private CrewType crewType;
+
+    public static Crew create(String name, CrewType crewType) {
+        Crew crew = new Crew();
+        crew.name = name;
+        crew.crewType = crewType;
+        return crew;
+    }
+
+    public void updateName(String name) {
+        this.name = name;
+    }
+
+    public void updateCrewType(CrewType crewType) {
+        this.crewType = crewType;
+    }
 }

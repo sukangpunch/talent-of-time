@@ -38,4 +38,24 @@ public class Count {
 
     @Column(name = "count", nullable = false)
     private int count;
+
+    public static Count createInitial(Crew crew, TaskType taskType) {
+        Count count = new Count();
+        count.crew = crew;
+        count.taskType = taskType;
+        count.count = 0;
+        return count;
+    }
+
+    public void increment() {
+        this.count++;
+    }
+
+    public void decrement() {
+        this.count = Math.max(0, this.count - 1);
+    }
+
+    public void reset() {
+        this.count = 0;
+    }
 }
