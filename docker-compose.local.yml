@@ -1,0 +1,13 @@
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: talent-of-time-local-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: test1234k
+      MYSQL_DATABASE: talent_of_time
+      MYSQL_USER: kang
+      MYSQL_PASSWORD: test1234k
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./mysql_data_local:/var/lib/mysql
