@@ -45,3 +45,6 @@ application.yml
 
 ### Serena MCP ###
 .serena/cache/
+
+### database
+mysql_data_local/
