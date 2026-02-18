@@ -14,12 +14,12 @@ import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import com.example.talentoftime.support.TestContainerSpringBootTest;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.transaction.annotation.Transactional;
 
-@SpringBootTest
+@TestContainerSpringBootTest
 @Transactional
 @DisplayName("강의실 서비스 테스트")
 class ClassroomServiceTest {
