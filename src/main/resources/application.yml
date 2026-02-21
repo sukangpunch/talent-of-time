@@ -1,0 +1,53 @@
+spring:
+  config:
+    activate:
+      on-profile: prod
+
+  datasource:
+    driverClassName: com.mysql.cj.jdbc.Driver
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+
+  sql:
+    init:
+      mode: always
+
+  jpa:
+    hibernate:
+      ddl-auto: create
+    generate-ddl: true
+    show-sql: false
+    database: mysql
+    defer-datasource-initialization: true
+    properties:
+      hibernate:
+        format_sql: false
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: local
+
+  datasource:
+    driverClassName: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost/talent_of_time?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    username: kang
+    password: test1234k
+
+  sql:
+    init:
+      mode: always
+
+  jpa:
+    hibernate:
+      ddl-auto: create
+    generate-ddl: true
+    show-sql: true
+    database: mysql
+    defer-datasource-initialization: true
+    properties:
+      hibernate:
+        format_sql: true
