@@ -95,6 +95,14 @@ jobs:
           echo "${{ secrets.DEPLOY_SSH_KEY }}" > deploy_key.pem
           chmod 600 deploy_key.pem
 
+      - name: 배포 디렉토리 생성
+        run: |
+          ssh -i deploy_key.pem \
+            -o StrictHostKeyChecking=no \
+            -p ${{ secrets.DEPLOY_PORT }} \
+            ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }} \
+            "mkdir -p /home/${{ secrets.DEPLOY_USER }}/talent-of-time"
+
       - name: Copy compose file to remote
         run: |
           scp -i deploy_key.pem \
