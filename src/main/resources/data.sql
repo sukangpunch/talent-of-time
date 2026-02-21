@@ -24,8 +24,8 @@ INSERT INTO period (period_number, start_time, end_time) VALUES (4, '15:20:00', 
 -- ==============================================
 -- 크루 (Crew)
 -- 오전(MORNING) 3명: 오전 수업 전부터 근무
--- 미들(MIDDLE)  1명: 오전 9시 ~ 오후 5시
--- 오후(AFTERNOON) 3명: 오후 2시 20분 ~ 오후 10시
+-- 미들(MIDDLE)  2명: 오전 9시 ~ 오후 5시
+-- 오후(AFTERNOON) 2명: 오후 2시 20분 ~ 오후 10시
 -- ==============================================
 INSERT INTO crew (name, crew_type) VALUES ('장강민', 'MORNING');
 INSERT INTO crew (name, crew_type) VALUES ('김수민', 'MORNING');
@@ -37,7 +37,7 @@ INSERT INTO crew (name, crew_type) VALUES ('이서준', 'AFTERNOON');
 
 -- ==============================================
 -- 카운트 (Count) - 크루별 작업유형별 초기값 0
--- crew_id 1~3: 오전, 4: 미들, 5~7: 오후
+-- crew_id 1~3: 오전, 4~5: 미들, 6~7: 오후
 -- task_type: SETTING, ENTRY, JOG, EXIT, EXAM_SUPERVISION
 -- ==============================================
 
