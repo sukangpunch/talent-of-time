@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+  talent-of-time:
+    image: ${DOCKERHUB_USERNAME}/talent-of-time:${IMAGE_TAG}
+    container_name: talent-of-time
+    network_mode: "host"
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+      - DB_URL=${DB_URL}
+      - DB_USERNAME=${DB_USERNAME}
+      - DB_PASSWORD=${DB_PASSWORD}
+    volumes:
+      - ./logs:/var/log/spring
+    restart: unless-stopped
