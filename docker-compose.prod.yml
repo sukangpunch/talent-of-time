@@ -4,7 +4,8 @@ services:
   talent-of-time:
     image: ${DOCKERHUB_USERNAME}/talent-of-time:${IMAGE_TAG}
     container_name: talent-of-time
-    network_mode: "host"
+    ports:
+      - "8080:8080"
     environment:
       - SPRING_PROFILES_ACTIVE=prod
       - DB_URL=${DB_URL}
