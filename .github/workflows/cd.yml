@@ -64,16 +64,22 @@ jobs:
 
       - name: Clean up old images from Docker Hub
         run: |
-          TAGS=$(curl -s \
-            -u "${{ secrets.DOCKERHUB_USERNAME }}:${{ secrets.DOCKERHUB_TOKEN }}" \
-            "https://hub.docker.com/v2/repositories/${{ secrets.DOCKERHUB_USERNAME }}/talent-of-time/tags?page_size=100" \
-            | jq -r '.results[].name' | grep -v 'buildcache' | sort -r)
+          JWT=$(curl -s \
+          -H "Content-Type: application/json" \
+          -X POST \
+          -d "{\"username\": \"${{ secrets.DOCKERHUB_USERNAME }}\", \"password\": \"${{ secrets.DOCKERHUB_PASSWORD }}\"}" \
+          https://hub.docker.com/v2/users/login/ | jq -r .token)
 
+          TAGS=$(curl -s \
+          -H "Authorization: JWT ${JWT}" \
+          "https://hub.docker.com/v2/repositories/${{ secrets.DOCKERHUB_USERNAME }}/talent-of-time/tags?page_size=100" \
+          | jq -r '.results[].name' | grep -v 'buildcache' | sort -r)
+      
           echo "$TAGS" | tail -n +3 | while read TAG; do
-            echo "Deleting tag: $TAG"
-            curl -s -X DELETE \
-              -u "${{ secrets.DOCKERHUB_USERNAME }}:${{ secrets.DOCKERHUB_TOKEN }}" \
-              "https://hub.docker.com/v2/repositories/${{ secrets.DOCKERHUB_USERNAME }}/talent-of-time/tags/${TAG}/"
+          echo "Deleting tag: $TAG"
+          curl -s -X DELETE \
+          -H "Authorization: JWT ${JWT}" \
+          "https://hub.docker.com/v2/repositories/${{ secrets.DOCKERHUB_USERNAME }}/talent-of-time/tags/${TAG}/"
           done
 
   deploy:
