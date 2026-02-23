@@ -31,11 +31,13 @@ public class Period {
     @Column(name = "end_time", nullable = false)
     private LocalTime endTime;
 
+    private Period(int periodNumber, LocalTime startTime, LocalTime endTime) {
+        this.periodNumber = periodNumber;
+        this.startTime = startTime;
+        this.endTime = endTime;
+    }
+
     public static Period create(int periodNumber, LocalTime startTime, LocalTime endTime) {
-        Period period = new Period();
-        period.periodNumber = periodNumber;
-        period.startTime = startTime;
-        period.endTime = endTime;
-        return period;
+        return new Period(periodNumber, startTime, endTime);
     }
 }
