@@ -11,7 +11,7 @@ INSERT INTO class_session (date, period_id, classroom_id) VALUES ('2026-02-23', 
 -- 화요일 (2026-02-24)
 INSERT INTO class_session (date, period_id, classroom_id) VALUES ('2026-02-24', 2, 5);  -- 1교시 606호 정재영 화1A
 INSERT INTO class_session (date, period_id, classroom_id) VALUES ('2026-02-24', 3, 3);  -- 2교시 604호 장재원 S 수학(수2)
-INSERT INTO class_session (date, period_id, classroom_id) VALUES ('2026-02-24', 3, 3);  -- 2교시 606호 현유찬 D 국어
+INSERT INTO class_session (date, period_id, classroom_id) VALUES ('2026-02-24', 3, 5);  -- 2교시 606호 현유찬 D 국어
 INSERT INTO class_session (date, period_id, classroom_id) VALUES ('2026-02-24', 4, 3);  -- 3교시 604호 나진환 지2
 INSERT INTO class_session (date, period_id, classroom_id) VALUES ('2026-02-24', 5, 1);  -- 4교시 602호 김윤환 인문논술
 INSERT INTO class_session (date, period_id, classroom_id) VALUES ('2026-02-24', 5, 3);  -- 4교시 604호 나진환 지2
