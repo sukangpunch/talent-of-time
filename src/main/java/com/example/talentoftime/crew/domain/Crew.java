@@ -30,11 +30,52 @@ public class Crew {
     @Column(name = "crew_type", nullable = false)
     private CrewType crewType;
 
+    @Column(name = "username", unique = true)
+    private String username;
+
+    @Column(name = "password")
+    private String password;
+
+    @Column(name = "email", unique = true)
+    private String email;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "role")
+    private CrewRole role;
+
+    private Crew(String name, CrewType crewType) {
+        this.name = name;
+        this.crewType = crewType;
+        this.role = CrewRole.USER;
+    }
+
+    private Crew(
+            String name,
+            CrewType crewType,
+            String username,
+            String password,
+            String email,
+            CrewRole role) {
+        this.name = name;
+        this.crewType = crewType;
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.role = role;
+    }
+
     public static Crew create(String name, CrewType crewType) {
-        Crew crew = new Crew();
-        crew.name = name;
-        crew.crewType = crewType;
-        return crew;
+        return new Crew(name, crewType);
+    }
+
+    public static Crew createWithAuth(
+            String name,
+            CrewType crewType,
+            String username,
+            String password,
+            String email,
+            CrewRole role) {
+        return new Crew(name, crewType, username, password, email, role);
     }
 
     public void updateName(String name) {
@@ -43,5 +84,9 @@ public class Crew {
 
     public void updateCrewType(CrewType crewType) {
         this.crewType = crewType;
+    }
+
+    public void updatePassword(String password) {
+        this.password = password;
     }
 }

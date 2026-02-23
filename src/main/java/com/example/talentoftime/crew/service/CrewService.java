@@ -6,6 +6,7 @@ import com.example.talentoftime.common.exception.ErrorCode;
 import com.example.talentoftime.count.domain.Count;
 import com.example.talentoftime.count.repository.CountRepository;
 import com.example.talentoftime.crew.domain.Crew;
+import com.example.talentoftime.crew.domain.CrewRole;
 import com.example.talentoftime.crew.domain.CrewType;
 import com.example.talentoftime.crew.dto.CrewCreateRequest;
 import com.example.talentoftime.crew.dto.CrewResponse;
@@ -15,6 +16,7 @@ import java.util.Arrays;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,6 +27,7 @@ public class CrewService {
 
     private final CrewRepository crewRepository;
     private final CountRepository countRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Transactional(readOnly = true)
     public List<CrewResponse> findAllCrews() {
@@ -46,18 +49,35 @@ public class CrewService {
         return CrewResponse.from(crew);
     }
 
-    private Crew findCrewOrThrow(Long crewId) {
-        return crewRepository.findById(crewId)
-                .orElseThrow(() -> new BusinessException(ErrorCode.CREW_NOT_FOUND));
-    }
-
     @Transactional
     public CrewResponse createCrew(CrewCreateRequest request) {
         if (crewRepository.existsByName(request.getName())) {
             throw new BusinessException(ErrorCode.CREW_NAME_DUPLICATED);
         }
+        if (request.getUsername() != null && crewRepository.existsByUsername(request.getUsername())) {
+            throw new BusinessException(ErrorCode.CREW_USERNAME_DUPLICATED);
+        }
+        if (request.getEmail() != null && crewRepository.existsByEmail(request.getEmail())) {
+            throw new BusinessException(ErrorCode.CREW_EMAIL_DUPLICATED);
+        }
 
-        Crew crew = Crew.create(request.getName(), request.getCrewType());
+        Crew crew;
+        if (request.getUsername() != null) {
+            String encodedPassword = request.getPassword() != null
+                    ? passwordEncoder.encode(request.getPassword())
+                    : null;
+            CrewRole role = request.getRole() != null ? request.getRole() : CrewRole.USER;
+            crew = Crew.createWithAuth(
+                    request.getName(),
+                    request.getCrewType(),
+                    request.getUsername(),
+                    encodedPassword,
+                    request.getEmail(),
+                    role);
+        } else {
+            crew = Crew.create(request.getName(), request.getCrewType());
+        }
+
         crewRepository.save(crew);
         log.info("크루 생성 완료: name={}, crewType={}", crew.getName(), crew.getCrewType());
 
@@ -90,5 +110,10 @@ public class CrewService {
         Crew crew = findCrewOrThrow(crewId);
         crewRepository.delete(crew);
         log.info("크루 삭제 완료: crewId={}", crewId);
+    }
+
+    private Crew findCrewOrThrow(Long crewId) {
+        return crewRepository.findById(crewId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.CREW_NOT_FOUND));
     }
 }

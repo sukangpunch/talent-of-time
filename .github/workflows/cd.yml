@@ -131,6 +131,7 @@ jobs:
               export DB_URL="${{ secrets.DB_URL }}"
               export DB_USERNAME="${{ secrets.DB_USERNAME }}"
               export DB_PASSWORD="${{ secrets.DB_PASSWORD }}"
+              export JWT_SECRET="${{ secrets.JWT_SECRET }}"
 
               echo "Cleaning up old tagged images (keeping last 2)..."
               docker images "${DOCKERHUB_USERNAME}/talent-of-time" --format "{{.Tag}}" | \

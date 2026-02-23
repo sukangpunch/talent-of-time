@@ -24,9 +24,11 @@ public class Classroom {
     @Column(name = "room_number", nullable = false)
     private int roomNumber;
 
+    private Classroom(int roomNumber) {
+        this.roomNumber = roomNumber;
+    }
+
     public static Classroom create(int roomNumber) {
-        Classroom classroom = new Classroom();
-        classroom.roomNumber = roomNumber;
-        return classroom;
+        return new Classroom(roomNumber);
     }
 }

@@ -2,6 +2,7 @@ package com.example.talentoftime.schedule.domain;
 
 import java.time.LocalDate;
 import com.example.talentoftime.classroom.domain.Classroom;
+import com.example.talentoftime.classsession.domain.ClassSession;
 import com.example.talentoftime.common.domain.TaskType;
 import com.example.talentoftime.crew.domain.Crew;
 import com.example.talentoftime.period.domain.Period;
@@ -50,19 +51,41 @@ public class Schedule {
     @JoinColumn(name = "crew_id", nullable = false)
     private Crew crew;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "class_session_id", nullable = true)
+    private ClassSession classSession;
+
+    private Schedule(LocalDate date, Period period, Classroom classroom, TaskType taskType, Crew crew) {
+        this.date = date;
+        this.period = period;
+        this.classroom = classroom;
+        this.taskType = taskType;
+        this.crew = crew;
+    }
+
+    private Schedule(LocalDate date, Period period, Classroom classroom,
+            TaskType taskType, Crew crew, ClassSession classSession) {
+        this(date, period, classroom, taskType, crew);
+        this.classSession = classSession;
+    }
+
     public static Schedule create(
             LocalDate date,
             Period period,
             Classroom classroom,
             TaskType taskType,
             Crew crew) {
-        Schedule schedule = new Schedule();
-        schedule.date = date;
-        schedule.period = period;
-        schedule.classroom = classroom;
-        schedule.taskType = taskType;
-        schedule.crew = crew;
-        return schedule;
+        return new Schedule(date, period, classroom, taskType, crew);
+    }
+
+    public static Schedule create(
+            LocalDate date,
+            Period period,
+            Classroom classroom,
+            TaskType taskType,
+            Crew crew,
+            ClassSession classSession) {
+        return new Schedule(date, period, classroom, taskType, crew, classSession);
     }
 
     public void assignCrew(Crew crew) {

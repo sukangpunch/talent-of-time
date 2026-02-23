@@ -98,7 +98,7 @@ class CrewServiceTest {
             // Then
             assertAll(
                     () -> assertThat(response.getName()).isEqualTo(crew.getName()),
-                    () -> assertThat(response.getCrewType()).isEqualTo(crew.getCrewType().name())
+                    () -> assertThat(response.getCrewType()).isEqualTo(crew.getCrewType())
             );
         }
 
@@ -128,7 +128,7 @@ class CrewServiceTest {
             // Then
             assertAll(
                     () -> assertThat(response.getName()).isEqualTo("홍길동"),
-                    () -> assertThat(response.getCrewType()).isEqualTo("MORNING")
+                    () -> assertThat(response.getCrewType()).isEqualTo(CrewType.MORNING)
             );
             assertThat(countRepository.findAll()).hasSize(TaskType.values().length);
         }
@@ -166,7 +166,7 @@ class CrewServiceTest {
             // Then
             assertAll(
                     () -> assertThat(response.getName()).isEqualTo("박지성"),
-                    () -> assertThat(response.getCrewType()).isEqualTo("AFTERNOON")
+                    () -> assertThat(response.getCrewType()).isEqualTo(CrewType.AFTERNOON)
             );
         }
 

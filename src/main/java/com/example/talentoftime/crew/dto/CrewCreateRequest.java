@@ -1,5 +1,6 @@
 package com.example.talentoftime.crew.dto;
 
+import com.example.talentoftime.crew.domain.CrewRole;
 import com.example.talentoftime.crew.domain.CrewType;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -15,4 +16,9 @@ public class CrewCreateRequest {
 
     @NotNull
     private CrewType crewType;
+
+    private String username;
+    private String password;
+    private String email;
+    private CrewRole role;
 }

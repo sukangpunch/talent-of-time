@@ -9,3 +9,6 @@ spring:
       hibernate:
         format_sql: true
 
+jwt:
+  secret: talent-of-time-test-secret-key-must-be-at-least-256-bits-long
+  expiration-ms: 86400000
