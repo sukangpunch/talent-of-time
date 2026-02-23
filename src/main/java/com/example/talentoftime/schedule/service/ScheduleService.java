@@ -66,14 +66,7 @@ public class ScheduleService {
         Period settingPeriod = periodRepository.findByPeriodNumber(0)
                 .orElseThrow(() -> new BusinessException(ErrorCode.PERIOD_NOT_FOUND));
 
-        List<ClassSession> sessions = classSessionRepository.findByDate(date);
-        if (sessions.isEmpty()) {
-            throw new BusinessException(ErrorCode.CLASS_SESSION_EMPTY_FOR_DATE);
-        }
-        List<Classroom> classrooms = sessions.stream()
-                .map(ClassSession::getClassroom)
-                .distinct()
-                .toList();
+        List<Classroom> classrooms = classroomRepository.findAll();
 
         List<Schedule> schedules = classrooms.stream()
                 .map(classroom -> assignSingleSchedule(date, settingPeriod, classroom, TaskType.SETTING))
