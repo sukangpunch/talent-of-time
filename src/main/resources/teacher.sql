@@ -81,3 +81,5 @@ INSERT INTO teacher (name, chalk_type, chalk_detail, eraser_detail, mic_type, ha
 INSERT INTO teacher (name, chalk_type, chalk_detail, eraser_detail, mic_type, has_ppt, notes, has_email) VALUES ('현정훈', 'PERSONAL', NULL, NULL, 'ACADEMY', false, NULL, false);
 INSERT INTO teacher (name, chalk_type, chalk_detail, eraser_detail, mic_type, has_ppt, notes, has_email) VALUES ('황석진', 'PERSONAL', NULL, NULL, 'ACADEMY', true, NULL, false);
 INSERT INTO teacher (name, chalk_type, chalk_detail, eraser_detail, mic_type, has_ppt, notes, has_email) VALUES ('황용일', 'PERSONAL', '직접 세팅', NULL, 'ACADEMY', true, '직접 세팅', false);
+INSERT INTO teacher (name, chalk_type, chalk_detail, eraser_detail, mic_type, has_ppt, notes, has_email) VALUES ('송지광', null, null, NULL, null, false, null, false);
+INSERT INTO teacher (name, chalk_type, chalk_detail, eraser_detail, mic_type, has_ppt, notes, has_email) VALUES ('손정민', null, null, NULL, null, false, null, false);
