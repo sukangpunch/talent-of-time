@@ -5,6 +5,8 @@ import com.example.talentoftime.period.domain.Period;
 import com.example.talentoftime.teacher.domain.Teacher;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -43,26 +45,44 @@ public class ClassSession {
     @JoinColumn(name = "teacher_id")
     private Teacher teacher;
 
-    @Column(name = "cancelled", nullable = false)
-    private boolean cancelled = false;
+    @Column(name = "subject")
+    private String subject;
 
-    private ClassSession(LocalDate date, Period period, Classroom classroom, Teacher teacher) {
+    @Column(name = "group_name")
+    private String group;
+
+    @Column(name = "in_person_count", nullable = false)
+    private int inPersonCount;
+
+    @Column(name = "online_count", nullable = false)
+    private int onlineCount;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status", nullable = false)
+    private ClassStatus status;
+
+    public ClassSession(
+            LocalDate date,
+            Period period,
+            Classroom classroom,
+            Teacher teacher,
+            String subject,
+            String group,
+            int inPersonCount,
+            int onlineCount
+    ) {
         this.date = date;
         this.period = period;
         this.classroom = classroom;
         this.teacher = teacher;
+        this.subject = subject;
+        this.group = group;
+        this.inPersonCount = inPersonCount;
+        this.onlineCount = onlineCount;
+        this.status = ClassStatus.NORMAL;
     }
 
-    public static ClassSession create(LocalDate date, Period period, Classroom classroom) {
-        return new ClassSession(date, period, classroom, null);
-    }
-
-    public static ClassSession create(LocalDate date, Period period, Classroom classroom, Teacher teacher) {
-        return new ClassSession(date, period, classroom, teacher);
-    }
-
-    public void update(LocalDate date, Period period, Classroom classroom) {
-        this.date = date;
+    public void update(Period period, Classroom classroom) {
         this.period = period;
         this.classroom = classroom;
     }
@@ -72,6 +92,10 @@ public class ClassSession {
     }
 
     public void cancel() {
-        this.cancelled = true;
+        this.status = ClassStatus.CANCELLED;
+    }
+
+    public boolean isCancelled() {
+        return this.status == ClassStatus.CANCELLED;
     }
 }

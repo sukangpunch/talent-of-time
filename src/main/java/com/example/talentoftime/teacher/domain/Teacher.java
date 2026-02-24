@@ -43,17 +43,11 @@ public class Teacher {
     @Column(name = "has_ppt")
     private boolean hasPpt;
 
-    @Column(name = "ppt_detail", columnDefinition = "TEXT")
-    private String pptDetail;
-
     @Column(name = "notes", columnDefinition = "TEXT")
     private String notes;
 
     @Column(name = "has_email")
     private boolean hasEmail;
-
-    @Column(name = "email_detail", columnDefinition = "TEXT")
-    private String emailDetail;
 
     public Teacher(
             String name,
@@ -62,21 +56,17 @@ public class Teacher {
             String eraserDetail,
             MicType micType,
             boolean hasPpt,
-            String pptDetail,
             String notes,
-            boolean hasEmail,
-            String emailDetail)
-    {
+            boolean hasEmail
+    ) {
         this.name = name;
         this.chalkType = chalkType;
         this.chalkDetail = chalkDetail;
         this.eraserDetail = eraserDetail;
         this.micType = micType;
         this.hasPpt = hasPpt;
-        this.pptDetail = pptDetail;
         this.notes = notes;
         this.hasEmail = hasEmail;
-        this.emailDetail = emailDetail;
     }
 
     public void update(
@@ -86,10 +76,8 @@ public class Teacher {
             String eraserDetail,
             MicType micType,
             boolean hasPpt,
-            String pptDetail,
             String notes,
-            boolean hasEmail,
-            String emailDetail
+            boolean hasEmail
     ) {
         this.name = name;
         this.chalkType = chalkType;
@@ -97,9 +85,7 @@ public class Teacher {
         this.eraserDetail = eraserDetail;
         this.micType = micType;
         this.hasPpt = hasPpt;
-        this.pptDetail = pptDetail;
         this.notes = notes;
         this.hasEmail = hasEmail;
-        this.emailDetail = emailDetail;
     }
 }

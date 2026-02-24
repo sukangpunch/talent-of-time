@@ -17,8 +17,6 @@ public class TeacherCreateRequest {
     private String eraserDetail;
     private MicType micType;
     private boolean hasPpt;
-    private String pptDetail;
     private String notes;
     private boolean hasEmail;
-    private String emailDetail;
 }

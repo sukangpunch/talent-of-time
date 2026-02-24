@@ -24,13 +24,13 @@ public class MyController implements MyControllerDocs {
     private final MyService myService;
 
     @GetMapping("/profile")
-    public ResponseEntity<CrewResponse> getProfile(@AuthenticationPrincipal Long crewId) {
-        return ResponseEntity.ok(myService.getProfile(crewId));
+    public ResponseEntity<CrewResponse> getProfile(@AuthenticationPrincipal LoginUser loginUser) {
+        return ResponseEntity.ok(myService.getProfile(loginUser.getId()));
     }
 
     @GetMapping("/counts")
-    public ResponseEntity<List<MyCountResponse>> getMyCounts(@AuthenticationPrincipal Long crewId) {
-        return ResponseEntity.ok(myService.getMyCounts(crewId));
+    public ResponseEntity<List<MyCountResponse>> getMyCounts(@AuthenticationPrincipal LoginUser loginUser) {
+        return ResponseEntity.ok(myService.getMyCounts(loginUser.getId()));
     }
 
     @PostMapping("/onboarding")

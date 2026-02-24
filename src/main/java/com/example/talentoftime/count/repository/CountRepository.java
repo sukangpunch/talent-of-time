@@ -15,7 +15,5 @@ public interface CountRepository extends JpaRepository<Count, Long> {
 
     List<Count> findByCrew(Crew crew);
 
-    List<Count> findByCrewInAndTaskType(List<Crew> crews, TaskType taskType);
-
     List<Count> findByTaskType(TaskType taskType);
 }

@@ -19,12 +19,12 @@ public interface ClassSessionRepository extends JpaRepository<ClassSession, Long
     boolean existsByDateAndPeriodAndClassroom(
             LocalDate date,
             Period period,
-            Classroom classroom);
+            Classroom classroom
+    );
 
     Optional<ClassSession> findByDateAndPeriodAndClassroom(
             LocalDate date,
             Period period,
-            Classroom classroom);
-
-    List<ClassSession> findByDateAndPeriod(LocalDate date, Period period);
+            Classroom classroom
+    );
 }

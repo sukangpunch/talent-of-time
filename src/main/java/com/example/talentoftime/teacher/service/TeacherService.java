@@ -14,8 +14,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
-@Service
 @RequiredArgsConstructor
+@Service
 public class TeacherService {
 
     private final TeacherRepository teacherRepository;
@@ -42,10 +42,9 @@ public class TeacherService {
                 request.getEraserDetail(),
                 request.getMicType(),
                 request.isHasPpt(),
-                request.getPptDetail(),
                 request.getNotes(),
-                request.isHasEmail(),
-                request.getEmailDetail());
+                request.isHasEmail()
+        );
         teacherRepository.save(teacher);
         log.info("강사 생성 완료: name={}", teacher.getName());
         return TeacherResponse.from(teacher);
@@ -61,10 +60,9 @@ public class TeacherService {
                 request.getEraserDetail(),
                 request.getMicType(),
                 request.isHasPpt(),
-                request.getPptDetail(),
                 request.getNotes(),
-                request.isHasEmail(),
-                request.getEmailDetail());
+                request.isHasEmail()
+        );
         log.info("강사 수정 완료: teacherId={}", teacherId);
         return TeacherResponse.from(teacher);
     }
@@ -81,3 +79,4 @@ public class TeacherService {
                 .orElseThrow(() -> new BusinessException(ErrorCode.TEACHER_NOT_FOUND));
     }
 }
+

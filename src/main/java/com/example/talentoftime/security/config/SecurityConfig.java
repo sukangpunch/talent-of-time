@@ -42,6 +42,13 @@ public class SecurityConfig {
                 .requestMatchers("/api/auth/**").permitAll()
                 .requestMatchers("/api/v1/oauth/**").permitAll()
                 .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
+                .requestMatchers(org.springframework.http.HttpMethod.GET,
+                        "/api/periods/**",
+                        "/api/teachers/**",
+                        "/api/classrooms/**",
+                        "/api/class-sessions/**",
+                        "/api/schedules/**"
+                ).permitAll()
                 .anyRequest().authenticated()
         );
 
