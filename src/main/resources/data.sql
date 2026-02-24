@@ -114,6 +114,12 @@ INSERT INTO teacher (name, chalk_type, chalk_detail, eraser_detail, mic_type, ha
 INSERT INTO teacher (name, chalk_type, chalk_detail, eraser_detail, mic_type, has_ppt, notes, has_email) VALUES ('황용일', 'PERSONAL', '직접 세팅', NULL, 'ACADEMY', true, '직접 세팅', false);
 INSERT INTO teacher (name, chalk_type, chalk_detail, eraser_detail, mic_type, has_ppt, notes, has_email) VALUES ('송지광', null, null, NULL, null, false, null, false);
 INSERT INTO teacher (name, chalk_type, chalk_detail, eraser_detail, mic_type, has_ppt, notes, has_email) VALUES ('손정민', null, null, NULL, null, false, null, false);
+INSERT INTO teacher (name, chalk_type, chalk_detail, eraser_detail, mic_type, has_ppt, notes, has_email) VALUES ('권경수', null, null, NULL, null, false, null, false);
+INSERT INTO teacher (name, chalk_type, chalk_detail, eraser_detail, mic_type, has_ppt, notes, has_email) VALUES ('김성묵', null, null, NULL, null, false, null, false);
+INSERT INTO teacher (name, chalk_type, chalk_detail, eraser_detail, mic_type, has_ppt, notes, has_email) VALUES ('이서준', null, null, NULL, null, false, null, false);
+INSERT INTO teacher (name, chalk_type, chalk_detail, eraser_detail, mic_type, has_ppt, notes, has_email) VALUES ('염소연', null, null, NULL, null, false, null, false);
+INSERT INTO teacher (name, chalk_type, chalk_detail, eraser_detail, mic_type, has_ppt, notes, has_email) VALUES ('이태민', null, null, NULL, null, false, null, false);
+
 
 -- ==============================================
 -- 크루 (Crew)

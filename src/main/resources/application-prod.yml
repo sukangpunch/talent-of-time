@@ -15,6 +15,8 @@ spring:
       data-locations:
         - classpath:data.sql
         - classpath:class_session_2026-02-25.sql
+        - classpath:class_session_2026-02-26.sql
+        - classpath:class_session_2026-02-27.sql
 
   jpa:
     hibernate:
