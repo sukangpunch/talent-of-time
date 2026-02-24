@@ -11,7 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 
-@Tag(name = "Teacher", description = "강사 관리 API")
+@Tag(name = "강사", description = "강사 관리 API")
 public interface TeacherControllerDocs {
 
     @Operation(summary = "강사 전체 조회")

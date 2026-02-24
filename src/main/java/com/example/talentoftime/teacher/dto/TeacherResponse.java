@@ -20,7 +20,8 @@ public class TeacherResponse {
     private boolean hasPpt;
     private String pptDetail;
     private String notes;
-    private String lectureEmailRecipient;
+    private boolean hasEmail;
+    private String emailDetail;
 
     public static TeacherResponse from(Teacher teacher) {
         TeacherResponse response = new TeacherResponse();
@@ -33,7 +34,8 @@ public class TeacherResponse {
         response.hasPpt = teacher.isHasPpt();
         response.pptDetail = teacher.getPptDetail();
         response.notes = teacher.getNotes();
-        response.lectureEmailRecipient = teacher.getLectureEmailRecipient();
+        response.hasEmail = teacher.isHasEmail();
+        response.emailDetail = teacher.getEmailDetail();
         return response;
     }
 }

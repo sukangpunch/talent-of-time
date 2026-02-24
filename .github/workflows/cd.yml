@@ -132,6 +132,9 @@ jobs:
               export DB_USERNAME="${{ secrets.DB_USERNAME }}"
               export DB_PASSWORD="${{ secrets.DB_PASSWORD }}"
               export JWT_SECRET="${{ secrets.JWT_SECRET }}"
+              export KAKAO_CLIENT_ID="${{ secrets.KAKAO_CLIENT_ID }}"
+              export KAKAO_CLIENT_SECRET="${{ secrets.KAKAO_CLIENT_SECRET }}"
+              export KAKAO_REDIRECT_URI="${{ secrets.KAKAO_REDIRECT_URI }}"
 
               echo "Cleaning up old tagged images (keeping last 2)..."
               docker images "${DOCKERHUB_USERNAME}/talent-of-time" --format "{{.Tag}}" | \

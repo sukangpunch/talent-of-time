@@ -35,7 +35,7 @@ public class TeacherService {
 
     @Transactional
     public TeacherResponse createTeacher(TeacherCreateRequest request) {
-        Teacher teacher = Teacher.create(
+        Teacher teacher = new Teacher(
                 request.getName(),
                 request.getChalkType(),
                 request.getChalkDetail(),
@@ -44,7 +44,8 @@ public class TeacherService {
                 request.isHasPpt(),
                 request.getPptDetail(),
                 request.getNotes(),
-                request.getLectureEmailRecipient());
+                request.isHasEmail(),
+                request.getEmailDetail());
         teacherRepository.save(teacher);
         log.info("강사 생성 완료: name={}", teacher.getName());
         return TeacherResponse.from(teacher);
@@ -62,7 +63,8 @@ public class TeacherService {
                 request.isHasPpt(),
                 request.getPptDetail(),
                 request.getNotes(),
-                request.getLectureEmailRecipient());
+                request.isHasEmail(),
+                request.getEmailDetail());
         log.info("강사 수정 완료: teacherId={}", teacherId);
         return TeacherResponse.from(teacher);
     }

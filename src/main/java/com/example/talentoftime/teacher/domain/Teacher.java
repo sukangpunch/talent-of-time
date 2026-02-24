@@ -49,10 +49,13 @@ public class Teacher {
     @Column(name = "notes", columnDefinition = "TEXT")
     private String notes;
 
-    @Column(name = "lecture_email_recipient")
-    private String lectureEmailRecipient;
+    @Column(name = "has_email")
+    private boolean hasEmail;
 
-    private Teacher(
+    @Column(name = "email_detail", columnDefinition = "TEXT")
+    private String emailDetail;
+
+    public Teacher(
             String name,
             ChalkType chalkType,
             String chalkDetail,
@@ -61,7 +64,9 @@ public class Teacher {
             boolean hasPpt,
             String pptDetail,
             String notes,
-            String lectureEmailRecipient) {
+            boolean hasEmail,
+            String emailDetail)
+    {
         this.name = name;
         this.chalkType = chalkType;
         this.chalkDetail = chalkDetail;
@@ -70,20 +75,8 @@ public class Teacher {
         this.hasPpt = hasPpt;
         this.pptDetail = pptDetail;
         this.notes = notes;
-        this.lectureEmailRecipient = lectureEmailRecipient;
-    }
-
-    public static Teacher create(
-            String name,
-            ChalkType chalkType,
-            String chalkDetail,
-            String eraserDetail,
-            MicType micType,
-            boolean hasPpt,
-            String pptDetail,
-            String notes,
-            String lectureEmailRecipient) {
-        return new Teacher(name, chalkType, chalkDetail, eraserDetail, micType, hasPpt, pptDetail, notes, lectureEmailRecipient);
+        this.hasEmail = hasEmail;
+        this.emailDetail = emailDetail;
     }
 
     public void update(
@@ -95,7 +88,9 @@ public class Teacher {
             boolean hasPpt,
             String pptDetail,
             String notes,
-            String lectureEmailRecipient) {
+            boolean hasEmail,
+            String emailDetail
+    ) {
         this.name = name;
         this.chalkType = chalkType;
         this.chalkDetail = chalkDetail;
@@ -104,6 +99,7 @@ public class Teacher {
         this.hasPpt = hasPpt;
         this.pptDetail = pptDetail;
         this.notes = notes;
-        this.lectureEmailRecipient = lectureEmailRecipient;
+        this.hasEmail = hasEmail;
+        this.emailDetail = emailDetail;
     }
 }

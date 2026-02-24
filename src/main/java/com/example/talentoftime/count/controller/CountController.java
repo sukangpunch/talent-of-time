@@ -6,7 +6,6 @@ import com.example.talentoftime.count.service.CountService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,18 +33,5 @@ public class CountController implements CountControllerDocs {
     public ResponseEntity<List<CountResponse>> findCountsByTaskType(
             @PathVariable TaskType taskType) {
         return ResponseEntity.ok(countService.findCountsByTaskType(taskType));
-    }
-
-    @DeleteMapping("/crew/{crewId}/reset")
-    public ResponseEntity<Void> resetCountsByCrew(
-            @PathVariable Long crewId) {
-        countService.resetCountsByCrew(crewId);
-        return ResponseEntity.noContent().build();
-    }
-
-    @DeleteMapping("/reset")
-    public ResponseEntity<Void> resetAllCounts() {
-        countService.resetAllCounts();
-        return ResponseEntity.noContent().build();
     }
 }

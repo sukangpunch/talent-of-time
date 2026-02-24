@@ -43,6 +43,9 @@ public class ClassSession {
     @JoinColumn(name = "teacher_id")
     private Teacher teacher;
 
+    @Column(name = "cancelled", nullable = false)
+    private boolean cancelled = false;
+
     private ClassSession(LocalDate date, Period period, Classroom classroom, Teacher teacher) {
         this.date = date;
         this.period = period;
@@ -66,5 +69,9 @@ public class ClassSession {
 
     public void updateTeacher(Teacher teacher) {
         this.teacher = teacher;
+    }
+
+    public void cancel() {
+        this.cancelled = true;
     }
 }

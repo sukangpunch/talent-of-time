@@ -4,7 +4,7 @@ public enum TaskType {
 
     SETTING,
     ENTRY,
-    JOG,
     EXIT,
-    EXAM_SUPERVISION
+    JOG,
+    CLEANUP
 }

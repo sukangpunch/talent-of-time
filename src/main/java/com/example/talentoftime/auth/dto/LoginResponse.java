@@ -1,25 +1,18 @@
 package com.example.talentoftime.auth.dto;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import com.example.talentoftime.auth.domain.AccessToken;
+import jakarta.validation.constraints.NotNull;
 
-@Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class LoginResponse {
+public record LoginResponse(
 
-    private String accessToken;
-    private String tokenType = "Bearer";
-    private Long crewId;
-    private String name;
-    private String role;
-
-    public static LoginResponse of(String accessToken, Long crewId, String name, String role) {
-        LoginResponse response = new LoginResponse();
-        response.accessToken = accessToken;
-        response.crewId = crewId;
-        response.name = name;
-        response.role = role;
-        return response;
+        @NotNull
+        String accessToken,
+        boolean isOnboarded
+) {
+    public static LoginResponse of(
+            AccessToken accessToken,
+            boolean isOnboarded
+    ) {
+        return new LoginResponse(accessToken.token(), isOnboarded);
     }
 }
