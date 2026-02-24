@@ -66,7 +66,7 @@ public class SecurityConfig {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.addAllowedHeader("*");
         configuration.addAllowedMethod("*");
-        configuration.setAllowedOrigins(List.of("http://localhost:5173", "https://sdij-crew.vercel.app"));
+        configuration.setAllowedOrigins(List.of("http://localhost:5173", "https://sdij-crew.vercel.app", "https://www.sdij.site"));
         configuration.setAllowCredentials(true);
         configuration.addExposedHeader("ACCESS_TOKEN");
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
