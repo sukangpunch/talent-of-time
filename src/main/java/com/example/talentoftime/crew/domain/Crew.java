@@ -1,5 +1,7 @@
 package com.example.talentoftime.crew.domain;
 
+import com.example.talentoftime.common.exception.BusinessException;
+import com.example.talentoftime.common.exception.ErrorCode;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -27,66 +29,74 @@ public class Crew {
     private String name;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "crew_type", nullable = false)
+    @Column(name = "crew_type")
     private CrewType crewType;
 
-    @Column(name = "username", unique = true)
-    private String username;
-
-    @Column(name = "password")
-    private String password;
-
-    @Column(name = "email", unique = true)
+    @Column(name = "email")
     private String email;
+
+    @Column(name = "provider_id", unique = true)
+    private String providerId;
+
+    @Column(name = "is_onboarded", nullable = false)
+    private boolean isOnboarded;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "role")
-    private CrewRole role;
+    private Role role;
 
     private Crew(String name, CrewType crewType) {
         this.name = name;
         this.crewType = crewType;
-        this.role = CrewRole.USER;
+        this.role = Role.USER;
     }
 
-    private Crew(
+    public Crew(
             String name,
-            CrewType crewType,
-            String username,
-            String password,
             String email,
-            CrewRole role) {
+            String providerId,
+            Role role
+    ) {
         this.name = name;
-        this.crewType = crewType;
-        this.username = username;
-        this.password = password;
         this.email = email;
+        this.providerId = providerId;
         this.role = role;
     }
 
-    public static Crew create(String name, CrewType crewType) {
-        return new Crew(name, crewType);
-    }
-
-    public static Crew createWithAuth(
+    public void onboard(
             String name,
-            CrewType crewType,
-            String username,
-            String password,
-            String email,
-            CrewRole role) {
-        return new Crew(name, crewType, username, password, email, role);
-    }
-
-    public void updateName(String name) {
+            CrewType crewType
+    ){
+        validateOnboard(name);
         this.name = name;
-    }
-
-    public void updateCrewType(CrewType crewType) {
         this.crewType = crewType;
+        this.isOnboarded = true;
     }
 
-    public void updatePassword(String password) {
-        this.password = password;
+    private void validateOnboard(
+            String nickname
+    ) {
+        validateIsOnboarded();
+        validateNickname(nickname);
+    }
+
+    private void validateIsOnboarded() {
+        if (this.isOnboarded()) {
+            throw new BusinessException(ErrorCode.CREW_ALREADY_ONBOARDED);
+        }
+    }
+
+    private void validateNickname(String nickname) {
+        if (nickname == null || nickname.isBlank()) {
+            throw new BusinessException(ErrorCode.CREW_NICKNAME_BLANK);
+        }
+
+        if (nickname.length() < 2 || nickname.length() > 5) {
+            throw new BusinessException(ErrorCode.CREW_NICKNAME_LENGTH_INVALID);
+        }
+
+        if (!nickname.matches("^[가-힣]+$")) {
+            throw new BusinessException(ErrorCode.CREW_NICKNAME_PATTERN_INVALID);
+        }
     }
 }

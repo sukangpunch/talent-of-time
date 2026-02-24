@@ -19,5 +19,6 @@ public class TeacherUpdateRequest {
     private boolean hasPpt;
     private String pptDetail;
     private String notes;
-    private String lectureEmailRecipient;
+    private boolean hasEmail;
+    private String emailDetail;
 }

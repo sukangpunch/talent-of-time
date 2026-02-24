@@ -129,6 +129,21 @@ public class ClassSessionService {
     }
 
     @Transactional
+    public ClassSessionResponse cancelClassSession(Long classSessionId) {
+        ClassSession classSession = classSessionRepository.findById(classSessionId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.CLASS_SESSION_NOT_FOUND));
+
+        if (classSession.isCancelled()) {
+            throw new BusinessException(ErrorCode.CLASS_SESSION_ALREADY_CANCELLED);
+        }
+
+        deleteLinkedSchedules(classSession);
+        classSession.cancel();
+        log.info("수업 일정 휴강 처리 완료: classSessionId={}", classSessionId);
+        return ClassSessionResponse.from(classSession);
+    }
+
+    @Transactional
     public void deleteClassSession(Long classSessionId) {
         ClassSession classSession = classSessionRepository.findById(classSessionId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.CLASS_SESSION_NOT_FOUND));

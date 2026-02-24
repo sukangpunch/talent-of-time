@@ -15,6 +15,7 @@ public class ClassSessionResponse {
     private LocalDate date;
     private int periodNumber;
     private int roomNumber;
+    private boolean cancelled;
     private TeacherResponse teacher;
 
     public static ClassSessionResponse from(ClassSession classSession) {
@@ -23,6 +24,7 @@ public class ClassSessionResponse {
         response.date = classSession.getDate();
         response.periodNumber = classSession.getPeriod().getPeriodNumber();
         response.roomNumber = classSession.getClassroom().getRoomNumber();
+        response.cancelled = classSession.isCancelled();
         if (classSession.getTeacher() != null) {
             response.teacher = TeacherResponse.from(classSession.getTeacher());
         }

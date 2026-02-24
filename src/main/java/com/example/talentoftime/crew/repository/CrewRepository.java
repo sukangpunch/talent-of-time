@@ -14,9 +14,13 @@ public interface CrewRepository extends JpaRepository<Crew, Long> {
 
     boolean existsByName(String name);
 
+    Optional<Crew> findByName(String name);
+
     boolean existsByUsername(String username);
 
     boolean existsByEmail(String email);
 
     Optional<Crew> findByUsername(String username);
+
+    Optional<Crew> findByProviderId(String providerId);
 }
