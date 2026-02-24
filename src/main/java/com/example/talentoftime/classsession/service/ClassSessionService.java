@@ -40,6 +40,8 @@ public class ClassSessionService {
     private final CountRepository countRepository;
     private final TeacherRepository teacherRepository;
 
+    static final int ONLINE_COUNT = 0;
+
     @Transactional(readOnly = true)
     public ClassSessionResponse findClassSession(Long classSessionId) {
         ClassSession classSession = classSessionRepository.findById(classSessionId)
@@ -70,27 +72,47 @@ public class ClassSessionService {
 
     @Transactional
     public ClassSessionResponse createClassSession(ClassSessionCreateRequest request) {
-        Period period = findPeriodOrThrow(request.getPeriodNumber());
-        Classroom classroom = findClassroomOrThrow(request.getClassroomId());
-        validateNoDuplicate(request.getDate(), period, classroom);
+        Period period = periodRepository.findByPeriodNumber(request.periodNumber())
+                .orElseThrow(() -> new BusinessException(ErrorCode.PERIOD_NOT_FOUND));
+        Classroom classroom = classroomRepository.findById(request.classroomId())
+                .orElseThrow(() -> new BusinessException(ErrorCode.CLASSROOM_NOT_FOUND));
+        validateNoDuplicate(request.date(), period, classroom);
 
-        Teacher teacher = findTeacherIfPresent(request.getTeacherId());
-        ClassSession classSession = ClassSession.create(request.getDate(), period, classroom, teacher);
+        Teacher teacher = findTeacherIfPresent(request.teacherId());
+        ClassSession classSession = new ClassSession(
+                request.date(),
+                period,
+                classroom,
+                teacher,
+                request.subject(),
+                request.group(),
+                request.inPersonCount(),
+                ONLINE_COUNT
+        );
+
         classSessionRepository.save(classSession);
-        log.info("수업 일정 단건 등록 완료: date={}, periodNumber={}, classroomId={}",
-                request.getDate(), request.getPeriodNumber(), request.getClassroomId());
+        log.info("수업 일정 단건 등록 완료: date={}, periodNumber={}, classroomId={}", request.date(), request.periodNumber(), request.classroomId());
         return ClassSessionResponse.from(classSession);
     }
 
     @Transactional
     public List<ClassSessionResponse> createBulkClassSessions(ClassSessionBulkCreateRequest request) {
-        List<ClassSession> sessions = request.getSessions().stream()
+        List<ClassSession> sessions = request.sessions().stream()
                 .map(item -> {
-                    Period period = findPeriodOrThrow(item.getPeriodNumber());
-                    Classroom classroom = findClassroomOrThrow(item.getClassroomId());
-                    validateNoDuplicate(item.getDate(), period, classroom);
-                    Teacher teacher = findTeacherIfPresent(item.getTeacherId());
-                    return ClassSession.create(item.getDate(), period, classroom, teacher);
+                    Period period = findPeriodOrThrow(item.periodNumber());
+                    Classroom classroom = findClassroomOrThrow(item.classroomId());
+                    validateNoDuplicate(item.date(), period, classroom);
+                    Teacher teacher = findTeacherIfPresent(item.teacherId());
+                    return new ClassSession(
+                            item.date(),
+                            period,
+                            classroom,
+                            teacher,
+                            item.subject(),
+                            item.group(),
+                            item.inPersonCount(),
+                            ONLINE_COUNT
+                    );
                 })
                 .toList();
 
@@ -101,18 +123,25 @@ public class ClassSessionService {
                 .toList();
     }
 
-    @Transactional
     public ClassSessionResponse updateClassSession(
             Long classSessionId,
-            ClassSessionUpdateRequest request) {
+            ClassSessionUpdateRequest request
+    ) {
         ClassSession classSession = classSessionRepository.findById(classSessionId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.CLASS_SESSION_NOT_FOUND));
 
-        Period newPeriod = findPeriodOrThrow(request.getPeriodNumber());
-        Classroom newClassroom = findClassroomOrThrow(request.getClassroomId());
+        Period newPeriod = request.periodNumber() != null
+                ? findPeriodOrThrow(request.periodNumber())
+                : classSession.getPeriod();
+        Classroom newClassroom = request.classroomId() != null
+                ? findClassroomOrThrow(request.classroomId())
+                : classSession.getClassroom();
 
         classSessionRepository.findByDateAndPeriodAndClassroom(
-                        request.getDate(), newPeriod, newClassroom)
+                        classSession.getDate(),
+                        newPeriod,
+                        newClassroom
+                )
                 .ifPresent(existing -> {
                     if (!existing.getId().equals(classSessionId)) {
                         throw new BusinessException(ErrorCode.CLASS_SESSION_DUPLICATED);
@@ -120,10 +149,7 @@ public class ClassSessionService {
                 });
 
         deleteLinkedSchedules(classSession);
-
-        classSession.update(request.getDate(), newPeriod, newClassroom);
-        Teacher teacher = findTeacherIfPresent(request.getTeacherId());
-        classSession.updateTeacher(teacher);
+        classSession.update(newPeriod, newClassroom);
         log.info("수업 일정 수정 완료: classSessionId={}", classSessionId);
         return ClassSessionResponse.from(classSession);
     }

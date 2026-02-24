@@ -1,11 +1,8 @@
 package com.example.talentoftime.schedule.domain;
 
-import java.time.LocalDate;
-import com.example.talentoftime.classroom.domain.Classroom;
 import com.example.talentoftime.classsession.domain.ClassSession;
 import com.example.talentoftime.common.domain.TaskType;
 import com.example.talentoftime.crew.domain.Crew;
-import com.example.talentoftime.period.domain.Period;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -17,6 +14,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import java.time.LocalDate;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -35,14 +33,6 @@ public class Schedule {
     @Column(name = "date", nullable = false)
     private LocalDate date;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "period_id", nullable = false)
-    private Period period;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "classroom_id", nullable = false)
-    private Classroom classroom;
-
     @Enumerated(EnumType.STRING)
     @Column(name = "task_type", nullable = false)
     private TaskType taskType;
@@ -52,40 +42,19 @@ public class Schedule {
     private Crew crew;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "class_session_id", nullable = true)
+    @JoinColumn(name = "class_session_id")
     private ClassSession classSession;
 
-    private Schedule(LocalDate date, Period period, Classroom classroom, TaskType taskType, Crew crew) {
-        this.date = date;
-        this.period = period;
-        this.classroom = classroom;
-        this.taskType = taskType;
-        this.crew = crew;
-    }
-
-    private Schedule(LocalDate date, Period period, Classroom classroom,
-            TaskType taskType, Crew crew, ClassSession classSession) {
-        this(date, period, classroom, taskType, crew);
-        this.classSession = classSession;
-    }
-
-    public static Schedule create(
+    public Schedule(
             LocalDate date,
-            Period period,
-            Classroom classroom,
-            TaskType taskType,
-            Crew crew) {
-        return new Schedule(date, period, classroom, taskType, crew);
-    }
-
-    public static Schedule create(
-            LocalDate date,
-            Period period,
-            Classroom classroom,
             TaskType taskType,
             Crew crew,
-            ClassSession classSession) {
-        return new Schedule(date, period, classroom, taskType, crew, classSession);
+            ClassSession classSession
+    ) {
+        this.date = date;
+        this.taskType = taskType;
+        this.crew = crew;
+        this.classSession = classSession;
     }
 
     public void assignCrew(Crew crew) {

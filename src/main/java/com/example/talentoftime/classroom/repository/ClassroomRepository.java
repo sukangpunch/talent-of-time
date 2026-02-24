@@ -9,6 +9,4 @@ import org.springframework.stereotype.Repository;
 public interface ClassroomRepository extends JpaRepository<Classroom, Long> {
 
     boolean existsByRoomNumber(int roomNumber);
-
-    Optional<Classroom> findByRoomNumber(int roomNumber);
 }

@@ -34,9 +34,7 @@ public enum ErrorCode {
     SCHEDULE_ALREADY_ASSIGNED(HttpStatus.CONFLICT, "S002", "이미 배정된 스케줄입니다."),
     SCHEDULE_INVALID_CREW_TYPE(HttpStatus.BAD_REQUEST, "S003", "해당 교시에 배정할 수 없는 크루 유형입니다."),
     SCHEDULE_NO_ELIGIBLE_CREW(HttpStatus.BAD_REQUEST, "S004", "배정 가능한 크루가 없습니다."),
-    SCHEDULE_SWAP_SAME_TASK(HttpStatus.BAD_REQUEST, "S005", "동일한 작업 유형은 교환할 수 없습니다."),
     SCHEDULE_NOT_OWNER(HttpStatus.FORBIDDEN, "S006", "본인의 스케줄만 삭제할 수 있습니다."),
-    SCHEDULE_DUPLICATE_TASK(HttpStatus.CONFLICT, "S007", "해당 슬롯에 동일한 작업이 이미 등록되어 있습니다."),
 
     // ClassSession
     CLASS_SESSION_NOT_FOUND(HttpStatus.NOT_FOUND, "CS001", "존재하지 않는 수업 일정입니다."),

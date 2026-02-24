@@ -18,10 +18,8 @@ public class TeacherResponse {
     private String eraserDetail;
     private MicType micType;
     private boolean hasPpt;
-    private String pptDetail;
     private String notes;
     private boolean hasEmail;
-    private String emailDetail;
 
     public static TeacherResponse from(Teacher teacher) {
         TeacherResponse response = new TeacherResponse();
@@ -32,10 +30,8 @@ public class TeacherResponse {
         response.eraserDetail = teacher.getEraserDetail();
         response.micType = teacher.getMicType();
         response.hasPpt = teacher.isHasPpt();
-        response.pptDetail = teacher.getPptDetail();
         response.notes = teacher.getNotes();
         response.hasEmail = teacher.isHasEmail();
-        response.emailDetail = teacher.getEmailDetail();
         return response;
     }
 }

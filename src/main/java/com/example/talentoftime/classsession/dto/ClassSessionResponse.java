@@ -1,33 +1,36 @@
 package com.example.talentoftime.classsession.dto;
 
 import com.example.talentoftime.classsession.domain.ClassSession;
-import com.example.talentoftime.teacher.dto.TeacherResponse;
+import com.example.talentoftime.teacher.domain.Teacher;
 import java.time.LocalDate;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 
-@Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class ClassSessionResponse {
-
-    private Long id;
-    private LocalDate date;
-    private int periodNumber;
-    private int roomNumber;
-    private boolean cancelled;
-    private TeacherResponse teacher;
-
+public record ClassSessionResponse(
+        Long id,
+        Long teacherId,
+        String teacherName,
+        int periodNumber,
+        int roomNumber,
+        String subject,
+        String group,
+        int inPersonCount,
+        int onlineCount,
+        String status,
+        LocalDate date
+) {
     public static ClassSessionResponse from(ClassSession classSession) {
-        ClassSessionResponse response = new ClassSessionResponse();
-        response.id = classSession.getId();
-        response.date = classSession.getDate();
-        response.periodNumber = classSession.getPeriod().getPeriodNumber();
-        response.roomNumber = classSession.getClassroom().getRoomNumber();
-        response.cancelled = classSession.isCancelled();
-        if (classSession.getTeacher() != null) {
-            response.teacher = TeacherResponse.from(classSession.getTeacher());
-        }
-        return response;
+        Teacher teacher = classSession.getTeacher();
+        return new ClassSessionResponse(
+                classSession.getId(),
+                teacher != null ? teacher.getId() : null,
+                teacher != null ? teacher.getName() : null,
+                classSession.getPeriod().getPeriodNumber(),
+                classSession.getClassroom().getRoomNumber(),
+                classSession.getSubject(),
+                classSession.getGroup(),
+                classSession.getInPersonCount(),
+                classSession.getOnlineCount(),
+                classSession.getStatus().name(),
+                classSession.getDate()
+        );
     }
 }

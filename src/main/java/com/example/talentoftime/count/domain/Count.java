@@ -39,14 +39,10 @@ public class Count {
     @Column(name = "count", nullable = false)
     private int count;
 
-    private Count(Crew crew, TaskType taskType) {
+    public Count(Crew crew, TaskType taskType) {
         this.crew = crew;
         this.taskType = taskType;
         this.count = 0;
-    }
-
-    public static Count createInitial(Crew crew, TaskType taskType) {
-        return new Count(crew, taskType);
     }
 
     public void increment() {

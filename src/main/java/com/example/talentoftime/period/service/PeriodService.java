@@ -13,8 +13,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
-@Service
 @RequiredArgsConstructor
+@Service
 public class PeriodService {
 
     private final PeriodRepository periodRepository;
@@ -39,11 +39,15 @@ public class PeriodService {
 
     @Transactional
     public PeriodResponse createPeriod(PeriodCreateRequest request) {
-        if (periodRepository.existsByPeriodNumber(request.getPeriodNumber())) {
+        if (periodRepository.existsByPeriodNumber(request.periodNumber())) {
             throw new BusinessException(ErrorCode.PERIOD_NUMBER_DUPLICATED);
         }
 
-        Period period = Period.create(request.getPeriodNumber(), request.getStartTime(), request.getEndTime());
+        Period period = new Period(
+                request.periodNumber(),
+                request.startTime(),
+                request.endTime()
+        );
         periodRepository.save(period);
         log.info("교시 생성 완료: periodNumber={}", period.getPeriodNumber());
 

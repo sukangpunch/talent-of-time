@@ -55,7 +55,7 @@ public class OAuthLoginProcessor {
 
     private void initializeCounts(Crew crew) {
         List<Count> counts = Arrays.stream(TaskType.values())
-                .map(taskType -> Count.createInitial(crew, taskType))
+                .map(taskType -> new Count(crew, taskType))
                 .toList();
         countRepository.saveAll(counts);
     }

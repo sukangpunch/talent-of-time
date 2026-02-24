@@ -43,7 +43,7 @@ public interface ClassSessionControllerDocs {
 
     @Operation(
             summary = "수업 일정 수정",
-            description = "수업 일정의 날짜·교시·강의실을 수정합니다.\n\n"
+            description = "수업 일정의 교시·강의실을 수정합니다. (PATCH — null 필드는 기존 값 유지)\n\n"
                     + "연결된 크루 배정(Schedule)이 있는 경우, 해당 배정은 삭제되고 count도 복구됩니다."
     )
     @ApiResponses({

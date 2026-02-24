@@ -13,8 +13,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
-@Service
 @RequiredArgsConstructor
+@Service
 public class ClassroomService {
 
     private final ClassroomRepository classroomRepository;
@@ -39,11 +39,11 @@ public class ClassroomService {
 
     @Transactional
     public ClassroomResponse createClassroom(ClassroomCreateRequest request) {
-        if (classroomRepository.existsByRoomNumber(request.getRoomNumber())) {
+        if (classroomRepository.existsByRoomNumber(request.roomNumber())) {
             throw new BusinessException(ErrorCode.CLASSROOM_ROOM_NUMBER_DUPLICATED);
         }
 
-        Classroom classroom = Classroom.create(request.getRoomNumber());
+        Classroom classroom = new Classroom(request.roomNumber());
         classroomRepository.save(classroom);
         log.info("강의실 생성 완료: roomNumber={}", classroom.getRoomNumber());
 

@@ -12,8 +12,8 @@ import com.example.talentoftime.crew.repository.CrewRepository;
 import com.example.talentoftime.schedule.domain.Schedule;
 import com.example.talentoftime.schedule.dto.ScheduleCreateRequest;
 import com.example.talentoftime.schedule.dto.ScheduleResponse;
-import com.example.talentoftime.schedule.dto.ScheduleSwapRequest;
 import com.example.talentoftime.schedule.repository.ScheduleRepository;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -30,63 +30,25 @@ public class ScheduleService {
     private final ClassSessionRepository classSessionRepository;
 
     @Transactional
-    public void swapSchedules(ScheduleSwapRequest request) {
-        Schedule scheduleA = scheduleRepository.findById(request.getScheduleIdA())
-                .orElseThrow(() -> new BusinessException(ErrorCode.SCHEDULE_NOT_FOUND));
-        Schedule scheduleB = scheduleRepository.findById(request.getScheduleIdB())
-                .orElseThrow(() -> new BusinessException(ErrorCode.SCHEDULE_NOT_FOUND));
-
-        if (scheduleA.getTaskType() == scheduleB.getTaskType()) {
-            throw new BusinessException(ErrorCode.SCHEDULE_SWAP_SAME_TASK);
-        }
-
-        Crew crewA = scheduleA.getCrew();
-        Crew crewB = scheduleB.getCrew();
-        TaskType taskTypeA = scheduleA.getTaskType();
-        TaskType taskTypeB = scheduleB.getTaskType();
-
-        Count countAOriginal = findCountOrThrow(crewA, taskTypeA);
-        countAOriginal.decrement();
-        Count countANew = findCountOrThrow(crewA, taskTypeB);
-        countANew.increment();
-
-        Count countBOriginal = findCountOrThrow(crewB, taskTypeB);
-        countBOriginal.decrement();
-        Count countBNew = findCountOrThrow(crewB, taskTypeA);
-        countBNew.increment();
-
-        scheduleA.assignCrew(crewB);
-        scheduleB.assignCrew(crewA);
-
-        log.info("스케줄 교환 완료: scheduleIdA={}, scheduleIdB={}", scheduleA.getId(), scheduleB.getId());
-    }
-
-    @Transactional
     public ScheduleResponse selfRegister(Long crewId, ScheduleCreateRequest request) {
         Crew crew = crewRepository.findById(crewId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.CREW_NOT_FOUND));
 
-        ClassSession classSession = classSessionRepository.findById(request.getClassSessionId())
+        ClassSession classSession = classSessionRepository.findById(request.classSessionId())
                 .orElseThrow(() -> new BusinessException(ErrorCode.CLASS_SESSION_NOT_FOUND));
 
-        if (scheduleRepository.existsByClassSessionAndTaskType(classSession, request.getTaskType())) {
-            throw new BusinessException(ErrorCode.SCHEDULE_DUPLICATE_TASK);
-        }
-
-        Count count = findCountOrThrow(crew, request.getTaskType());
+        Count count = findCountOrThrow(crew, request.taskType());
         count.increment();
 
-        Schedule schedule = Schedule.create(
+        Schedule schedule = new Schedule(
                 classSession.getDate(),
-                classSession.getPeriod(),
-                classSession.getClassroom(),
-                request.getTaskType(),
+                request.taskType(),
                 crew,
-                classSession);
+                classSession
+        );
 
         scheduleRepository.save(schedule);
-        log.info("스케줄 자기 등록 완료: crewId={}, classSessionId={}, taskType={}",
-                crewId, request.getClassSessionId(), request.getTaskType());
+        log.info("스케줄 자기 등록 완료: crewId={}, classSessionId={}, taskType={}", crewId, request.classSessionId(), request.taskType());
         return ScheduleResponse.from(schedule);
     }
 
@@ -104,6 +66,15 @@ public class ScheduleService {
 
         scheduleRepository.delete(schedule);
         log.info("스케줄 등록 취소 완료: scheduleId={}, crewId={}", scheduleId, crewId);
+    }
+
+    @Transactional(readOnly = true)
+    public List<ScheduleResponse> findByClassSessionAndTaskType(Long classSessionId, TaskType taskType) {
+        ClassSession classSession = classSessionRepository.findById(classSessionId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.CLASS_SESSION_NOT_FOUND));
+        return scheduleRepository.findByClassSessionAndTaskType(classSession, taskType).stream()
+                .map(ScheduleResponse::from)
+                .toList();
     }
 
     private Count findCountOrThrow(Crew crew, TaskType taskType) {

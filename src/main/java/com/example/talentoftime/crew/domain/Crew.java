@@ -45,12 +45,6 @@ public class Crew {
     @Column(name = "role")
     private Role role;
 
-    private Crew(String name, CrewType crewType) {
-        this.name = name;
-        this.crewType = crewType;
-        this.role = Role.USER;
-    }
-
     public Crew(
             String name,
             String email,

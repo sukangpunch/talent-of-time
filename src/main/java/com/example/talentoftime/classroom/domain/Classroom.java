@@ -24,11 +24,7 @@ public class Classroom {
     @Column(name = "room_number", nullable = false)
     private int roomNumber;
 
-    private Classroom(int roomNumber) {
+    public Classroom(int roomNumber) {
         this.roomNumber = roomNumber;
-    }
-
-    public static Classroom create(int roomNumber) {
-        return new Classroom(roomNumber);
     }
 }
