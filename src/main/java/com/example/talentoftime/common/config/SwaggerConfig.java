@@ -46,7 +46,7 @@ public class SwaggerConfig {
     private List<Server> servers() {
         List<Server> servers = new ArrayList<>();
         servers.add(new Server().url("http://localhost:8080").description("Dev env"));
-        servers.add(new Server().url("https://www.sdij.site").description("Prod env"));
+        servers.add(new Server().url("https://server.sdij.site").description("Prod env"));
         return servers;
     }
 }
