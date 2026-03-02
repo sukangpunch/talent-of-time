@@ -2,6 +2,7 @@ package com.example.talentoftime.teacher.controller;
 
 import com.example.talentoftime.teacher.dto.TeacherCreateRequest;
 import com.example.talentoftime.teacher.dto.TeacherResponse;
+import com.example.talentoftime.teacher.dto.TeacherSearchResponse;
 import com.example.talentoftime.teacher.dto.TeacherUpdateRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -10,6 +11,7 @@ import java.util.List;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Tag(name = "강사", description = "강사 관리 API")
 public interface TeacherControllerDocs {
@@ -30,4 +32,7 @@ public interface TeacherControllerDocs {
 
     @Operation(summary = "강사 삭제")
     ResponseEntity<Void> deleteTeacher(@PathVariable Long teacherId);
+
+    @Operation(summary = "강사 이름 검색 (prefix 매칭)")
+    ResponseEntity<List<TeacherSearchResponse>> searchTeachers(@RequestParam String name);
 }

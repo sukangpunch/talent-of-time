@@ -2,6 +2,7 @@ package com.example.talentoftime.teacher.controller;
 
 import com.example.talentoftime.teacher.dto.TeacherCreateRequest;
 import com.example.talentoftime.teacher.dto.TeacherResponse;
+import com.example.talentoftime.teacher.dto.TeacherSearchResponse;
 import com.example.talentoftime.teacher.dto.TeacherUpdateRequest;
 import com.example.talentoftime.teacher.service.TeacherService;
 import jakarta.validation.Valid;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -51,5 +53,11 @@ public class TeacherController implements TeacherControllerDocs {
     public ResponseEntity<Void> deleteTeacher(@PathVariable Long teacherId) {
         teacherService.deleteTeacher(teacherId);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<TeacherSearchResponse>> searchTeachers(
+            @RequestParam String name) {
+        return ResponseEntity.ok(teacherService.searchTeachersByName(name));
     }
 }

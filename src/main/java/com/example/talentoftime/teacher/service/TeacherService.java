@@ -5,6 +5,7 @@ import com.example.talentoftime.common.exception.ErrorCode;
 import com.example.talentoftime.teacher.domain.Teacher;
 import com.example.talentoftime.teacher.dto.TeacherCreateRequest;
 import com.example.talentoftime.teacher.dto.TeacherResponse;
+import com.example.talentoftime.teacher.dto.TeacherSearchResponse;
 import com.example.talentoftime.teacher.dto.TeacherUpdateRequest;
 import com.example.talentoftime.teacher.repository.TeacherRepository;
 import java.util.List;
@@ -72,6 +73,21 @@ public class TeacherService {
         Teacher teacher = findTeacherOrThrow(teacherId);
         teacherRepository.delete(teacher);
         log.info("강사 삭제 완료: teacherId={}", teacherId);
+    }
+
+    @Transactional(readOnly = true)
+    public List<TeacherSearchResponse> searchTeachersByName(String name) {
+        List<Teacher> teachers = teacherRepository.findByNameStartingWith(name);
+        boolean hasExactMatch = teachers.stream().anyMatch(t -> t.getName().equals(name));
+        if (hasExactMatch) {
+            return teachers.stream()
+                    .filter(t -> t.getName().equals(name))
+                    .map(TeacherSearchResponse::from)
+                    .toList();
+        }
+        return teachers.stream()
+                .map(TeacherSearchResponse::from)
+                .toList();
     }
 
     private Teacher findTeacherOrThrow(Long teacherId) {
