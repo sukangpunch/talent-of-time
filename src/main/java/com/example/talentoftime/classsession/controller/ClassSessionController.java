@@ -38,6 +38,12 @@ public class ClassSessionController implements ClassSessionControllerDocs {
         return ResponseEntity.ok(classSessionService.findClassSessionsByDate(date));
     }
 
+    @GetMapping("/last-week-same-day")
+    public ResponseEntity<List<ClassSessionResponse>> findLastWeekSameDayClassSessions(
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
+        return ResponseEntity.ok(classSessionService.findLastWeekSameDayClassSessions(date));
+    }
+
     @PostMapping("/bulk")
     public ResponseEntity<List<ClassSessionResponse>> createBulkClassSessions(
             @Valid @RequestBody ClassSessionBulkCreateRequest request) {

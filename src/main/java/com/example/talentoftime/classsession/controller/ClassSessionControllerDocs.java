@@ -31,6 +31,14 @@ public interface ClassSessionControllerDocs {
             @Parameter(description = "조회 날짜 (yyyy-MM-dd)", example = "2026-02-24") LocalDate date);
 
     @Operation(
+            summary = "저번 주 같은 요일 수업 일정 조회",
+            description = "입력한 날짜의 저번 주 같은 요일(7일 전) 수업 일정 목록을 반환합니다."
+    )
+    @ApiResponse(responseCode = "200", description = "조회 성공")
+    ResponseEntity<List<ClassSessionResponse>> findLastWeekSameDayClassSessions(
+            @Parameter(description = "기준 날짜 (yyyy-MM-dd)", example = "2026-03-02") LocalDate date);
+
+    @Operation(
             summary = "수업 일정 일괄 등록 (주간)",
             description = "한 주치 수업 일정을 한 번에 등록합니다. 하나라도 중복이 있으면 전체 롤백됩니다."
     )
