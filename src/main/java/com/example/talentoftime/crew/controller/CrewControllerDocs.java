@@ -3,6 +3,8 @@ package com.example.talentoftime.crew.controller;
 import com.example.talentoftime.crew.dto.CrewResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -17,7 +19,18 @@ public interface CrewControllerDocs {
     )
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "조회 성공"),
-            @ApiResponse(responseCode = "404", description = "존재하지 않는 크루")
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "존재하지 않는 크루",
+                    content = @Content(
+                            mediaType = "application/json",
+                            examples = @ExampleObject(
+                                    name = "C001",
+                                    summary = "C001 - 존재하지 않는 크루",
+                                    value = "{\"error\": \"C001\", \"message\": \"존재하지 않는 크루입니다.\"}"
+                            )
+                    )
+            )
     })
     ResponseEntity<CrewResponse> findCrewByName(
             @Parameter(description = "크루 이름", example = "홍길동") String name);
