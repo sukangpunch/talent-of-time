@@ -69,7 +69,8 @@ public class ClassSession {
             String subject,
             String group,
             int inPersonCount,
-            int onlineCount
+            int onlineCount,
+            ClassStatus status
     ) {
         this.date = date;
         this.period = period;
@@ -79,7 +80,7 @@ public class ClassSession {
         this.group = group;
         this.inPersonCount = inPersonCount;
         this.onlineCount = onlineCount;
-        this.status = ClassStatus.NORMAL;
+        this.status = status;
     }
 
     public void update(Period period, Classroom classroom) {

@@ -4,6 +4,8 @@ import com.example.talentoftime.common.domain.TaskType;
 import com.example.talentoftime.count.dto.CountResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -26,7 +28,18 @@ public interface CountControllerDocs {
     )
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "조회 성공"),
-            @ApiResponse(responseCode = "404", description = "존재하지 않는 크루")
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "존재하지 않는 크루",
+                    content = @Content(
+                            mediaType = "application/json",
+                            examples = @ExampleObject(
+                                    name = "C001",
+                                    summary = "C001 - 존재하지 않는 크루",
+                                    value = "{\"error\": \"C001\", \"message\": \"존재하지 않는 크루입니다.\"}"
+                            )
+                    )
+            )
     })
     ResponseEntity<List<CountResponse>> findCountsByCrew(
             @Parameter(description = "크루 ID", example = "1") Long crewId);
@@ -43,7 +56,18 @@ public interface CountControllerDocs {
     )
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "조회 성공"),
-            @ApiResponse(responseCode = "400", description = "유효하지 않은 작업 유형")
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "유효하지 않은 작업 유형",
+                    content = @Content(
+                            mediaType = "application/json",
+                            examples = @ExampleObject(
+                                    name = "G001",
+                                    summary = "G001 - 허용되지 않는 taskType 값",
+                                    value = "{\"error\": \"G001\", \"message\": \"유효하지 않은 요청 파라미터입니다.\"}"
+                            )
+                    )
+            )
     })
     ResponseEntity<List<CountResponse>> findCountsByTaskType(
             @Parameter(description = "작업 유형 (SETTING / ENTRY / EXIT / JOG / CLEANUP)", example = "ENTRY") TaskType taskType);

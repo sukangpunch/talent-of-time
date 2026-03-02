@@ -22,7 +22,9 @@ import com.example.talentoftime.teacher.domain.Teacher;
 import com.example.talentoftime.teacher.repository.TeacherRepository;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -39,8 +41,6 @@ public class ClassSessionService {
     private final ScheduleRepository scheduleRepository;
     private final CountRepository countRepository;
     private final TeacherRepository teacherRepository;
-
-    static final int ONLINE_COUNT = 0;
 
     @Transactional(readOnly = true)
     public ClassSessionResponse findClassSession(Long classSessionId) {
@@ -93,7 +93,8 @@ public class ClassSessionService {
                 request.subject(),
                 request.group(),
                 request.inPersonCount(),
-                ONLINE_COUNT
+                request.onlineCount(),
+                request.classStatus()
         );
 
         classSessionRepository.save(classSession);
@@ -103,6 +104,7 @@ public class ClassSessionService {
 
     @Transactional
     public List<ClassSessionResponse> createBulkClassSessions(ClassSessionBulkCreateRequest request) {
+        validateNoDuplicateInRequest(request.sessions());
         List<ClassSession> sessions = request.sessions().stream()
                 .map(item -> {
                     Period period = findPeriodOrThrow(item.periodNumber());
@@ -117,7 +119,8 @@ public class ClassSessionService {
                             item.subject(),
                             item.group(),
                             item.inPersonCount(),
-                            ONLINE_COUNT
+                            item.onlineCount(),
+                            item.classStatus()
                     );
                 })
                 .toList();
@@ -219,6 +222,16 @@ public class ClassSessionService {
         }
         return teacherRepository.findById(teacherId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.TEACHER_NOT_FOUND));
+    }
+
+    private void validateNoDuplicateInRequest(List<ClassSessionCreateRequest> sessions) {
+        Set<String> keys = new HashSet<>();
+        for (ClassSessionCreateRequest item : sessions) {
+            String key = item.date() + "-" + item.periodNumber() + "-" + item.classroomId();
+            if (!keys.add(key)) {
+                throw new BusinessException(ErrorCode.CLASS_SESSION_DUPLICATED);
+            }
+        }
     }
 
     private void validateNoDuplicate(LocalDate date, Period period, Classroom classroom) {

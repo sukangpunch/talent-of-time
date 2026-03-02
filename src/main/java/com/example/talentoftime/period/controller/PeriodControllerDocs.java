@@ -4,6 +4,8 @@ import com.example.talentoftime.period.dto.PeriodCreateRequest;
 import com.example.talentoftime.period.dto.PeriodResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -32,7 +34,18 @@ public interface PeriodControllerDocs {
     )
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "조회 성공"),
-            @ApiResponse(responseCode = "404", description = "존재하지 않는 교시")
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "존재하지 않는 교시",
+                    content = @Content(
+                            mediaType = "application/json",
+                            examples = @ExampleObject(
+                                    name = "P001",
+                                    summary = "P001 - 존재하지 않는 교시",
+                                    value = "{\"error\": \"P001\", \"message\": \"존재하지 않는 교시입니다.\"}"
+                            )
+                    )
+            )
     })
     ResponseEntity<PeriodResponse> findPeriod(
             @Parameter(description = "교시 ID", example = "1") Long periodId);
@@ -43,7 +56,18 @@ public interface PeriodControllerDocs {
     )
     @ApiResponses({
             @ApiResponse(responseCode = "201", description = "생성 성공"),
-            @ApiResponse(responseCode = "409", description = "교시 번호 중복")
+            @ApiResponse(
+                    responseCode = "409",
+                    description = "교시 번호 중복",
+                    content = @Content(
+                            mediaType = "application/json",
+                            examples = @ExampleObject(
+                                    name = "P002",
+                                    summary = "P002 - 이미 등록된 교시 번호",
+                                    value = "{\"error\": \"P002\", \"message\": \"이미 등록된 교시 번호입니다.\"}"
+                            )
+                    )
+            )
     })
     ResponseEntity<PeriodResponse> createPeriod(PeriodCreateRequest request);
 
@@ -53,7 +77,18 @@ public interface PeriodControllerDocs {
     )
     @ApiResponses({
             @ApiResponse(responseCode = "204", description = "삭제 성공"),
-            @ApiResponse(responseCode = "404", description = "존재하지 않는 교시")
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "존재하지 않는 교시",
+                    content = @Content(
+                            mediaType = "application/json",
+                            examples = @ExampleObject(
+                                    name = "P001",
+                                    summary = "P001 - 존재하지 않는 교시",
+                                    value = "{\"error\": \"P001\", \"message\": \"존재하지 않는 교시입니다.\"}"
+                            )
+                    )
+            )
     })
     ResponseEntity<Void> deletePeriod(
             @Parameter(description = "교시 ID", example = "1") Long periodId);

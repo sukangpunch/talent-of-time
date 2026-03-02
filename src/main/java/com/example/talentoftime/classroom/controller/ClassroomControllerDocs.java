@@ -4,6 +4,8 @@ import com.example.talentoftime.classroom.dto.ClassroomCreateRequest;
 import com.example.talentoftime.classroom.dto.ClassroomResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -26,7 +28,18 @@ public interface ClassroomControllerDocs {
     )
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "조회 성공"),
-            @ApiResponse(responseCode = "404", description = "존재하지 않는 강의실")
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "존재하지 않는 강의실",
+                    content = @Content(
+                            mediaType = "application/json",
+                            examples = @ExampleObject(
+                                    name = "R001",
+                                    summary = "R001 - 존재하지 않는 강의실",
+                                    value = "{\"error\": \"R001\", \"message\": \"존재하지 않는 강의실입니다.\"}"
+                            )
+                    )
+            )
     })
     ResponseEntity<ClassroomResponse> findClassroom(
             @Parameter(description = "강의실 ID", example = "1") Long classroomId);
@@ -37,7 +50,18 @@ public interface ClassroomControllerDocs {
     )
     @ApiResponses({
             @ApiResponse(responseCode = "201", description = "생성 성공"),
-            @ApiResponse(responseCode = "409", description = "호수 중복")
+            @ApiResponse(
+                    responseCode = "409",
+                    description = "호수 중복",
+                    content = @Content(
+                            mediaType = "application/json",
+                            examples = @ExampleObject(
+                                    name = "R002",
+                                    summary = "R002 - 이미 등록된 호수",
+                                    value = "{\"error\": \"R002\", \"message\": \"이미 등록된 호수입니다.\"}"
+                            )
+                    )
+            )
     })
     ResponseEntity<ClassroomResponse> createClassroom(ClassroomCreateRequest request);
 
@@ -47,7 +71,18 @@ public interface ClassroomControllerDocs {
     )
     @ApiResponses({
             @ApiResponse(responseCode = "204", description = "삭제 성공"),
-            @ApiResponse(responseCode = "404", description = "존재하지 않는 강의실")
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "존재하지 않는 강의실",
+                    content = @Content(
+                            mediaType = "application/json",
+                            examples = @ExampleObject(
+                                    name = "R001",
+                                    summary = "R001 - 존재하지 않는 강의실",
+                                    value = "{\"error\": \"R001\", \"message\": \"존재하지 않는 강의실입니다.\"}"
+                            )
+                    )
+            )
     })
     ResponseEntity<Void> deleteClassroom(
             @Parameter(description = "강의실 ID", example = "1") Long classroomId);

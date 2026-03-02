@@ -5,6 +5,8 @@ import com.example.talentoftime.classsession.dto.ClassSessionResponse;
 import com.example.talentoftime.classsession.dto.ClassSessionUpdateRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -44,8 +46,54 @@ public interface ClassSessionControllerDocs {
     )
     @ApiResponses({
             @ApiResponse(responseCode = "201", description = "등록 성공"),
-            @ApiResponse(responseCode = "400", description = "중복된 수업 일정 포함"),
-            @ApiResponse(responseCode = "404", description = "존재하지 않는 교시 또는 강의실")
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "유효하지 않은 요청 파라미터",
+                    content = @Content(
+                            mediaType = "application/json",
+                            examples = @ExampleObject(
+                                    name = "G001",
+                                    summary = "G001 - sessions 목록이 비어있음",
+                                    value = "{\"error\": \"G001\", \"message\": \"유효하지 않은 요청 파라미터입니다.\"}"
+                            )
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "존재하지 않는 리소스",
+                    content = @Content(
+                            mediaType = "application/json",
+                            examples = {
+                                    @ExampleObject(
+                                            name = "P001",
+                                            summary = "P001 - 존재하지 않는 교시",
+                                            value = "{\"error\": \"P001\", \"message\": \"존재하지 않는 교시입니다.\"}"
+                                    ),
+                                    @ExampleObject(
+                                            name = "R001",
+                                            summary = "R001 - 존재하지 않는 강의실",
+                                            value = "{\"error\": \"R001\", \"message\": \"존재하지 않는 강의실입니다.\"}"
+                                    ),
+                                    @ExampleObject(
+                                            name = "T001",
+                                            summary = "T001 - 존재하지 않는 강사 (teacherId 제공 시)",
+                                            value = "{\"error\": \"T001\", \"message\": \"존재하지 않는 강사입니다.\"}"
+                                    )
+                            }
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "409",
+                    description = "수업 일정 중복",
+                    content = @Content(
+                            mediaType = "application/json",
+                            examples = @ExampleObject(
+                                    name = "CS002",
+                                    summary = "CS002 - 요청 내 또는 DB에 이미 존재하는 수업 일정",
+                                    value = "{\"error\": \"CS002\", \"message\": \"수업 일정이 중복됩니다.\"}"
+                            )
+                    )
+            )
     })
     ResponseEntity<List<ClassSessionResponse>> createBulkClassSessions(ClassSessionBulkCreateRequest request);
 
@@ -56,8 +104,42 @@ public interface ClassSessionControllerDocs {
     )
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "수정 성공"),
-            @ApiResponse(responseCode = "400", description = "수정 결과가 기존 다른 일정과 중복"),
-            @ApiResponse(responseCode = "404", description = "존재하지 않는 수업 일정")
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "존재하지 않는 리소스",
+                    content = @Content(
+                            mediaType = "application/json",
+                            examples = {
+                                    @ExampleObject(
+                                            name = "CS001",
+                                            summary = "CS001 - 존재하지 않는 수업 일정",
+                                            value = "{\"error\": \"CS001\", \"message\": \"존재하지 않는 수업 일정입니다.\"}"
+                                    ),
+                                    @ExampleObject(
+                                            name = "P001",
+                                            summary = "P001 - 존재하지 않는 교시",
+                                            value = "{\"error\": \"P001\", \"message\": \"존재하지 않는 교시입니다.\"}"
+                                    ),
+                                    @ExampleObject(
+                                            name = "R001",
+                                            summary = "R001 - 존재하지 않는 강의실",
+                                            value = "{\"error\": \"R001\", \"message\": \"존재하지 않는 강의실입니다.\"}"
+                                    )
+                            }
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "409",
+                    description = "수업 일정 중복",
+                    content = @Content(
+                            mediaType = "application/json",
+                            examples = @ExampleObject(
+                                    name = "CS002",
+                                    summary = "CS002 - 수정 결과가 다른 일정과 중복",
+                                    value = "{\"error\": \"CS002\", \"message\": \"수업 일정이 중복됩니다.\"}"
+                            )
+                    )
+            )
     })
     ResponseEntity<ClassSessionResponse> updateClassSession(
             @Parameter(description = "수업 일정 ID", example = "1") Long classSessionId,
@@ -66,13 +148,34 @@ public interface ClassSessionControllerDocs {
     @Operation(
             summary = "수업 일정 휴강 처리",
             description = "수업 일정을 휴강으로 처리합니다.\n\n"
-                    + "연결된 크루 배정(Schedule)이 있는 경우, 해당 배정도 함께 삭제되고 count도 복구됩니다.\n\n"
-                    + "이미 휴강 처리된 수업 일정은 400을 반환합니다."
+                    + "연결된 크루 배정(Schedule)이 있는 경우, 해당 배정도 함께 삭제되고 count도 복구됩니다."
     )
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "휴강 처리 성공"),
-            @ApiResponse(responseCode = "400", description = "이미 휴강 처리된 수업 일정"),
-            @ApiResponse(responseCode = "404", description = "존재하지 않는 수업 일정")
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "이미 휴강 처리된 수업 일정",
+                    content = @Content(
+                            mediaType = "application/json",
+                            examples = @ExampleObject(
+                                    name = "CS004",
+                                    summary = "CS004 - 이미 휴강 처리된 수업 일정",
+                                    value = "{\"error\": \"CS004\", \"message\": \"이미 휴강 처리된 수업 일정입니다.\"}"
+                            )
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "존재하지 않는 수업 일정",
+                    content = @Content(
+                            mediaType = "application/json",
+                            examples = @ExampleObject(
+                                    name = "CS001",
+                                    summary = "CS001 - 존재하지 않는 수업 일정",
+                                    value = "{\"error\": \"CS001\", \"message\": \"존재하지 않는 수업 일정입니다.\"}"
+                            )
+                    )
+            )
     })
     ResponseEntity<ClassSessionResponse> cancelClassSession(
             @Parameter(description = "수업 일정 ID", example = "1") Long classSessionId);

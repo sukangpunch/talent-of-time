@@ -1,5 +1,6 @@
 package com.example.talentoftime.classsession.dto;
 
+import com.example.talentoftime.classsession.domain.ClassStatus;
 import java.time.LocalDate;
 
 public record ClassSessionCreateRequest(
@@ -9,6 +10,8 @@ public record ClassSessionCreateRequest(
         Long teacherId,
         String subject,
         String group,
-        Integer inPersonCount
+        Integer inPersonCount,
+        Integer onlineCount,
+        ClassStatus classStatus
 ) {
 }

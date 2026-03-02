@@ -38,7 +38,7 @@ public enum ErrorCode {
 
     // ClassSession
     CLASS_SESSION_NOT_FOUND(HttpStatus.NOT_FOUND, "CS001", "존재하지 않는 수업 일정입니다."),
-    CLASS_SESSION_DUPLICATED(HttpStatus.CONFLICT, "CS002", "이미 등록된 수업 일정입니다."),
+    CLASS_SESSION_DUPLICATED(HttpStatus.CONFLICT, "CS002", "수업 일정이 중복됩니다."),
     CLASS_SESSION_EMPTY_FOR_DATE(HttpStatus.NOT_FOUND, "CS003", "해당 날짜에 등록된 수업 일정이 없습니다."),
     CLASS_SESSION_ALREADY_CANCELLED(HttpStatus.BAD_REQUEST, "CS004", "이미 휴강 처리된 수업 일정입니다."),
 
