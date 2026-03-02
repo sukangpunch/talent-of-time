@@ -18,5 +18,5 @@ public class TeacherCreateRequest {
     private MicType micType;
     private boolean hasPpt;
     private String notes;
-    private boolean hasEmail;
+    private String email;
 }

@@ -19,7 +19,7 @@ public class TeacherResponse {
     private MicType micType;
     private boolean hasPpt;
     private String notes;
-    private boolean hasEmail;
+    private String email;
 
     public static TeacherResponse from(Teacher teacher) {
         TeacherResponse response = new TeacherResponse();
@@ -31,7 +31,7 @@ public class TeacherResponse {
         response.micType = teacher.getMicType();
         response.hasPpt = teacher.isHasPpt();
         response.notes = teacher.getNotes();
-        response.hasEmail = teacher.isHasEmail();
+        response.email = teacher.getEmail();
         return response;
     }
 }

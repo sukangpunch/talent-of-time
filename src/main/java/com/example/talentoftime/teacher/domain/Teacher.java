@@ -46,8 +46,8 @@ public class Teacher {
     @Column(name = "notes", columnDefinition = "TEXT")
     private String notes;
 
-    @Column(name = "has_email")
-    private boolean hasEmail;
+    @Column(name = "email")
+    private String email;
 
     public Teacher(
             String name,
@@ -57,7 +57,7 @@ public class Teacher {
             MicType micType,
             boolean hasPpt,
             String notes,
-            boolean hasEmail
+            String email
     ) {
         this.name = name;
         this.chalkType = chalkType;
@@ -66,7 +66,7 @@ public class Teacher {
         this.micType = micType;
         this.hasPpt = hasPpt;
         this.notes = notes;
-        this.hasEmail = hasEmail;
+        this.email = email;
     }
 
     public void update(
@@ -77,7 +77,7 @@ public class Teacher {
             MicType micType,
             boolean hasPpt,
             String notes,
-            boolean hasEmail
+            String email
     ) {
         this.name = name;
         this.chalkType = chalkType;
@@ -86,6 +86,6 @@ public class Teacher {
         this.micType = micType;
         this.hasPpt = hasPpt;
         this.notes = notes;
-        this.hasEmail = hasEmail;
+        this.email = email;
     }
 }
