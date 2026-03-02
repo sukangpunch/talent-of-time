@@ -72,6 +72,7 @@ public class ClassSessionService {
 
     @Transactional(readOnly = true)
     public List<ClassSessionResponse> findLastWeekSameDayClassSessions(LocalDate date) {
+
         return findClassSessionsByDate(date.minusWeeks(1));
     }
 
