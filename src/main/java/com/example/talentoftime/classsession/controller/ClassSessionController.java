@@ -8,6 +8,7 @@ import jakarta.validation.Valid;
 import java.time.LocalDate;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -36,6 +37,12 @@ public class ClassSessionController implements ClassSessionControllerDocs {
     public ResponseEntity<List<ClassSessionResponse>> findClassSessionsByDate(
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
         return ResponseEntity.ok(classSessionService.findClassSessionsByDate(date));
+    }
+
+    @GetMapping("/last-week-same-day")
+    public ResponseEntity<List<ClassSessionResponse>> findLastWeekSameDayClassSessions(
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
+        return ResponseEntity.ok(classSessionService.findLastWeekSameDayClassSessions(date));
     }
 
     @PostMapping("/bulk")

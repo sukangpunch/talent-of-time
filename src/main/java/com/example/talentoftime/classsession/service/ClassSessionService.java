@@ -70,6 +70,12 @@ public class ClassSessionService {
                 .toList();
     }
 
+    @Transactional(readOnly = true)
+    public List<ClassSessionResponse> findLastWeekSameDayClassSessions(LocalDate date) {
+
+        return findClassSessionsByDate(date.minusWeeks(1));
+    }
+
     @Transactional
     public ClassSessionResponse createClassSession(ClassSessionCreateRequest request) {
         Period period = periodRepository.findByPeriodNumber(request.periodNumber())
