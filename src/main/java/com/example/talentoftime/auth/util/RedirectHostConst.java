@@ -6,7 +6,7 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public class RedirectHostConst {
     public static final Map<String, String> DEST_BASE = Map.of(
-            "prod",  "https://sdij-crew.vercel.app/",
+            "prod",  "https://www.sdij.site",
             "local", "http://localhost:5173"
     );
 }
