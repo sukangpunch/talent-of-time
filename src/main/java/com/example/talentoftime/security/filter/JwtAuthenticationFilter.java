@@ -1,6 +1,7 @@
 package com.example.talentoftime.security.filter;
 
 import com.example.talentoftime.auth.service.AuthTokenProvider;
+import com.example.talentoftime.auth.util.CookieUtil;
 import com.example.talentoftime.common.exception.BusinessException;
 import com.example.talentoftime.security.exception.CustomAuthenticationEntryPoint;
 import com.example.talentoftime.security.exception.CustomAuthenticationException;
@@ -33,11 +34,16 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             HttpEndpoint.prefix("/api/auth", HttpMethod.POST),
 
             /* oauth */
-            HttpEndpoint.prefix("/api/v1/oauth", HttpMethod.GET)
+            HttpEndpoint.prefix("/api/v1/oauth", HttpMethod.GET),
+
+            /* token management */
+            HttpEndpoint.exact("/api/v1/auth/refresh", HttpMethod.POST),
+            HttpEndpoint.exact("/api/v1/auth/logout", HttpMethod.POST)
     );
 
     private final AuthTokenProvider authTokenProvider;
     private final CustomAuthenticationEntryPoint authenticationEntryPoint;
+    private final CookieUtil cookieUtil;
 
     @Override
     protected void doFilterInternal(
@@ -46,11 +52,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             @NonNull FilterChain filterChain
     ) throws ServletException, IOException {
         try {
-            String token = request.getHeader("Authorization");
+            String jwtToken = cookieUtil.extractAccessToken(request);
 
-            if (checkTokenNotNullAndBearer(token)) {
-                String jwtToken = token.substring(7);
-
+            if (jwtToken != null) {
                 authTokenProvider.validateToken(jwtToken);
                 Authentication authentication = authTokenProvider.getAuthUser(jwtToken);
                 SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -66,10 +70,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             authenticationEntryPoint.commence(
                     request, response, new CustomAuthenticationException(e.getErrorCode()));
         }
-    }
-
-    private boolean checkTokenNotNullAndBearer(String token) {
-        return token != null && token.startsWith("Bearer ");
     }
 
     @Override

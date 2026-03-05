@@ -1,7 +1,6 @@
 package com.example.talentoftime.auth.service.oauth;
 
-import com.example.talentoftime.auth.domain.AccessToken;
-import com.example.talentoftime.auth.dto.LoginResponse;
+import com.example.talentoftime.auth.dto.LoginResult;
 import com.example.talentoftime.auth.dto.oauth.OAuthUserInfo;
 import com.example.talentoftime.auth.service.AuthTokenProvider;
 import com.example.talentoftime.common.domain.TaskType;
@@ -27,10 +26,11 @@ public class OAuthLoginProcessor {
     private final AuthTokenProvider authTokenProvider;
 
     @Transactional
-    public LoginResponse process(OAuthUserInfo oAuthUserInfo) {
+    public LoginResult process(OAuthUserInfo oAuthUserInfo) {
         Crew crew = findOrCreateCrew(oAuthUserInfo);
-        AccessToken accessToken = authTokenProvider.generateAccessToken(crew);
-        return LoginResponse.of(accessToken, crew.isOnboarded());
+        String accessToken = authTokenProvider.generateAccessToken(crew).token();
+        String refreshToken = authTokenProvider.issueRefreshToken(crew);
+        return new LoginResult(accessToken, refreshToken, crew.isOnboarded());
     }
 
     private Crew findOrCreateCrew(OAuthUserInfo oAuthUserInfo) {
