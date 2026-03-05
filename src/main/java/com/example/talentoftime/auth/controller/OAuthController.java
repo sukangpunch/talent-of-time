@@ -48,8 +48,7 @@ public class OAuthController {
     ) {
         OAuthUserInfo userInfo = oAuthUserInfoService.getUserInfo(code, dest);
         LoginResult result = oAuthLoginProcessor.process(userInfo);
-        cookieUtil.setAccessTokenCookie(response, result.accessToken(), tokenProperties.access().expireTime());
         cookieUtil.setRefreshTokenCookie(response, result.refreshToken(), tokenProperties.refresh().expireTime());
-        return ResponseEntity.ok(new LoginResponse(result.isOnboarded()));
+        return ResponseEntity.ok(new LoginResponse(result.accessToken(), result.isOnboarded()));
     }
 }
