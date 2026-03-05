@@ -53,6 +53,8 @@ public enum ErrorCode {
     TOKEN_EXPIRED(HttpStatus.UNAUTHORIZED, "A005", "만료된 토큰입니다."),
     TOKEN_EMPTY(HttpStatus.UNAUTHORIZED, "A006", "토큰이 비어있습니다."),
     TOKEN_NOT_SIGNED(HttpStatus.UNAUTHORIZED, "A007", "서명되지 않은 토큰입니다."),
+    REFRESH_TOKEN_NOT_FOUND(HttpStatus.UNAUTHORIZED, "A008", "리프레시 토큰을 찾을 수 없습니다."),
+    REFRESH_TOKEN_INVALID(HttpStatus.UNAUTHORIZED, "A009", "유효하지 않은 리프레시 토큰입니다."),
 
     // OAuth
     DEST_NOT_VALID(HttpStatus.BAD_REQUEST, "O001", "올바르지 않은 DEST 형식입니다."),

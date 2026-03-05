@@ -4,6 +4,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 
 @ConfigurationProperties(prefix = "token")
 public record TokenProperties(
-        TokenConfig access
+        TokenConfig access,
+        TokenConfig refresh
 ) {
 }

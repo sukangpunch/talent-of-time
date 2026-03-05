@@ -87,5 +87,28 @@
 - `security/config/SecurityConfig.java` — /api/v1/oauth/** permitAll 추가
 - `application.yml` — prod 프로파일에 token.access.expire-time 추가
 
+**Cookie + RefreshToken 도입 (2026-03-05):**
+- AccessToken을 body 대신 HttpOnly 쿠키로 전달
+- RefreshToken을 DB에 저장 (Redis 미사용)
+- `db/migration/V3__add_refresh_token_table.sql` — refresh_token 테이블 생성
+- `auth/domain/RefreshToken.java` — JPA 엔티티, rotate() 메서드 포함
+- `auth/repository/RefreshTokenRepository.java` — findByCrewId, findByToken, deleteByCrewId
+- `auth/service/RefreshTokenService.java` — issue(), validateAndGetCrewId(), validateAndGetCrew(), delete()
+- `auth/util/CookieUtil.java` — set/clear/extract 쿠키 유틸 (app.cookie.secure 프로파일별 분리)
+- `auth/dto/LoginResult.java` — accessToken + refreshToken + isOnboarded 반환 DTO
+- `auth/dto/LoginResponse.java` — isOnboarded 만 남김 (accessToken 제거)
+- `auth/token/config/TokenProperties.java` — refresh 필드 추가
+- `application.yml` — token.refresh.expire-time: 14d, app.cookie.secure: false
+- `application-prod.yml` — token.refresh.expire-time: 14d, app.cookie.secure: true
+- `auth/controller/OAuthController.java` — kakaoLogin에 쿠키 설정 추가, LoginResult 사용
+- `auth/controller/AuthController.java` — POST /api/v1/auth/refresh, POST /api/v1/auth/logout
+- `auth/service/oauth/OAuthLoginProcessor.java` — LoginResult 반환, refreshTokenService 주입
+- `security/filter/JwtAuthenticationFilter.java` — Authorization 헤더 대신 access_token 쿠키 읽기
+- `security/config/SecurityConfig.java` — /api/v1/auth/** permitAll 추가
+- 쿠키 설정: access_token(path=/, 2h), refresh_token(path=/api/v1/auth, 14d), HttpOnly, SameSite(None/prod, Lax/local)
+
+**ErrorCode 추가:**
+- REFRESH_TOKEN_NOT_FOUND (A008), REFRESH_TOKEN_INVALID (A009)
+
 ### Not Yet Implemented
 - Stage 8: Email SMTP for ID/password recovery
