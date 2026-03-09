@@ -39,16 +39,16 @@ public class SecurityConfig {
         http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
         http.authorizeHttpRequests(auth -> auth
-                .requestMatchers("/api/auth/**").permitAll()
+                .requestMatchers("/api/v1/auth/**").permitAll()
                 .requestMatchers("/api/v1/oauth/**").permitAll()
                 .requestMatchers("/api/v1/auth/**").permitAll()
                 .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
                 .requestMatchers(org.springframework.http.HttpMethod.GET,
-                        "/api/periods/**",
-                        "/api/teachers/**",
-                        "/api/classrooms/**",
-                        "/api/class-sessions/**",
-                        "/api/schedules/**"
+                        "/api/v1/periods/**",
+                        "/api/v1/teachers/**",
+                        "/api/v1/classrooms/**",
+                        "/api/v1/class-sessions/**",
+                        "/api/v1/schedules/**"
                 ).permitAll()
                 .anyRequest().authenticated()
         );
