@@ -11,6 +11,9 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 
 @Tag(name = "교시", description = "교시 관리 API")
 public interface PeriodControllerDocs {
@@ -26,6 +29,7 @@ public interface PeriodControllerDocs {
                     + "- `4교시`: 15:20 ~ 17:00"
     )
     @ApiResponse(responseCode = "200", description = "조회 성공")
+    @GetMapping
     ResponseEntity<List<PeriodResponse>> findAllPeriods();
 
     @Operation(
@@ -47,8 +51,8 @@ public interface PeriodControllerDocs {
                     )
             )
     })
-    ResponseEntity<PeriodResponse> findPeriod(
-            @Parameter(description = "교시 ID", example = "1") Long periodId);
+    @GetMapping("/{periodId}")
+    ResponseEntity<PeriodResponse> findPeriod(@Parameter(description = "교시 ID", example = "1") Long periodId);
 
     @Operation(
             summary = "교시 생성",
@@ -69,6 +73,7 @@ public interface PeriodControllerDocs {
                     )
             )
     })
+    @PostMapping
     ResponseEntity<PeriodResponse> createPeriod(PeriodCreateRequest request);
 
     @Operation(
@@ -90,6 +95,6 @@ public interface PeriodControllerDocs {
                     )
             )
     })
-    ResponseEntity<Void> deletePeriod(
-            @Parameter(description = "교시 ID", example = "1") Long periodId);
+    @DeleteMapping("/{periodId}")
+    ResponseEntity<Void> deletePeriod(@Parameter(description = "교시 ID", example = "1") Long periodId);
 }

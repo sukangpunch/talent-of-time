@@ -5,7 +5,6 @@ import com.example.talentoftime.teacher.dto.TeacherResponse;
 import com.example.talentoftime.teacher.dto.TeacherSearchResponse;
 import com.example.talentoftime.teacher.dto.TeacherUpdateRequest;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -14,7 +13,11 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import java.util.List;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -26,6 +29,7 @@ public interface TeacherControllerDocs {
             description = "등록된 전체 강사 목록을 반환합니다."
     )
     @ApiResponse(responseCode = "200", description = "조회 성공")
+    @GetMapping
     ResponseEntity<List<TeacherResponse>> findAllTeachers();
 
     @Operation(
@@ -47,6 +51,7 @@ public interface TeacherControllerDocs {
                     )
             )
     })
+    @GetMapping("/{teacherId}")
     ResponseEntity<TeacherResponse> findTeacher(@PathVariable Long teacherId);
 
     @Operation(
@@ -54,6 +59,7 @@ public interface TeacherControllerDocs {
             description = "새 강사를 등록합니다."
     )
     @ApiResponse(responseCode = "201", description = "등록 성공")
+    @PostMapping
     ResponseEntity<TeacherResponse> createTeacher(@Valid @RequestBody TeacherCreateRequest request);
 
     @Operation(
@@ -75,6 +81,7 @@ public interface TeacherControllerDocs {
                     )
             )
     })
+    @PutMapping("/{teacherId}")
     ResponseEntity<TeacherResponse> updateTeacher(
             @PathVariable Long teacherId,
             @Valid @RequestBody TeacherUpdateRequest request);
@@ -98,6 +105,7 @@ public interface TeacherControllerDocs {
                     )
             )
     })
+    @DeleteMapping("/{teacherId}")
     ResponseEntity<Void> deleteTeacher(@PathVariable Long teacherId);
 
     @Operation(
@@ -105,5 +113,6 @@ public interface TeacherControllerDocs {
             description = "강사 이름의 앞부분으로 검색합니다. 정확히 일치하는 이름이 있으면 해당 강사만 반환합니다."
     )
     @ApiResponse(responseCode = "200", description = "조회 성공")
+    @GetMapping("/search")
     ResponseEntity<List<TeacherSearchResponse>> searchTeachers(@RequestParam String name);
 }

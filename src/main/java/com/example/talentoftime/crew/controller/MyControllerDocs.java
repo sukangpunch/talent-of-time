@@ -14,6 +14,7 @@ import jakarta.validation.Valid;
 import java.util.List;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -25,7 +26,6 @@ public interface MyControllerDocs {
             description = "회원가입 이후 닉네임과 크루 유형을 등록합니다.\n\n"
                     + "닉네임 조건: 한글 2~5자, 공백 불가"
     )
-    @PostMapping("/onboarding")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "온보딩 성공"),
             @ApiResponse(
@@ -70,6 +70,7 @@ public interface MyControllerDocs {
                     )
             )
     })
+    @PostMapping("/onboarding")
     ResponseEntity<CrewResponse> onboardUser(@AuthenticationPrincipal LoginUser loginUser, @Valid @RequestBody OnboardingRequest request);
 
     @Operation(
@@ -91,6 +92,7 @@ public interface MyControllerDocs {
                     )
             )
     })
+    @GetMapping("/profile")
     ResponseEntity<CrewResponse> getProfile(@AuthenticationPrincipal LoginUser loginUser);
 
     @Operation(
@@ -112,5 +114,6 @@ public interface MyControllerDocs {
                     )
             )
     })
+    @GetMapping("/counts")
     ResponseEntity<List<MyCountResponse>> getMyCounts(@AuthenticationPrincipal LoginUser loginUser);
 }

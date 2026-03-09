@@ -11,6 +11,9 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 
 @Tag(name = "강의실", description = "강의실 관리 API")
 public interface ClassroomControllerDocs {
@@ -20,6 +23,7 @@ public interface ClassroomControllerDocs {
             description = "등록된 전체 강의실 목록을 반환합니다."
     )
     @ApiResponse(responseCode = "200", description = "조회 성공")
+    @GetMapping
     ResponseEntity<List<ClassroomResponse>> findAllClassrooms();
 
     @Operation(
@@ -41,6 +45,7 @@ public interface ClassroomControllerDocs {
                     )
             )
     })
+    @GetMapping("/{classroomId}")
     ResponseEntity<ClassroomResponse> findClassroom(
             @Parameter(description = "강의실 ID", example = "1") Long classroomId);
 
@@ -63,6 +68,7 @@ public interface ClassroomControllerDocs {
                     )
             )
     })
+    @PostMapping
     ResponseEntity<ClassroomResponse> createClassroom(ClassroomCreateRequest request);
 
     @Operation(
@@ -84,6 +90,7 @@ public interface ClassroomControllerDocs {
                     )
             )
     })
+    @DeleteMapping("/{classroomsId}")
     ResponseEntity<Void> deleteClassroom(
             @Parameter(description = "강의실 ID", example = "1") Long classroomId);
 }

@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/teachers")
+@RequestMapping("/api/v1/teachers")
 @RequiredArgsConstructor
 public class TeacherController implements TeacherControllerDocs {
 
