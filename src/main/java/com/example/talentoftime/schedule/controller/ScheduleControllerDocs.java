@@ -13,6 +13,11 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 @Tag(name = "스케줄", description = "업무 스케줄 등록 및 관리 API")
 public interface ScheduleControllerDocs {
@@ -36,9 +41,11 @@ public interface ScheduleControllerDocs {
                     )
             )
     })
+    @GetMapping
     ResponseEntity<List<ScheduleResponse>> findByClassSessionAndTaskType(
             @Parameter(description = "수업 일정 ID", example = "1") Long classSessionId,
-            @Parameter(description = "작업 유형", example = "SETTING") TaskType taskType);
+            @Parameter(description = "작업 유형", example = "SETTING") TaskType taskType
+    );
 
     @Operation(
             summary = "스케줄 자기 등록",
@@ -83,7 +90,11 @@ public interface ScheduleControllerDocs {
                     )
             )
     })
-    ResponseEntity<ScheduleResponse> selfRegister(LoginUser loginUser, ScheduleCreateRequest request);
+    @PostMapping
+    ResponseEntity<ScheduleResponse> selfRegister(
+            @AuthenticationPrincipal LoginUser loginUser,
+            @RequestBody ScheduleCreateRequest request
+    );
 
     @Operation(
             summary = "스케줄 등록 취소",
@@ -129,7 +140,9 @@ public interface ScheduleControllerDocs {
                     )
             )
     })
+    @DeleteMapping("/{scheduleId}")
     ResponseEntity<Void> cancelRegistration(
-            LoginUser loginUser,
-            @Parameter(description = "스케줄 ID", example = "1") Long scheduleId);
+            @AuthenticationPrincipal LoginUser loginUser,
+            @Parameter(description = "스케줄 ID", example = "1") Long scheduleId
+    );
 }

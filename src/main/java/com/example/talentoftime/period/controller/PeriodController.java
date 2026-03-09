@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/periods")
+@RequestMapping("/api/v1/periods")
 @RequiredArgsConstructor
 public class PeriodController implements PeriodControllerDocs {
 

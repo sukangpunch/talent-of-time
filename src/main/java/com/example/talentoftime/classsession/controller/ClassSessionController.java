@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/class-sessions")
+@RequestMapping("/api/v1/class-sessions")
 @RequiredArgsConstructor
 public class ClassSessionController implements ClassSessionControllerDocs {
 

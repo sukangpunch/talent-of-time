@@ -13,6 +13,9 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import java.time.LocalDate;
 import java.util.List;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 
 @Tag(name = "수업 일정", description = "주간 수업 일정(ClassSession) 관리 API")
 public interface ClassSessionControllerDocs {
@@ -22,6 +25,7 @@ public interface ClassSessionControllerDocs {
             description = "오늘 날짜의 수업 일정 목록을 반환합니다."
     )
     @ApiResponse(responseCode = "200", description = "조회 성공")
+    @GetMapping("/today")
     ResponseEntity<List<ClassSessionResponse>> findTodayClassSessions();
 
     @Operation(
@@ -29,6 +33,7 @@ public interface ClassSessionControllerDocs {
             description = "특정 날짜의 수업 일정 목록을 반환합니다."
     )
     @ApiResponse(responseCode = "200", description = "조회 성공")
+    @GetMapping
     ResponseEntity<List<ClassSessionResponse>> findClassSessionsByDate(
             @Parameter(description = "조회 날짜 (yyyy-MM-dd)", example = "2026-02-24") LocalDate date);
 
@@ -37,6 +42,7 @@ public interface ClassSessionControllerDocs {
             description = "입력한 날짜의 저번 주 같은 요일(7일 전) 수업 일정 목록을 반환합니다."
     )
     @ApiResponse(responseCode = "200", description = "조회 성공")
+    @GetMapping("/last-week-same-day")
     ResponseEntity<List<ClassSessionResponse>> findLastWeekSameDayClassSessions(
             @Parameter(description = "기준 날짜 (yyyy-MM-dd)", example = "2026-03-02") LocalDate date);
 
@@ -95,6 +101,7 @@ public interface ClassSessionControllerDocs {
                     )
             )
     })
+    @PostMapping("/bulk")
     ResponseEntity<List<ClassSessionResponse>> createBulkClassSessions(ClassSessionBulkCreateRequest request);
 
     @Operation(
@@ -141,6 +148,7 @@ public interface ClassSessionControllerDocs {
                     )
             )
     })
+    @PatchMapping("/{classSessionId}")
     ResponseEntity<ClassSessionResponse> updateClassSession(
             @Parameter(description = "수업 일정 ID", example = "1") Long classSessionId,
             ClassSessionUpdateRequest request);
@@ -177,6 +185,7 @@ public interface ClassSessionControllerDocs {
                     )
             )
     })
+    @PatchMapping("/{classSessionId}/cancel")
     ResponseEntity<ClassSessionResponse> cancelClassSession(
             @Parameter(description = "수업 일정 ID", example = "1") Long classSessionId);
 }

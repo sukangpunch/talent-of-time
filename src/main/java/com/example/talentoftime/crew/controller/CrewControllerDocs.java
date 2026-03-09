@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 
 @Tag(name = "크루", description = "크루(알바생) 조회 API")
 public interface CrewControllerDocs {
@@ -32,6 +33,7 @@ public interface CrewControllerDocs {
                     )
             )
     })
+    @GetMapping("/name")
     ResponseEntity<CrewResponse> findCrewByName(
             @Parameter(description = "크루 이름", example = "홍길동") String name);
 }

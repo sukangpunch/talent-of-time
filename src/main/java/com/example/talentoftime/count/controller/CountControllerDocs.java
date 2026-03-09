@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 
 @Tag(name = "카운트", description = "크루 작업 횟수 조회 API")
 public interface CountControllerDocs {
@@ -20,6 +21,7 @@ public interface CountControllerDocs {
             description = "전체 크루의 모든 작업 유형별 수행 횟수를 반환합니다."
     )
     @ApiResponse(responseCode = "200", description = "조회 성공")
+    @GetMapping
     ResponseEntity<List<CountResponse>> findAllCounts();
 
     @Operation(
@@ -41,8 +43,8 @@ public interface CountControllerDocs {
                     )
             )
     })
-    ResponseEntity<List<CountResponse>> findCountsByCrew(
-            @Parameter(description = "크루 ID", example = "1") Long crewId);
+    @GetMapping("/crew/{crewId}")
+    ResponseEntity<List<CountResponse>> findCountsByCrew(@Parameter(description = "크루 ID", example = "1") Long crewId);
 
     @Operation(
             summary = "작업 유형별 카운트 조회",
@@ -69,6 +71,6 @@ public interface CountControllerDocs {
                     )
             )
     })
-    ResponseEntity<List<CountResponse>> findCountsByTaskType(
-            @Parameter(description = "작업 유형 (SETTING / ENTRY / EXIT / JOG / CLEANUP)", example = "ENTRY") TaskType taskType);
+    @GetMapping("/task-type/{taskType}")
+    ResponseEntity<List<CountResponse>> findCountsByTaskType(@Parameter(description = "작업 유형 (SETTING / ENTRY / EXIT / JOG / CLEANUP)", example = "ENTRY") TaskType taskType);
 }

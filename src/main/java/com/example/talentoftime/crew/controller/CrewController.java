@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/crews")
+@RequestMapping("/api/v1/crews")
 @RequiredArgsConstructor
 public class CrewController implements CrewControllerDocs {
 
