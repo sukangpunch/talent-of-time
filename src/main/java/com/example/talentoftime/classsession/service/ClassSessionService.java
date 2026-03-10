@@ -167,17 +167,6 @@ public class ClassSessionService {
         return ClassSessionResponse.from(classSession);
     }
 
-    @Transactional
-    public void deleteClassSession(Long classSessionId) {
-        ClassSession classSession = classSessionRepository.findById(classSessionId)
-                .orElseThrow(() -> new BusinessException(ErrorCode.CLASS_SESSION_NOT_FOUND));
-
-        deleteLinkedSchedules(classSession);
-
-        classSessionRepository.delete(classSession);
-        log.info("수업 일정 삭제 완료: classSessionId={}", classSessionId);
-    }
-
     private void deleteLinkedSchedules(ClassSession classSession) {
         List<Schedule> linkedSchedules = scheduleRepository.findByClassSession(classSession);
         for (Schedule schedule : linkedSchedules) {
@@ -209,7 +198,7 @@ public class ClassSessionService {
         if (teacherName == null) {
             return null;
         }
-        return teacherRepository.findByName(teacherName)
+        return teacherRepository.findFirstByName(teacherName)
                 .orElseThrow(() -> new BusinessException(ErrorCode.TEACHER_NOT_FOUND));
     }
 

@@ -11,7 +11,7 @@ public interface TeacherRepository extends JpaRepository<Teacher, Long> {
 
     List<Teacher> findAllByOrderByNameAsc();
 
-    Optional<Teacher> findByName(String name);
+    Optional<Teacher> findFirstByName(String name);
 
     List<Teacher> findByNameStartingWith(String name);
 }

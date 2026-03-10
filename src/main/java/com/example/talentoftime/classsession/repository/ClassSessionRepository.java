@@ -14,8 +14,6 @@ public interface ClassSessionRepository extends JpaRepository<ClassSession, Long
 
     List<ClassSession> findByDate(LocalDate date);
 
-    List<ClassSession> findByDateBetween(LocalDate startDate, LocalDate endDate);
-
     boolean existsByDateAndPeriodAndClassroom(
             LocalDate date,
             Period period,
