@@ -7,7 +7,7 @@ public record ClassSessionCreateRequest(
         LocalDate date,
         Integer periodNumber,
         Long classroomId,
-        Long teacherId,
+        String teacherName,
         String subject,
         String group,
         Integer inPersonCount,

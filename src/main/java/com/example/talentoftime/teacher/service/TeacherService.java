@@ -23,7 +23,7 @@ public class TeacherService {
 
     @Transactional(readOnly = true)
     public List<TeacherResponse> findAllTeachers() {
-        return teacherRepository.findAll().stream()
+        return teacherRepository.findAllByOrderByNameAsc().stream()
                 .map(TeacherResponse::from)
                 .toList();
     }
