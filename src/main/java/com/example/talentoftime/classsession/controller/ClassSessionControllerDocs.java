@@ -82,7 +82,7 @@ public interface ClassSessionControllerDocs {
                                     ),
                                     @ExampleObject(
                                             name = "T001",
-                                            summary = "T001 - 존재하지 않는 강사 (teacherId 제공 시)",
+                                            summary = "T001 - 존재하지 않는 강사 (teacherName 제공 시)",
                                             value = "{\"error\": \"T001\", \"message\": \"존재하지 않는 강사입니다.\"}"
                                     )
                             }

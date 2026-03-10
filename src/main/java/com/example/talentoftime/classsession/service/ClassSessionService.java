@@ -20,7 +20,6 @@ import com.example.talentoftime.schedule.domain.Schedule;
 import com.example.talentoftime.schedule.repository.ScheduleRepository;
 import com.example.talentoftime.teacher.domain.Teacher;
 import com.example.talentoftime.teacher.repository.TeacherRepository;
-import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.List;
@@ -62,17 +61,7 @@ public class ClassSessionService {
     }
 
     @Transactional(readOnly = true)
-    public List<ClassSessionResponse> findWeeklyClassSessions(LocalDate date) {
-        LocalDate monday = date.with(DayOfWeek.MONDAY);
-        LocalDate sunday = date.with(DayOfWeek.SUNDAY);
-        return classSessionRepository.findByDateBetween(monday, sunday).stream()
-                .map(ClassSessionResponse::from)
-                .toList();
-    }
-
-    @Transactional(readOnly = true)
     public List<ClassSessionResponse> findLastWeekSameDayClassSessions(LocalDate date) {
-
         return findClassSessionsByDate(date.minusWeeks(1));
     }
 
@@ -84,7 +73,7 @@ public class ClassSessionService {
                 .orElseThrow(() -> new BusinessException(ErrorCode.CLASSROOM_NOT_FOUND));
         validateNoDuplicate(request.date(), period, classroom);
 
-        Teacher teacher = findTeacherIfPresent(request.teacherId());
+        Teacher teacher = findTeacherIfPresent(request.teacherName());
         ClassSession classSession = new ClassSession(
                 request.date(),
                 period,
@@ -110,7 +99,7 @@ public class ClassSessionService {
                     Period period = findPeriodOrThrow(item.periodNumber());
                     Classroom classroom = findClassroomOrThrow(item.classroomId());
                     validateNoDuplicate(item.date(), period, classroom);
-                    Teacher teacher = findTeacherIfPresent(item.teacherId());
+                    Teacher teacher = findTeacherIfPresent(item.teacherName());
                     return new ClassSession(
                             item.date(),
                             period,
@@ -178,17 +167,6 @@ public class ClassSessionService {
         return ClassSessionResponse.from(classSession);
     }
 
-    @Transactional
-    public void deleteClassSession(Long classSessionId) {
-        ClassSession classSession = classSessionRepository.findById(classSessionId)
-                .orElseThrow(() -> new BusinessException(ErrorCode.CLASS_SESSION_NOT_FOUND));
-
-        deleteLinkedSchedules(classSession);
-
-        classSessionRepository.delete(classSession);
-        log.info("수업 일정 삭제 완료: classSessionId={}", classSessionId);
-    }
-
     private void deleteLinkedSchedules(ClassSession classSession) {
         List<Schedule> linkedSchedules = scheduleRepository.findByClassSession(classSession);
         for (Schedule schedule : linkedSchedules) {
@@ -216,11 +194,11 @@ public class ClassSessionService {
                 .orElseThrow(() -> new BusinessException(ErrorCode.CLASSROOM_NOT_FOUND));
     }
 
-    private Teacher findTeacherIfPresent(Long teacherId) {
-        if (teacherId == null) {
+    private Teacher findTeacherIfPresent(String teacherName) {
+        if (teacherName == null) {
             return null;
         }
-        return teacherRepository.findById(teacherId)
+        return teacherRepository.findFirstByName(teacherName)
                 .orElseThrow(() -> new BusinessException(ErrorCode.TEACHER_NOT_FOUND));
     }
 
