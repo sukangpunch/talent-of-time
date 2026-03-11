@@ -1,5 +1,7 @@
 package com.example.talentoftime.teacher.service;
 
+import com.example.talentoftime.cache.annotation.DefaultCacheOut;
+import com.example.talentoftime.cache.annotation.DefaultCaching;
 import com.example.talentoftime.common.exception.BusinessException;
 import com.example.talentoftime.common.exception.ErrorCode;
 import com.example.talentoftime.teacher.domain.Teacher;
@@ -19,8 +21,12 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class TeacherService {
 
+    private static final String CACHE_MANAGER = "customCacheManager";
+    private static final String TEACHER_KEY_PREFIX = "teacher:";
+
     private final TeacherRepository teacherRepository;
 
+    @DefaultCaching(key = "teacher:all", cacheManager = CACHE_MANAGER, ttlSec = 1800)
     @Transactional(readOnly = true)
     public List<TeacherResponse> findAllTeachers() {
         return teacherRepository.findAllByOrderByNameAsc().stream()
@@ -28,12 +34,14 @@ public class TeacherService {
                 .toList();
     }
 
+    @DefaultCaching(key = "teacher:{0}", cacheManager = CACHE_MANAGER, ttlSec = 3600)
     @Transactional(readOnly = true)
     public TeacherResponse findTeacher(Long teacherId) {
         Teacher teacher = findTeacherOrThrow(teacherId);
         return TeacherResponse.from(teacher);
     }
 
+    @DefaultCacheOut(key = {TEACHER_KEY_PREFIX}, cacheManager = CACHE_MANAGER, prefix = true)
     @Transactional
     public TeacherResponse createTeacher(TeacherCreateRequest request) {
         Teacher teacher = new Teacher(
@@ -51,6 +59,7 @@ public class TeacherService {
         return TeacherResponse.from(teacher);
     }
 
+    @DefaultCacheOut(key = {TEACHER_KEY_PREFIX}, cacheManager = CACHE_MANAGER, prefix = true)
     @Transactional
     public TeacherResponse updateTeacher(Long teacherId, TeacherUpdateRequest request) {
         Teacher teacher = findTeacherOrThrow(teacherId);
@@ -68,6 +77,7 @@ public class TeacherService {
         return TeacherResponse.from(teacher);
     }
 
+    @DefaultCacheOut(key = {TEACHER_KEY_PREFIX}, cacheManager = CACHE_MANAGER, prefix = true)
     @Transactional
     public void deleteTeacher(Long teacherId) {
         Teacher teacher = findTeacherOrThrow(teacherId);
@@ -75,6 +85,7 @@ public class TeacherService {
         log.info("강사 삭제 완료: teacherId={}", teacherId);
     }
 
+    @DefaultCaching(key = "teacher:search:{0}", cacheManager = CACHE_MANAGER, ttlSec = 600)
     @Transactional(readOnly = true)
     public List<TeacherSearchResponse> searchTeachersByName(String name) {
         List<Teacher> teachers = teacherRepository.findByNameStartingWith(name);
@@ -95,4 +106,3 @@ public class TeacherService {
                 .orElseThrow(() -> new BusinessException(ErrorCode.TEACHER_NOT_FOUND));
     }
 }
-

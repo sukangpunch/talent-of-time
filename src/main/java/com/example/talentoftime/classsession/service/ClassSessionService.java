@@ -1,5 +1,7 @@
 package com.example.talentoftime.classsession.service;
 
+import com.example.talentoftime.cache.annotation.DefaultCacheOut;
+import com.example.talentoftime.cache.annotation.DefaultCaching;
 import com.example.talentoftime.classsession.domain.ClassSession;
 import com.example.talentoftime.classsession.dto.ClassSessionBulkCreateRequest;
 import com.example.talentoftime.classsession.dto.ClassSessionCreateRequest;
@@ -34,6 +36,9 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class ClassSessionService {
 
+    private static final String CACHE_MANAGER = "customCacheManager";
+    private static final String CLASS_SESSION_KEY_PREFIX = "class-session:";
+
     private final ClassSessionRepository classSessionRepository;
     private final PeriodRepository periodRepository;
     private final ClassroomRepository classroomRepository;
@@ -41,6 +46,7 @@ public class ClassSessionService {
     private final CountRepository countRepository;
     private final TeacherRepository teacherRepository;
 
+    @DefaultCaching(key = "class-session:{0}", cacheManager = CACHE_MANAGER, ttlSec = 3600)
     @Transactional(readOnly = true)
     public ClassSessionResponse findClassSession(Long classSessionId) {
         ClassSession classSession = classSessionRepository.findById(classSessionId)
@@ -48,6 +54,7 @@ public class ClassSessionService {
         return ClassSessionResponse.from(classSession);
     }
 
+    @DefaultCaching(key = "class-session:date:{0}", cacheManager = CACHE_MANAGER, ttlSec = 300)
     @Transactional(readOnly = true)
     public List<ClassSessionResponse> findClassSessionsByDate(LocalDate date) {
         return classSessionRepository.findByDate(date).stream()
@@ -55,16 +62,23 @@ public class ClassSessionService {
                 .toList();
     }
 
+    @DefaultCaching(key = "class-session:today", cacheManager = CACHE_MANAGER, ttlSec = 300)
     @Transactional(readOnly = true)
     public List<ClassSessionResponse> findTodayClassSessions() {
-        return findClassSessionsByDate(LocalDate.now());
+        return classSessionRepository.findByDate(LocalDate.now()).stream()
+                .map(ClassSessionResponse::from)
+                .toList();
     }
 
+    @DefaultCaching(key = "class-session:last-week:{0}", cacheManager = CACHE_MANAGER, ttlSec = 3600)
     @Transactional(readOnly = true)
     public List<ClassSessionResponse> findLastWeekSameDayClassSessions(LocalDate date) {
-        return findClassSessionsByDate(date.minusWeeks(1));
+        return classSessionRepository.findByDate(date.minusWeeks(1)).stream()
+                .map(ClassSessionResponse::from)
+                .toList();
     }
 
+    @DefaultCacheOut(key = {CLASS_SESSION_KEY_PREFIX}, cacheManager = CACHE_MANAGER, prefix = true)
     @Transactional
     public ClassSessionResponse createClassSession(ClassSessionCreateRequest request) {
         Period period = periodRepository.findByPeriodNumber(request.periodNumber())
@@ -91,6 +105,7 @@ public class ClassSessionService {
         return ClassSessionResponse.from(classSession);
     }
 
+    @DefaultCacheOut(key = {CLASS_SESSION_KEY_PREFIX}, cacheManager = CACHE_MANAGER, prefix = true)
     @Transactional
     public List<ClassSessionResponse> createBulkClassSessions(ClassSessionBulkCreateRequest request) {
         validateNoDuplicateInRequest(request.sessions());
@@ -121,6 +136,7 @@ public class ClassSessionService {
                 .toList();
     }
 
+    @DefaultCacheOut(key = {CLASS_SESSION_KEY_PREFIX}, cacheManager = CACHE_MANAGER, prefix = true)
     public ClassSessionResponse updateClassSession(
             Long classSessionId,
             ClassSessionUpdateRequest request
@@ -152,6 +168,7 @@ public class ClassSessionService {
         return ClassSessionResponse.from(classSession);
     }
 
+    @DefaultCacheOut(key = {CLASS_SESSION_KEY_PREFIX}, cacheManager = CACHE_MANAGER, prefix = true)
     @Transactional
     public ClassSessionResponse cancelClassSession(Long classSessionId) {
         ClassSession classSession = classSessionRepository.findById(classSessionId)
