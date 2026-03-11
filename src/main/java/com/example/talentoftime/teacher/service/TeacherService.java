@@ -37,14 +37,14 @@ public class TeacherService {
     @Transactional
     public TeacherResponse createTeacher(TeacherCreateRequest request) {
         Teacher teacher = new Teacher(
-                request.getName(),
-                request.getChalkType(),
-                request.getChalkDetail(),
-                request.getEraserDetail(),
-                request.getMicType(),
-                request.isHasPpt(),
-                request.getNotes(),
-                request.getEmail()
+                request.name(),
+                request.chalkType(),
+                request.chalkDetail(),
+                request.eraserDetail(),
+                request.micType(),
+                request.hasPpt(),
+                request.notes(),
+                request.email()
         );
         teacherRepository.save(teacher);
         log.info("강사 생성 완료: name={}", teacher.getName());
@@ -55,14 +55,14 @@ public class TeacherService {
     public TeacherResponse updateTeacher(Long teacherId, TeacherUpdateRequest request) {
         Teacher teacher = findTeacherOrThrow(teacherId);
         teacher.update(
-                request.getName(),
-                request.getChalkType(),
-                request.getChalkDetail(),
-                request.getEraserDetail(),
-                request.getMicType(),
-                request.isHasPpt(),
-                request.getNotes(),
-                request.getEmail()
+                request.name(),
+                request.chalkType(),
+                request.chalkDetail(),
+                request.eraserDetail(),
+                request.micType(),
+                request.hasPpt(),
+                request.notes(),
+                request.email()
         );
         log.info("강사 수정 완료: teacherId={}", teacherId);
         return TeacherResponse.from(teacher);
