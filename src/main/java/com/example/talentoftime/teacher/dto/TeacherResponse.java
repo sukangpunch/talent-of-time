@@ -3,35 +3,29 @@ package com.example.talentoftime.teacher.dto;
 import com.example.talentoftime.teacher.domain.ChalkType;
 import com.example.talentoftime.teacher.domain.MicType;
 import com.example.talentoftime.teacher.domain.Teacher;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 
-@Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class TeacherResponse {
-
-    private Long id;
-    private String name;
-    private ChalkType chalkType;
-    private String chalkDetail;
-    private String eraserDetail;
-    private MicType micType;
-    private boolean hasPpt;
-    private String notes;
-    private String email;
-
+public record TeacherResponse(
+        Long id,
+        String name,
+        ChalkType chalkType,
+        String chalkDetail,
+        String eraserDetail,
+        MicType micType,
+        boolean hasPpt,
+        String notes,
+        String email
+) {
     public static TeacherResponse from(Teacher teacher) {
-        TeacherResponse response = new TeacherResponse();
-        response.id = teacher.getId();
-        response.name = teacher.getName();
-        response.chalkType = teacher.getChalkType();
-        response.chalkDetail = teacher.getChalkDetail();
-        response.eraserDetail = teacher.getEraserDetail();
-        response.micType = teacher.getMicType();
-        response.hasPpt = teacher.isHasPpt();
-        response.notes = teacher.getNotes();
-        response.email = teacher.getEmail();
-        return response;
+        return new TeacherResponse(
+                teacher.getId(),
+                teacher.getName(),
+                teacher.getChalkType(),
+                teacher.getChalkDetail(),
+                teacher.getEraserDetail(),
+                teacher.getMicType(),
+                teacher.isHasPpt(),
+                teacher.getNotes(),
+                teacher.getEmail()
+        );
     }
 }
