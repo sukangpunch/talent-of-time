@@ -1,7 +1,6 @@
 package com.example.talentoftime.security.filter;
 
 import com.example.talentoftime.auth.service.AuthTokenProvider;
-import com.example.talentoftime.auth.util.CookieUtil;
 import com.example.talentoftime.common.exception.BusinessException;
 import com.example.talentoftime.security.exception.CustomAuthenticationEntryPoint;
 import com.example.talentoftime.security.exception.CustomAuthenticationException;
@@ -41,9 +40,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             HttpEndpoint.exact("/api/v1/auth/logout", HttpMethod.POST)
     );
 
+    private static final String AUTHORIZATION_HEADER = "Authorization";
+    private static final String BEARER_PREFIX = "Bearer ";
+
     private final AuthTokenProvider authTokenProvider;
     private final CustomAuthenticationEntryPoint authenticationEntryPoint;
-    private final CookieUtil cookieUtil;
 
     @Override
     protected void doFilterInternal(
@@ -52,7 +53,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             @NonNull FilterChain filterChain
     ) throws ServletException, IOException {
         try {
-            String jwtToken = cookieUtil.extractAccessToken(request);
+            String jwtToken = extractBearerToken(request);
 
             if (jwtToken != null) {
                 authTokenProvider.validateToken(jwtToken);
@@ -70,6 +71,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             authenticationEntryPoint.commence(
                     request, response, new CustomAuthenticationException(e.getErrorCode()));
         }
+    }
+
+    private String extractBearerToken(HttpServletRequest request) {
+        String header = request.getHeader(AUTHORIZATION_HEADER);
+        if (header != null && header.startsWith(BEARER_PREFIX)) {
+            return header.substring(BEARER_PREFIX.length());
+        }
+        return null;
     }
 
     @Override
