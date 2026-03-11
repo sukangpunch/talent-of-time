@@ -12,26 +12,10 @@ import java.time.Duration;
 @Component
 public class CookieUtil {
 
-    private static final String ACCESS_TOKEN_COOKIE = "access_token";
     private static final String REFRESH_TOKEN_COOKIE = "refresh_token";
 
     @Value("${app.cookie.secure}")
     private boolean secure;
-
-    public void setAccessTokenCookie(
-            HttpServletResponse response,
-            String token,
-            Duration expireTime
-    ) {
-        ResponseCookie cookie = ResponseCookie.from(ACCESS_TOKEN_COOKIE, token)
-                .httpOnly(true)
-                .secure(secure)
-                .sameSite(secure ? "None" : "Lax")
-                .path("/")
-                .maxAge(expireTime)
-                .build();
-        response.addHeader("Set-Cookie", cookie.toString());
-    }
 
     public void setRefreshTokenCookie(
             HttpServletResponse response,
@@ -48,17 +32,6 @@ public class CookieUtil {
         response.addHeader("Set-Cookie", cookie.toString());
     }
 
-    public void clearAccessTokenCookie(HttpServletResponse response) {
-        ResponseCookie cookie = ResponseCookie.from(ACCESS_TOKEN_COOKIE, "")
-                .httpOnly(true)
-                .secure(secure)
-                .sameSite(secure ? "None" : "Lax")
-                .path("/")
-                .maxAge(0)
-                .build();
-        response.addHeader("Set-Cookie", cookie.toString());
-    }
-
     public void clearRefreshTokenCookie(HttpServletResponse response) {
         ResponseCookie cookie = ResponseCookie.from(REFRESH_TOKEN_COOKIE, "")
                 .httpOnly(true)
@@ -68,10 +41,6 @@ public class CookieUtil {
                 .maxAge(0)
                 .build();
         response.addHeader("Set-Cookie", cookie.toString());
-    }
-
-    public String extractAccessToken(HttpServletRequest request) {
-        return extractCookie(request, ACCESS_TOKEN_COOKIE);
     }
 
     public String extractRefreshToken(HttpServletRequest request) {

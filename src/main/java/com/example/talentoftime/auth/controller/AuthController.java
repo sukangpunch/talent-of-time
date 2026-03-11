@@ -1,5 +1,6 @@
 package com.example.talentoftime.auth.controller;
 
+import com.example.talentoftime.auth.dto.TokenRefreshResponse;
 import com.example.talentoftime.auth.service.AuthTokenProvider;
 import com.example.talentoftime.auth.token.config.TokenProperties;
 import com.example.talentoftime.auth.util.CookieUtil;
@@ -24,7 +25,7 @@ public class AuthController {
     private final TokenProperties tokenProperties;
 
     @PostMapping("/refresh")
-    public ResponseEntity<Void> refresh(
+    public ResponseEntity<TokenRefreshResponse> refresh(
             HttpServletRequest request,
             HttpServletResponse response
     ) {
@@ -37,10 +38,9 @@ public class AuthController {
         String newAccessToken = authTokenProvider.generateAccessToken(crew).token();
         String newRefreshToken = authTokenProvider.issueRefreshToken(crew);
 
-        cookieUtil.setAccessTokenCookie(response, newAccessToken, tokenProperties.access().expireTime());
         cookieUtil.setRefreshTokenCookie(response, newRefreshToken, tokenProperties.refresh().expireTime());
 
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(new TokenRefreshResponse(newAccessToken));
     }
 
     @PostMapping("/logout")
@@ -58,7 +58,6 @@ public class AuthController {
             }
         }
 
-        cookieUtil.clearAccessTokenCookie(response);
         cookieUtil.clearRefreshTokenCookie(response);
         return ResponseEntity.ok().build();
     }
