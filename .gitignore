@@ -47,4 +47,5 @@ application.yml
 .serena/cache/
 
 ### database
-mysql_data_local/
+/mysql_data_local
+/redis_data_local

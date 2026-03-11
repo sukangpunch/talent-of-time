@@ -135,6 +135,9 @@ jobs:
               export KAKAO_CLIENT_ID="${{ secrets.KAKAO_CLIENT_ID }}"
               export KAKAO_CLIENT_SECRET="${{ secrets.KAKAO_CLIENT_SECRET }}"
               export KAKAO_REDIRECT_URI="${{ secrets.KAKAO_REDIRECT_URI }}"
+              export REDIS_SERVER_HOST="${{ secrets.REDIS_SERVER_HOST }}"
+              export REDIS_PORT="${{ secrets.REDIS_PORT }}"
+              export REDIS_PASSWORD="${{ secrets.REDIS_PASSWORD }}"
 
               echo "Cleaning up old tagged images (keeping last 2)..."
               docker images "${DOCKERHUB_USERNAME}/talent-of-time" --format "{{.Tag}}" | \
