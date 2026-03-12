@@ -1,12 +1,8 @@
 package com.example.talentoftime.teacher.dto;
 
-import com.example.talentoftime.teacher.domain.Teacher;
+import java.util.List;
 
 public record TeacherSearchResponse(
-        Long id,
-        String name
+        List<TeacherSimpleDto> teacherSimpleDtoList
 ) {
-    public static TeacherSearchResponse from(Teacher teacher) {
-        return new TeacherSearchResponse(teacher.getId(), teacher.getName());
-    }
 }

@@ -7,6 +7,7 @@ import com.example.talentoftime.classsession.dto.ClassSessionBulkCreateRequest;
 import com.example.talentoftime.classsession.dto.ClassSessionCreateRequest;
 import com.example.talentoftime.classsession.dto.ClassSessionResponse;
 import com.example.talentoftime.classsession.dto.ClassSessionUpdateRequest;
+import com.example.talentoftime.classsession.dto.DayByClassSessionResponse;
 import com.example.talentoftime.classsession.repository.ClassSessionRepository;
 import com.example.talentoftime.classroom.domain.Classroom;
 import com.example.talentoftime.classroom.repository.ClassroomRepository;
@@ -54,60 +55,38 @@ public class ClassSessionService {
         return ClassSessionResponse.from(classSession);
     }
 
-    @DefaultCaching(key = "class-session:date:{0}", cacheManager = CACHE_MANAGER, ttlSec = 300)
+    @DefaultCaching(key = "'class-session:' + #date.toString()" , cacheManager = CACHE_MANAGER, ttlSec = 43200) // 12시간
     @Transactional(readOnly = true)
-    public List<ClassSessionResponse> findClassSessionsByDate(LocalDate date) {
-        return classSessionRepository.findByDate(date).stream()
-                .map(ClassSessionResponse::from)
-                .toList();
-    }
-
-    @DefaultCaching(key = "class-session:today", cacheManager = CACHE_MANAGER, ttlSec = 300)
-    @Transactional(readOnly = true)
-    public List<ClassSessionResponse> findTodayClassSessions() {
-        return classSessionRepository.findByDate(LocalDate.now()).stream()
-                .map(ClassSessionResponse::from)
-                .toList();
-    }
-
-    @DefaultCaching(key = "class-session:last-week:{0}", cacheManager = CACHE_MANAGER, ttlSec = 3600)
-    @Transactional(readOnly = true)
-    public List<ClassSessionResponse> findLastWeekSameDayClassSessions(LocalDate date) {
-        return classSessionRepository.findByDate(date.minusWeeks(1)).stream()
-                .map(ClassSessionResponse::from)
-                .toList();
-    }
-
-    @DefaultCacheOut(key = {CLASS_SESSION_KEY_PREFIX}, cacheManager = CACHE_MANAGER, prefix = true)
-    @Transactional
-    public ClassSessionResponse createClassSession(ClassSessionCreateRequest request) {
-        Period period = periodRepository.findByPeriodNumber(request.periodNumber())
-                .orElseThrow(() -> new BusinessException(ErrorCode.PERIOD_NOT_FOUND));
-        Classroom classroom = classroomRepository.findById(request.classroomId())
-                .orElseThrow(() -> new BusinessException(ErrorCode.CLASSROOM_NOT_FOUND));
-        validateNoDuplicate(request.date(), period, classroom);
-
-        Teacher teacher = findTeacherIfPresent(request.teacherName());
-        ClassSession classSession = new ClassSession(
-                request.date(),
-                period,
-                classroom,
-                teacher,
-                request.subject(),
-                request.group(),
-                request.inPersonCount(),
-                request.onlineCount(),
-                request.classStatus()
+    public DayByClassSessionResponse findClassSessionsByDate(LocalDate date) {
+        return new DayByClassSessionResponse(
+                classSessionRepository.findByDate(date).stream()
+                        .map(ClassSessionResponse::from)
+                        .toList()
         );
+    }
 
-        classSessionRepository.save(classSession);
-        log.info("수업 일정 단건 등록 완료: date={}, periodNumber={}, classroomId={}", request.date(), request.periodNumber(), request.classroomId());
-        return ClassSessionResponse.from(classSession);
+    @DefaultCaching(key = "'class-session:' + T(java.time.LocalDate).now().toString()", cacheManager = CACHE_MANAGER, ttlSec = 43200)
+    @Transactional(readOnly = true)
+    public DayByClassSessionResponse findTodayClassSessions() {
+        return new DayByClassSessionResponse(
+                classSessionRepository.findByDate(LocalDate.now()).stream()
+                        .map(ClassSessionResponse::from)
+                        .toList()
+        );
+    }
+
+    @Transactional(readOnly = true)
+    public DayByClassSessionResponse findLastWeekSameDayClassSessions(LocalDate date) {
+        return new DayByClassSessionResponse(
+                classSessionRepository.findByDate(date.minusWeeks(1)).stream()
+                        .map(ClassSessionResponse::from)
+                        .toList()
+        );
     }
 
     @DefaultCacheOut(key = {CLASS_SESSION_KEY_PREFIX}, cacheManager = CACHE_MANAGER, prefix = true)
     @Transactional
-    public List<ClassSessionResponse> createBulkClassSessions(ClassSessionBulkCreateRequest request) {
+    public DayByClassSessionResponse createBulkClassSessions(ClassSessionBulkCreateRequest request) {
         validateNoDuplicateInRequest(request.sessions());
         List<ClassSession> sessions = request.sessions().stream()
                 .map(item -> {
@@ -131,9 +110,10 @@ public class ClassSessionService {
 
         classSessionRepository.saveAll(sessions);
         log.info("수업 일정 일괄 등록 완료: count={}", sessions.size());
-        return sessions.stream()
+        return new DayByClassSessionResponse(sessions.stream()
                 .map(ClassSessionResponse::from)
-                .toList();
+                .toList()
+        );
     }
 
     @DefaultCacheOut(key = {CLASS_SESSION_KEY_PREFIX}, cacheManager = CACHE_MANAGER, prefix = true)
