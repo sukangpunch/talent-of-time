@@ -37,17 +37,6 @@ public class RedisUtils {
         return redisTemplate.getExpire(key, TimeUnit.MILLISECONDS);
     }
 
-    public String generateCacheKey(String keyPattern, Object[] args) {
-        for (int i = 0; i < args.length; i++) {
-            // 키 패턴에 {i}가 포함된 경우에만 해당 인덱스의 파라미터를 삽입
-            if (keyPattern.contains("{" + i + "}")) {
-                String replacement = (args[i] != null) ? args[i].toString() : "null";
-                keyPattern = keyPattern.replace("{" + i + "}", replacement);
-            }
-        }
-        return keyPattern;
-    }
-
     public String getCreateLockKey(String key) {
         return CREATE_LOCK_PREFIX.getValue() + key;
     }

@@ -1,12 +1,12 @@
 package com.example.talentoftime.teacher.controller;
 
+import com.example.talentoftime.teacher.dto.AllTeacherResponse;
 import com.example.talentoftime.teacher.dto.TeacherCreateRequest;
 import com.example.talentoftime.teacher.dto.TeacherResponse;
 import com.example.talentoftime.teacher.dto.TeacherSearchResponse;
 import com.example.talentoftime.teacher.dto.TeacherUpdateRequest;
 import com.example.talentoftime.teacher.service.TeacherService;
 import jakarta.validation.Valid;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -27,7 +27,7 @@ public class TeacherController implements TeacherControllerDocs {
     private final TeacherService teacherService;
 
     @GetMapping
-    public ResponseEntity<List<TeacherResponse>> findAllTeachers() {
+    public ResponseEntity<AllTeacherResponse> findAllTeachers() {
         return ResponseEntity.ok(teacherService.findAllTeachers());
     }
 
@@ -56,8 +56,7 @@ public class TeacherController implements TeacherControllerDocs {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<List<TeacherSearchResponse>> searchTeachers(
-            @RequestParam String name) {
+    public ResponseEntity<TeacherSearchResponse> searchTeachers(@RequestParam String name) {
         return ResponseEntity.ok(teacherService.searchTeachersByName(name));
     }
 }

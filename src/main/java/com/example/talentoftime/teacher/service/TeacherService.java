@@ -5,9 +5,11 @@ import com.example.talentoftime.cache.annotation.DefaultCaching;
 import com.example.talentoftime.common.exception.BusinessException;
 import com.example.talentoftime.common.exception.ErrorCode;
 import com.example.talentoftime.teacher.domain.Teacher;
+import com.example.talentoftime.teacher.dto.AllTeacherResponse;
 import com.example.talentoftime.teacher.dto.TeacherCreateRequest;
 import com.example.talentoftime.teacher.dto.TeacherResponse;
 import com.example.talentoftime.teacher.dto.TeacherSearchResponse;
+import com.example.talentoftime.teacher.dto.TeacherSimpleDto;
 import com.example.talentoftime.teacher.dto.TeacherUpdateRequest;
 import com.example.talentoftime.teacher.repository.TeacherRepository;
 import java.util.List;
@@ -28,10 +30,12 @@ public class TeacherService {
 
     @DefaultCaching(key = "teacher:all", cacheManager = CACHE_MANAGER, ttlSec = 1800)
     @Transactional(readOnly = true)
-    public List<TeacherResponse> findAllTeachers() {
-        return teacherRepository.findAllByOrderByNameAsc().stream()
-                .map(TeacherResponse::from)
-                .toList();
+    public AllTeacherResponse findAllTeachers() {
+        return new AllTeacherResponse(
+                teacherRepository.findAllByOrderByNameAsc().stream()
+                        .map(TeacherResponse::from)
+                        .toList()
+        );
     }
 
     @DefaultCaching(key = "teacher:{0}", cacheManager = CACHE_MANAGER, ttlSec = 3600)
@@ -87,18 +91,22 @@ public class TeacherService {
 
     @DefaultCaching(key = "teacher:search:{0}", cacheManager = CACHE_MANAGER, ttlSec = 600)
     @Transactional(readOnly = true)
-    public List<TeacherSearchResponse> searchTeachersByName(String name) {
+    public TeacherSearchResponse searchTeachersByName(String name) {
         List<Teacher> teachers = teacherRepository.findByNameStartingWith(name);
         boolean hasExactMatch = teachers.stream().anyMatch(t -> t.getName().equals(name));
         if (hasExactMatch) {
-            return teachers.stream()
-                    .filter(t -> t.getName().equals(name))
-                    .map(TeacherSearchResponse::from)
-                    .toList();
+            return new TeacherSearchResponse(
+                    teachers.stream()
+                            .filter(t -> t.getName().equals(name))
+                            .map(TeacherSimpleDto::from)
+                            .toList()
+            );
         }
-        return teachers.stream()
-                .map(TeacherSearchResponse::from)
-                .toList();
+        return new TeacherSearchResponse(
+                teachers.stream()
+                        .map(TeacherSimpleDto::from)
+                        .toList()
+        );
     }
 
     private Teacher findTeacherOrThrow(Long teacherId) {

@@ -3,10 +3,10 @@ package com.example.talentoftime.classsession.controller;
 import com.example.talentoftime.classsession.dto.ClassSessionBulkCreateRequest;
 import com.example.talentoftime.classsession.dto.ClassSessionResponse;
 import com.example.talentoftime.classsession.dto.ClassSessionUpdateRequest;
+import com.example.talentoftime.classsession.dto.DayByClassSessionResponse;
 import com.example.talentoftime.classsession.service.ClassSessionService;
 import jakarta.validation.Valid;
 import java.time.LocalDate;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
@@ -28,24 +28,24 @@ public class ClassSessionController implements ClassSessionControllerDocs {
     private final ClassSessionService classSessionService;
 
     @GetMapping("/today")
-    public ResponseEntity<List<ClassSessionResponse>> findTodayClassSessions() {
+    public ResponseEntity<DayByClassSessionResponse> findTodayClassSessions() {
         return ResponseEntity.ok(classSessionService.findTodayClassSessions());
     }
 
     @GetMapping
-    public ResponseEntity<List<ClassSessionResponse>> findClassSessionsByDate(
+    public ResponseEntity<DayByClassSessionResponse> findClassSessionsByDate(
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
         return ResponseEntity.ok(classSessionService.findClassSessionsByDate(date));
     }
 
     @GetMapping("/last-week-same-day")
-    public ResponseEntity<List<ClassSessionResponse>> findLastWeekSameDayClassSessions(
+    public ResponseEntity<DayByClassSessionResponse> findLastWeekSameDayClassSessions(
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
         return ResponseEntity.ok(classSessionService.findLastWeekSameDayClassSessions(date));
     }
 
     @PostMapping("/bulk")
-    public ResponseEntity<List<ClassSessionResponse>> createBulkClassSessions(
+    public ResponseEntity<DayByClassSessionResponse> createBulkClassSessions(
             @Valid @RequestBody ClassSessionBulkCreateRequest request) {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(classSessionService.createBulkClassSessions(request));

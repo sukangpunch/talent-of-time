@@ -1,5 +1,6 @@
 package com.example.talentoftime.teacher.controller;
 
+import com.example.talentoftime.teacher.dto.AllTeacherResponse;
 import com.example.talentoftime.teacher.dto.TeacherCreateRequest;
 import com.example.talentoftime.teacher.dto.TeacherResponse;
 import com.example.talentoftime.teacher.dto.TeacherSearchResponse;
@@ -30,7 +31,7 @@ public interface TeacherControllerDocs {
     )
     @ApiResponse(responseCode = "200", description = "조회 성공")
     @GetMapping
-    ResponseEntity<List<TeacherResponse>> findAllTeachers();
+    ResponseEntity<AllTeacherResponse> findAllTeachers();
 
     @Operation(
             summary = "강사 단건 조회",
@@ -114,5 +115,5 @@ public interface TeacherControllerDocs {
     )
     @ApiResponse(responseCode = "200", description = "조회 성공")
     @GetMapping("/search")
-    ResponseEntity<List<TeacherSearchResponse>> searchTeachers(@RequestParam String name);
+    ResponseEntity<TeacherSearchResponse> searchTeachers(@RequestParam String name);
 }

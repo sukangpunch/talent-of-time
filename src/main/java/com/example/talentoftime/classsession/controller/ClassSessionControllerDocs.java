@@ -3,6 +3,7 @@ package com.example.talentoftime.classsession.controller;
 import com.example.talentoftime.classsession.dto.ClassSessionBulkCreateRequest;
 import com.example.talentoftime.classsession.dto.ClassSessionResponse;
 import com.example.talentoftime.classsession.dto.ClassSessionUpdateRequest;
+import com.example.talentoftime.classsession.dto.DayByClassSessionResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -26,7 +27,7 @@ public interface ClassSessionControllerDocs {
     )
     @ApiResponse(responseCode = "200", description = "조회 성공")
     @GetMapping("/today")
-    ResponseEntity<List<ClassSessionResponse>> findTodayClassSessions();
+    ResponseEntity<DayByClassSessionResponse> findTodayClassSessions();
 
     @Operation(
             summary = "날짜별 수업 일정 조회",
@@ -34,7 +35,7 @@ public interface ClassSessionControllerDocs {
     )
     @ApiResponse(responseCode = "200", description = "조회 성공")
     @GetMapping
-    ResponseEntity<List<ClassSessionResponse>> findClassSessionsByDate(
+    ResponseEntity<DayByClassSessionResponse> findClassSessionsByDate(
             @Parameter(description = "조회 날짜 (yyyy-MM-dd)", example = "2026-02-24") LocalDate date);
 
     @Operation(
@@ -43,7 +44,7 @@ public interface ClassSessionControllerDocs {
     )
     @ApiResponse(responseCode = "200", description = "조회 성공")
     @GetMapping("/last-week-same-day")
-    ResponseEntity<List<ClassSessionResponse>> findLastWeekSameDayClassSessions(
+    ResponseEntity<DayByClassSessionResponse> findLastWeekSameDayClassSessions(
             @Parameter(description = "기준 날짜 (yyyy-MM-dd)", example = "2026-03-02") LocalDate date);
 
     @Operation(
@@ -102,7 +103,7 @@ public interface ClassSessionControllerDocs {
             )
     })
     @PostMapping("/bulk")
-    ResponseEntity<List<ClassSessionResponse>> createBulkClassSessions(ClassSessionBulkCreateRequest request);
+    ResponseEntity<DayByClassSessionResponse> createBulkClassSessions(ClassSessionBulkCreateRequest request);
 
     @Operation(
             summary = "수업 일정 수정",
