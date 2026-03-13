@@ -95,8 +95,8 @@ export function setup() {
     check(res, { 'setup: 날짜 조회 성공': (r) => r.status === 200 });
 
     if (res.status === 200) {
-        const sessions = JSON.parse(res.body);
-        console.log(`setup 확인 (date=${sampleDate}): ${sessions.length}건 반환`);
+        const body = JSON.parse(res.body);
+        console.log(`setup 확인 (date=${sampleDate}): ${body.classSessionResponses.length}건 반환`);
     } else {
         console.warn(`setup 경고: date=${sampleDate} 조회 실패 (status=${res.status})`);
     }
@@ -121,8 +121,8 @@ export default function () {
 
     const ok = check(res, {
         'find_by_date: status 200':    (r) => r.status === 200,
-        'find_by_date: body is array': (r) => {
-            try { return Array.isArray(JSON.parse(r.body)); } catch { return false; }
+        'find_by_date: body has classSessionResponses': (r) => {
+            try { return Array.isArray(JSON.parse(r.body).classSessionResponses); } catch { return false; }
         },
     });
     errorRate.add(!ok);

@@ -77,8 +77,8 @@ export function setup() {
         return { teacherIds: [] };
     }
 
-    const teachers  = JSON.parse(res.body);
-    const teacherIds = teachers.map((t) => t.id);
+    const body       = JSON.parse(res.body);
+    const teacherIds = body.teacherResponses.map((t) => t.id);
 
     console.log(`setup 완료: 선생님 ${teacherIds.length}명의 ID를 확인했습니다.`);
     return { teacherIds };
