@@ -139,6 +139,7 @@ jobs:
               export REDIS_PORT="${{ secrets.REDIS_PORT }}"
               export REDIS_PASSWORD="${{ secrets.REDIS_PASSWORD }}"
 
+
               echo "Cleaning up old tagged images (keeping last 2)..."
               docker images "${DOCKERHUB_USERNAME}/talent-of-time" --format "{{.Tag}}" | \
               sort -r | \
@@ -215,7 +216,8 @@ jobs:
               export REDIS_SERVER_HOST="${{ secrets.REDIS_SERVER_HOST }}"
               export REDIS_PORT="${{ secrets.REDIS_PORT }}"
               export REDIS_PASSWORD="${{ secrets.REDIS_PASSWORD }}"
-
+              
+              
               echo "Cleaning up old tagged images (keeping last 2)..."
               docker images "${DOCKERHUB_USERNAME}/talent-of-time" --format "{{.Tag}}" | \
               sort -r | \
