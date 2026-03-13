@@ -36,6 +36,9 @@ jobs:
       - name: JAR 빌드 (테스트 제외)
         run: ./gradlew bootJar -x test
 
+      - name: QEMU 설정 (ARM64 크로스 컴파일용)
+        uses: docker/setup-qemu-action@v3
+
       - name: Docker Buildx 설정
         uses: docker/setup-buildx-action@v3
 
@@ -58,6 +61,7 @@ jobs:
         with:
           context: .
           push: true
+          platforms: linux/arm64
           tags: ${{ steps.image_meta.outputs.image_name }}:${{ steps.image_meta.outputs.image_tag }}
           cache-from: type=registry,ref=${{ steps.image_meta.outputs.image_name }}:buildcache
           cache-to: type=registry,ref=${{ steps.image_meta.outputs.image_name }}:buildcache,mode=max
