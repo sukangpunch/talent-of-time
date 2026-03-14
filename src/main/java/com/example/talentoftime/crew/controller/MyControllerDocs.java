@@ -2,6 +2,7 @@ package com.example.talentoftime.crew.controller;
 
 import com.example.talentoftime.auth.domain.LoginUser;
 import com.example.talentoftime.count.dto.MyCountResponse;
+import com.example.talentoftime.crew.dto.CrewHeaderResponse;
 import com.example.talentoftime.crew.dto.CrewResponse;
 import com.example.talentoftime.crew.dto.OnboardingRequest;
 import io.swagger.v3.oas.annotations.Operation;
@@ -72,6 +73,28 @@ public interface MyControllerDocs {
     })
     @PostMapping("/onboarding")
     ResponseEntity<CrewResponse> onboardUser(@AuthenticationPrincipal LoginUser loginUser, @Valid @RequestBody OnboardingRequest request);
+
+    @Operation(
+            summary = "헤더 정보 조회",
+            description = "로그인한 크루의 이름과 크루 유형을 반환합니다. 헤더 UI 표시용입니다."
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "조회 성공"),
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "인증 필요",
+                    content = @Content(
+                            mediaType = "application/json",
+                            examples = @ExampleObject(
+                                    name = "A002",
+                                    summary = "A002 - 토큰 없음 또는 유효하지 않은 토큰",
+                                    value = "{\"error\": \"A002\", \"message\": \"인증이 필요합니다.\"}"
+                            )
+                    )
+            )
+    })
+    @GetMapping("/header")
+    ResponseEntity<CrewHeaderResponse> getHeader(@AuthenticationPrincipal LoginUser loginUser);
 
     @Operation(
             summary = "내 프로필 조회",

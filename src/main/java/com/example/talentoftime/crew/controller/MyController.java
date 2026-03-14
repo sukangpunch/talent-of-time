@@ -2,6 +2,7 @@ package com.example.talentoftime.crew.controller;
 
 import com.example.talentoftime.auth.domain.LoginUser;
 import com.example.talentoftime.count.dto.MyCountResponse;
+import com.example.talentoftime.crew.dto.CrewHeaderResponse;
 import com.example.talentoftime.crew.dto.CrewResponse;
 import com.example.talentoftime.crew.dto.OnboardingRequest;
 import com.example.talentoftime.crew.service.MyService;
@@ -22,6 +23,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class MyController implements MyControllerDocs {
 
     private final MyService myService;
+
+    @GetMapping("/header")
+    public ResponseEntity<CrewHeaderResponse> getHeader(@AuthenticationPrincipal LoginUser loginUser) {
+        return ResponseEntity.ok(myService.getHeader(loginUser.getId()));
+    }
 
     @GetMapping("/profile")
     public ResponseEntity<CrewResponse> getProfile(@AuthenticationPrincipal LoginUser loginUser) {

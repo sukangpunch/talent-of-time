@@ -37,7 +37,8 @@ public class ScheduleService {
         ClassSession classSession = classSessionRepository.findById(request.classSessionId())
                 .orElseThrow(() -> new BusinessException(ErrorCode.CLASS_SESSION_NOT_FOUND));
 
-        Count count = findCountOrThrow(crew, request.taskType());
+        Count count = countRepository.findByCrewAndTaskType(crew, request.taskType())
+                .orElseThrow(() -> new BusinessException(ErrorCode.COUNT_NOT_FOUND));
         count.increment();
 
         Schedule schedule = new Schedule(
@@ -61,7 +62,8 @@ public class ScheduleService {
             throw new BusinessException(ErrorCode.SCHEDULE_NOT_OWNER);
         }
 
-        Count count = findCountOrThrow(schedule.getCrew(), schedule.getTaskType());
+        Count count = countRepository.findByCrewAndTaskType(schedule.getCrew(), schedule.getTaskType())
+                .orElseThrow(() -> new BusinessException(ErrorCode.COUNT_NOT_FOUND));
         count.decrement();
 
         scheduleRepository.delete(schedule);
@@ -75,10 +77,5 @@ public class ScheduleService {
         return scheduleRepository.findByClassSessionAndTaskType(classSession, taskType).stream()
                 .map(ScheduleResponse::from)
                 .toList();
-    }
-
-    private Count findCountOrThrow(Crew crew, TaskType taskType) {
-        return countRepository.findByCrewAndTaskType(crew, taskType)
-                .orElseThrow(() -> new BusinessException(ErrorCode.COUNT_NOT_FOUND));
     }
 }

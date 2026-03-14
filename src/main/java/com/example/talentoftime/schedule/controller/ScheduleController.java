@@ -29,21 +29,24 @@ public class ScheduleController implements ScheduleControllerDocs {
     @PostMapping
     public ResponseEntity<ScheduleResponse> selfRegister(
             @AuthenticationPrincipal LoginUser loginUser,
-            @Valid @RequestBody ScheduleCreateRequest request) {
+            @Valid @RequestBody ScheduleCreateRequest request
+    ) {
         return ResponseEntity.ok(scheduleService.selfRegister(loginUser.getId(), request));
     }
 
     @GetMapping
     public ResponseEntity<List<ScheduleResponse>> findByClassSessionAndTaskType(
             @RequestParam Long classSessionId,
-            @RequestParam TaskType taskType) {
+            @RequestParam TaskType taskType
+    ) {
         return ResponseEntity.ok(scheduleService.findByClassSessionAndTaskType(classSessionId, taskType));
     }
 
     @DeleteMapping("/{scheduleId}")
     public ResponseEntity<Void> cancelRegistration(
             @AuthenticationPrincipal LoginUser loginUser,
-            @PathVariable Long scheduleId) {
+            @PathVariable Long scheduleId
+    ) {
         scheduleService.cancelRegistration(loginUser.getId(), scheduleId);
         return ResponseEntity.noContent().build();
     }

@@ -5,10 +5,10 @@ import com.example.talentoftime.common.exception.ErrorCode;
 import com.example.talentoftime.count.dto.MyCountResponse;
 import com.example.talentoftime.count.repository.CountRepository;
 import com.example.talentoftime.crew.domain.Crew;
+import com.example.talentoftime.crew.dto.CrewHeaderResponse;
 import com.example.talentoftime.crew.dto.CrewResponse;
 import com.example.talentoftime.crew.dto.OnboardingRequest;
 import com.example.talentoftime.crew.repository.CrewRepository;
-import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,6 +20,13 @@ public class MyService {
 
     private final CrewRepository crewRepository;
     private final CountRepository countRepository;
+
+    @Transactional(readOnly = true)
+    public CrewHeaderResponse getHeader(Long crewId) {
+        Crew crew = crewRepository.findById(crewId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.CREW_NOT_FOUND));
+        return CrewHeaderResponse.from(crew);
+    }
 
     @Transactional(readOnly = true)
     public CrewResponse getProfile(Long crewId) {
