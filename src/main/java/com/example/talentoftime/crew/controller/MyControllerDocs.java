@@ -4,6 +4,7 @@ import com.example.talentoftime.auth.domain.LoginUser;
 import com.example.talentoftime.count.dto.MyCountResponse;
 import com.example.talentoftime.crew.dto.CrewHeaderResponse;
 import com.example.talentoftime.crew.dto.CrewResponse;
+import com.example.talentoftime.crew.dto.FcmTokenRequest;
 import com.example.talentoftime.crew.dto.OnboardingRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -16,11 +17,34 @@ import java.util.List;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 @Tag(name = "마이페이지", description = "로그인한 크루 본인 정보 조회 API")
 public interface MyControllerDocs {
+
+    @Operation(
+            summary = "FCM 토큰 저장",
+            description = "로그인한 크루의 FCM 디바이스 토큰을 저장합니다. 로그인 직후 호출해주세요."
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "저장 성공"),
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "인증 필요",
+                    content = @Content(
+                            mediaType = "application/json",
+                            examples = @ExampleObject(
+                                    name = "A002",
+                                    summary = "A002 - 토큰 없음 또는 유효하지 않은 토큰",
+                                    value = "{\"error\": \"A002\", \"message\": \"인증이 필요합니다.\"}"
+                            )
+                    )
+            )
+    })
+    @PatchMapping("/fcm-token")
+    ResponseEntity<Void> saveFcmToken(@AuthenticationPrincipal LoginUser loginUser, @Valid @RequestBody FcmTokenRequest request);
 
     @Operation(
             summary = "온보딩",

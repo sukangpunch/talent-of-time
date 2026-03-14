@@ -7,6 +7,7 @@ import com.example.talentoftime.count.repository.CountRepository;
 import com.example.talentoftime.crew.domain.Crew;
 import com.example.talentoftime.crew.dto.CrewHeaderResponse;
 import com.example.talentoftime.crew.dto.CrewResponse;
+import com.example.talentoftime.crew.dto.FcmTokenRequest;
 import com.example.talentoftime.crew.dto.OnboardingRequest;
 import com.example.talentoftime.crew.repository.CrewRepository;
 import java.util.List;
@@ -20,6 +21,13 @@ public class MyService {
 
     private final CrewRepository crewRepository;
     private final CountRepository countRepository;
+
+    @Transactional
+    public void saveFcmToken(Long crewId, FcmTokenRequest request) {
+        Crew crew = crewRepository.findById(crewId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.CREW_NOT_FOUND));
+        crew.updateFcmToken(request.fcmToken());
+    }
 
     @Transactional(readOnly = true)
     public CrewHeaderResponse getHeader(Long crewId) {

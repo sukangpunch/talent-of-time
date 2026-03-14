@@ -22,6 +22,10 @@ jobs:
         uses: gradle/actions/setup-gradle@v4
       - name: gradlew 실행 권한 부여
         run: chmod +x ./gradlew
+      - name: Firebase 서비스 키 파일 생성
+        run: |
+          mkdir -p src/main/resources/firebase
+          echo '${{ secrets.FIREBASE_SERVICE_KEY_JSON }}' > src/main/resources/firebase/firebase_service_key.json
       - name: Build with Gradle Wrapper
         run: ./gradlew build
       - name: Publish Test Report

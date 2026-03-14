@@ -1,0 +1,1 @@
+ALTER TABLE crew ADD COLUMN fcm_token VARCHAR(255) NULL;

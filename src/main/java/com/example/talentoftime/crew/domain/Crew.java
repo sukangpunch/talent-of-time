@@ -45,6 +45,9 @@ public class Crew {
     @Column(name = "role")
     private Role role;
 
+    @Column(name = "fcm_token")
+    private String fcmToken;
+
     public Crew(
             String name,
             String email,
@@ -55,6 +58,10 @@ public class Crew {
         this.email = email;
         this.providerId = providerId;
         this.role = role;
+    }
+
+    public void updateFcmToken(String fcmToken) {
+        this.fcmToken = fcmToken;
     }
 
     public void onboard(
