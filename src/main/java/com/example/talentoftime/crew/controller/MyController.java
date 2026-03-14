@@ -10,6 +10,7 @@ import com.example.talentoftime.crew.service.MyService;
 import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/v1/my")
 @RequiredArgsConstructor
+@Slf4j
 public class MyController implements MyControllerDocs {
 
     private final MyService myService;
@@ -31,6 +33,7 @@ public class MyController implements MyControllerDocs {
             @AuthenticationPrincipal LoginUser loginUser,
             @Valid @RequestBody FcmTokenRequest request
     ) {
+        log.info("[saveFcmToken] userId: {}, fcmToekn : {}", loginUser.getId(), request.fcmToken());
         myService.saveFcmToken(loginUser.getId(), request);
         return ResponseEntity.ok().build();
     }
