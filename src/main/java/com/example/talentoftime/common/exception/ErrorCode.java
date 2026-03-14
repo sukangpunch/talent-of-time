@@ -63,6 +63,9 @@ public enum ErrorCode {
     OAUTH_ACCESS_TOKEN_INVALID(HttpStatus.UNAUTHORIZED, "O004", "유효하지 않은 OAuth 액세스 토큰입니다."),
     PROVIDER_INVALID(HttpStatus.BAD_REQUEST, "O005", "지원하지 않는 OAuth 제공자입니다."),
 
+    // FCM
+    FCM_SEND_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "F001", "FCM 푸시 알림 전송에 실패했습니다."),
+
     // Global
     INVALID_PARAMS(HttpStatus.BAD_REQUEST, "G001", "유효하지 않은 요청 파라미터입니다."),
     DATABASE_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "G002", "데이터베이스 오류가 발생했습니다."),

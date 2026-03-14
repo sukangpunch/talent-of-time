@@ -49,3 +49,4 @@ application.yml
 ### database
 /mysql_data_local
 /redis_data_local
+src/main/resources/firebase/

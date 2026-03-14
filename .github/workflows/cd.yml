@@ -33,6 +33,11 @@ jobs:
       - name: gradlew 실행 권한 부여
         run: chmod +x gradlew
 
+      - name: Firebase 서비스 키 파일 생성
+        run: |
+          mkdir -p src/main/resources/firebase
+          echo '${{ secrets.FIREBASE_SERVICE_KEY_JSON }}' > src/main/resources/firebase/firebase_service_key.json
+
       - name: JAR 빌드 (테스트 제외)
         run: ./gradlew bootJar -x test
 
