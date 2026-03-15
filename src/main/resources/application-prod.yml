@@ -19,21 +19,32 @@ spring:
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
     hikari:
+      auto-commit: false
       maximum-pool-size: 5 # master(5개) + slave(5개) 로 최대 db 에는 총 10개 연결
       minimum-idle: 5 # max와 동일하게 맞춰서 불필요한 커넥션 생성/삭제 비용 제거
+      data-source-properties:
+        cachePrepStmts: true          # 클라이언트 측 Prepared Statement 캐싱 활성화
+        prepStmtCacheSize: 250        # 커넥션당 캐싱할 Prepared Statement 수
+        prepStmtCacheSqlLimit: 2048   # 캐싱할 SQL 문의 최대 길이
+        useServerPrepStmts: true      # MySQL 서버 측 Prepared Statement 사용 (서버에서 실행 계획을 캐싱)
 
   sql:
     init:
       mode: never
 
   jpa:
+    open-in-view: false
     hibernate:
       ddl-auto: none
     show-sql: false
     database: mysql
     properties:
       hibernate:
+        connection:
+          provider_disables_autocommit: true
         format_sql: false
+        query:
+          in_clause_parameter_padding: true
 
   flyway:
     enabled: true
