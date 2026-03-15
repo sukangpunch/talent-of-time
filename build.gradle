@@ -67,6 +67,9 @@ dependencies {
     implementation 'com.google.firebase:firebase-admin:6.8.1'
     implementation group: 'com.squareup.okhttp3', name: 'okhttp', version: '4.2.2'
 
+    // Actuator
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+
     // Test
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
