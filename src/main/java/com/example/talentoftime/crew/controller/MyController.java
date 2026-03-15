@@ -5,6 +5,7 @@ import com.example.talentoftime.count.dto.MyCountResponse;
 import com.example.talentoftime.crew.dto.CrewHeaderResponse;
 import com.example.talentoftime.crew.dto.CrewResponse;
 import com.example.talentoftime.crew.dto.FcmTokenRequest;
+import com.example.talentoftime.crew.dto.FcmTokenResponse;
 import com.example.talentoftime.crew.dto.OnboardingRequest;
 import com.example.talentoftime.crew.service.MyService;
 import jakarta.validation.Valid;
@@ -36,6 +37,11 @@ public class MyController implements MyControllerDocs {
         log.info("[saveFcmToken] userId: {}, fcmToekn : {}", loginUser.getId(), request.fcmToken());
         myService.saveFcmToken(loginUser.getId(), request);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/fcm-token")
+    public ResponseEntity<List<FcmTokenResponse>> getFcmTokens(@AuthenticationPrincipal LoginUser loginUser) {
+        return ResponseEntity.ok(myService.getFcmTokens(loginUser.getId()));
     }
 
     @GetMapping("/header")

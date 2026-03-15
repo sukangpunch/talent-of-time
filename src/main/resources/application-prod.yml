@@ -20,8 +20,8 @@ spring:
     password: ${DB_PASSWORD}
     hikari:
       auto-commit: false
-      maximum-pool-size: 5        # master(5개) + slave(5개) 로 최대 db 에는 총 10개 연결
-      minimum-idle: 5             # max와 동일하게 맞춰서 불필요한 커넥션 생성/삭제 비용 제거
+      maximum-pool-size: 3        # master(3개) + slave(3개) 로 최대 db 에는 총 10개 연결
+      minimum-idle: 3             # max와 동일하게 맞춰서 불필요한 커넥션 생성/삭제 비용 제거
       data-source-properties:
         cachePrepStmts: true          # 클라이언트 측 Prepared Statement 캐싱 활성화
         prepStmtCacheSize: 250        # 커넥션당 캐싱할 Prepared Statement 수
