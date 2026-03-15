@@ -5,6 +5,7 @@ import com.example.talentoftime.count.dto.MyCountResponse;
 import com.example.talentoftime.crew.dto.CrewHeaderResponse;
 import com.example.talentoftime.crew.dto.CrewResponse;
 import com.example.talentoftime.crew.dto.FcmTokenRequest;
+import com.example.talentoftime.crew.dto.FcmTokenResponse;
 import com.example.talentoftime.crew.dto.OnboardingRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -45,6 +46,28 @@ public interface MyControllerDocs {
     })
     @PatchMapping("/fcm-token")
     ResponseEntity<Void> saveFcmToken(@AuthenticationPrincipal LoginUser loginUser, @Valid @RequestBody FcmTokenRequest request);
+
+    @Operation(
+            summary = "FCM 토큰 조회",
+            description = "로그인한 크루의 등록된 FCM 디바이스 토큰 목록을 반환합니다."
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "조회 성공"),
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "인증 필요",
+                    content = @Content(
+                            mediaType = "application/json",
+                            examples = @ExampleObject(
+                                    name = "A002",
+                                    summary = "A002 - 토큰 없음 또는 유효하지 않은 토큰",
+                                    value = "{\"error\": \"A002\", \"message\": \"인증이 필요합니다.\"}"
+                            )
+                    )
+            )
+    })
+    @GetMapping("/fcm-token")
+    ResponseEntity<List<FcmTokenResponse>> getFcmTokens(@AuthenticationPrincipal LoginUser loginUser);
 
     @Operation(
             summary = "온보딩",

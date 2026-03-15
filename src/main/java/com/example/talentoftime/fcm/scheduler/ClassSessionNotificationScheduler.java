@@ -87,18 +87,6 @@ public class ClassSessionNotificationScheduler {
         sendToOnDutyCrews(LocalTime.of(21, 50), "수업 알림", "6교시 퇴실 시작 10분 전입니다.");
     }
 
-    // 매분 0초에 실행 (1분 주기: 01분, 02분, 03분...)
-    @Scheduled(cron = "0 * * * * *")
-    public void notifyTestEntry() {
-        sendToOnDutyCrews(LocalTime.now(), "수업 알림", "Test교시 입실 시작 10분 전입니다.");
-    }
-
-    // 매 2분 0초마다 실행 (2분 주기: 00분, 02분, 04분...)
-    @Scheduled(cron = "0 0/2 * * * *")
-    public void notifyTestExit() {
-        sendToOnDutyCrews(LocalTime.now(), "수업 알림", "Test교시 퇴실 시작 10분 전입니다.");
-    }
-
     private void sendToOnDutyCrews(
             LocalTime notificationTime,
             String title,

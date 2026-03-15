@@ -8,6 +8,7 @@ import com.example.talentoftime.crew.domain.Crew;
 import com.example.talentoftime.crew.dto.CrewHeaderResponse;
 import com.example.talentoftime.crew.dto.CrewResponse;
 import com.example.talentoftime.crew.dto.FcmTokenRequest;
+import com.example.talentoftime.crew.dto.FcmTokenResponse;
 import com.example.talentoftime.crew.dto.OnboardingRequest;
 import com.example.talentoftime.crew.repository.CrewRepository;
 import com.example.talentoftime.fcm.domain.FcmToken;
@@ -34,6 +35,13 @@ public class MyService {
                         existing -> existing.updateCrew(crew),
                         () -> fcmTokenRepository.save(new FcmToken(crew, request.fcmToken()))
                 );
+    }
+
+    @Transactional(readOnly = true)
+    public List<FcmTokenResponse> getFcmTokens(Long crewId) {
+        return fcmTokenRepository.findAllByCrewId(crewId).stream()
+                .map(FcmTokenResponse::from)
+                .toList();
     }
 
     @Transactional(readOnly = true)
