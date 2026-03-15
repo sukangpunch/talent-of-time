@@ -2,6 +2,11 @@ spring:
   config:
     activate:
       on-profile: prod
+
+  threads:
+    virtual:
+      enabled: true
+
   data:
     redis:
       host: ${REDIS_SERVER_HOST}
@@ -13,6 +18,9 @@ spring:
     url: ${DB_URL}
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
+    hikari:
+      maximum-pool-size: 5 # master(5개) + slave(5개) 로 최대 db 에는 총 10개 연결
+      minimum-idle: 5 # max와 동일하게 맞춰서 불필요한 커넥션 생성/삭제 비용 제거
 
   sql:
     init:
@@ -63,3 +71,9 @@ token:
 app:
   cookie:
     secure: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "metrics"
