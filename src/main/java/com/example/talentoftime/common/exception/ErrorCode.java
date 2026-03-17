@@ -66,6 +66,11 @@ public enum ErrorCode {
     // FCM
     FCM_SEND_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "F001", "FCM 푸시 알림 전송에 실패했습니다."),
 
+    // GEMINI
+    NO_CANDIDATES_RESPONSE(HttpStatus.BAD_REQUEST, "GM001", "제미니 API 응답에 CandidateDtoList가 없습니다."),
+    EMPTY_CONTENT_RESPONSE(HttpStatus.BAD_REQUEST, "GM002", "제미니 API 응답에 PartsDtoList 가 없습니다."),
+    IMAGE_EXTRACTION_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "GM003", "이미지에서 수업 정보 추출에 실패했습니다."),
+
     // Global
     INVALID_PARAMS(HttpStatus.BAD_REQUEST, "G001", "유효하지 않은 요청 파라미터입니다."),
     DATABASE_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "G002", "데이터베이스 오류가 발생했습니다."),

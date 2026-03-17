@@ -1,15 +1,20 @@
 package com.example.talentoftime.classsession.controller;
 
 import com.example.talentoftime.classsession.dto.ClassSessionBulkCreateRequest;
+import com.example.talentoftime.classsession.dto.ClassSessionParseResultResponse;
 import com.example.talentoftime.classsession.dto.ClassSessionResponse;
 import com.example.talentoftime.classsession.dto.ClassSessionUpdateRequest;
 import com.example.talentoftime.classsession.dto.DayByClassSessionResponse;
+import com.example.talentoftime.classsession.infrastructure.ClassSessionExtractFromImageService;
+import com.example.talentoftime.classsession.infrastructure.GeminiExtractionService;
 import com.example.talentoftime.classsession.service.ClassSessionService;
 import jakarta.validation.Valid;
 import java.time.LocalDate;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -19,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/api/v1/class-sessions")
@@ -26,6 +32,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class ClassSessionController implements ClassSessionControllerDocs {
 
     private final ClassSessionService classSessionService;
+    private final ClassSessionExtractFromImageService extractionFromImageService;
 
     @GetMapping("/today")
     public ResponseEntity<DayByClassSessionResponse> findTodayClassSessions() {
@@ -62,5 +69,11 @@ public class ClassSessionController implements ClassSessionControllerDocs {
     public ResponseEntity<ClassSessionResponse> cancelClassSession(
             @PathVariable Long classSessionId) {
         return ResponseEntity.ok(classSessionService.cancelClassSession(classSessionId));
+    }
+
+    @PostMapping(value = "/extract", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<List<ClassSessionParseResultResponse>> extractClassSession(
+            @RequestParam("file") MultipartFile file) {
+        return ResponseEntity.ok(extractionFromImageService.extractSessionsFromImage(file));
     }
 }
