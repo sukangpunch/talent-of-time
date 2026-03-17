@@ -1,5 +1,6 @@
 package com.example.talentoftime.common.exception;
 
+import com.google.api.Http;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -65,6 +66,10 @@ public enum ErrorCode {
 
     // FCM
     FCM_SEND_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "F001", "FCM 푸시 알림 전송에 실패했습니다."),
+
+    // GEMINI
+    NO_CANDIDATES_RESPONSE(HttpStatus.BAD_REQUEST, "GM001", "제미니 API 응답에 CandidateDtoList가 없습니다."),
+    EMPTY_CONTENT_RESPONSE(HttpStatus.BAD_REQUEST, "GM002", "제미니 API 응답에 PartsDtoList 가 없습니다."),
 
     // Global
     INVALID_PARAMS(HttpStatus.BAD_REQUEST, "G001", "유효하지 않은 요청 파라미터입니다."),

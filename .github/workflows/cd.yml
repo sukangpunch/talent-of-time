@@ -147,7 +147,7 @@ jobs:
               export REDIS_SERVER_HOST="${{ secrets.REDIS_SERVER_HOST }}"
               export REDIS_PORT="${{ secrets.REDIS_PORT }}"
               export REDIS_PASSWORD="${{ secrets.REDIS_PASSWORD }}"
-
+              export GEMINI_API_KEY="${{ secrets.GEMINI_API_KEY }}"
 
               echo "Cleaning up old tagged images (keeping last 2)..."
               docker images "${DOCKERHUB_USERNAME}/talent-of-time" --format "{{.Tag}}" | \
@@ -225,7 +225,7 @@ jobs:
               export REDIS_SERVER_HOST="${{ secrets.REDIS_SERVER_HOST }}"
               export REDIS_PORT="${{ secrets.REDIS_PORT }}"
               export REDIS_PASSWORD="${{ secrets.REDIS_PASSWORD }}"
-              
+              export GEMINI_API_KEY="${{ secrets.GEMINI_API_KEY }}"
               
               echo "Cleaning up old tagged images (keeping last 2)..."
               docker images "${DOCKERHUB_USERNAME}/talent-of-time" --format "{{.Tag}}" | \

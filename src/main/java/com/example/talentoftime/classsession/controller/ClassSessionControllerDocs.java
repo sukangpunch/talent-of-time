@@ -1,6 +1,7 @@
 package com.example.talentoftime.classsession.controller;
 
 import com.example.talentoftime.classsession.dto.ClassSessionBulkCreateRequest;
+import com.example.talentoftime.classsession.dto.ClassSessionParseResultResponse;
 import com.example.talentoftime.classsession.dto.ClassSessionResponse;
 import com.example.talentoftime.classsession.dto.ClassSessionUpdateRequest;
 import com.example.talentoftime.classsession.dto.DayByClassSessionResponse;
@@ -13,10 +14,12 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.time.LocalDate;
 import java.util.List;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.multipart.MultipartFile;
 
 @Tag(name = "수업 일정", description = "주간 수업 일정(ClassSession) 관리 API")
 public interface ClassSessionControllerDocs {
@@ -189,4 +192,16 @@ public interface ClassSessionControllerDocs {
     @PatchMapping("/{classSessionId}/cancel")
     ResponseEntity<ClassSessionResponse> cancelClassSession(
             @Parameter(description = "수업 일정 ID", example = "1") Long classSessionId);
+
+    @Operation(
+            summary = "시간표 이미지 분석 (Gemini)",
+            description = "주간 시간표 이미지를 업로드하면 Gemini AI가 분석하여 수업 정보 목록을 JSON으로 반환합니다."
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "추출 성공"),
+            @ApiResponse(responseCode = "500", description = "이미지 분석 실패")
+    })
+    @PostMapping(value = "/extract", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    ResponseEntity<List<ClassSessionParseResultResponse>> extractClassSession(
+            @Parameter(description = "시간표 이미지 파일 (jpg, png 등)") MultipartFile file);
 }
