@@ -54,8 +54,10 @@ public class GeminiExtractionService implements ClassSessionExtractFromImageServ
 
             // 5. 순수 JSON 문자열을 List<ParsedClassSessionDto> 객체로 변환
             return objectMapper.readValue(extractedJsonText, new TypeReference<List<ClassSessionParseResultResponse>>() {});
+        } catch (BusinessException e) {
+            throw e;
         } catch (Exception e) {
-            throw new RuntimeException("이미지에서 수업 정보 추출에 실패했습니다.", e);
+            throw new BusinessException(ErrorCode.IMAGE_EXTRACTION_FAILED);
         }
     }
 
