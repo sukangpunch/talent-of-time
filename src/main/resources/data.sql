@@ -49,6 +49,16 @@ INSERT INTO period (period_number, start_time, end_time) VALUES (6, '20:20:00', 
 -- 4. 서바이벌 시즌: 정오사항 바로 지우지 말고 강사님께 지우기 여부 확인 필수
 -- ==============================================
 
+-- ==============================================
+-- 강사 (Teacher) 강의실 세팅 데이터
+--
+-- [공통 준수 사항]
+-- 1. 개인분필 세팅방법 미기재 시: 쓰시기 편하게만 세팅
+-- 2. 마이크 커버: 매교시 교체 / 배터리: 1교시 수업 전, 2/4교시 종료 후 교체 (단, 2칸 이하면 즉시 교체)
+-- 3. 분필 기본 세팅(학원): 흰2, 노1, 빨1, 파1 / 기본 지우개: 4개
+-- 4. 서바이벌 시즌: 정오사항 바로 지우지 말고 강사님께 지우기 여부 확인 필수
+-- ==============================================
+
 -- 강기원T ~
 INSERT INTO teacher (name, chalk_type, chalk_detail, eraser_detail, mic_type, has_ppt, notes, email) VALUES ('강기원', 'ACADEMY', '학원분필 사용 (흰4, 노4, 빨2, 파2 세팅)', '5개, 쉬는시간 3분간 사용하던 지우개로만 정리(물x)', 'PERSONAL', false, '좌측 topic/개념설명 지우지 않고 우측 문제들만 지우기 (#문항번호 표시)', NULL);
 INSERT INTO teacher (name, chalk_type, chalk_detail, eraser_detail, mic_type, has_ppt, notes, email) VALUES ('강수영', 'PERSONAL', NULL, NULL, 'ACADEMY', false, NULL, NULL);
@@ -107,7 +117,10 @@ INSERT INTO teacher (name, chalk_type, chalk_detail, eraser_detail, mic_type, ha
 
 -- 안가람T ~
 INSERT INTO teacher (name, chalk_type, chalk_detail, eraser_detail, mic_type, has_ppt, notes, email) VALUES ('안가람', 'ACADEMY', '학원분필 세팅 (단, 개인분필 사용시 6층 강사대기실 보관됨)', NULL, 'ACADEMY', false, NULL, NULL);
-INSERT INTO teacher (name, chalk_type, chalk_detail, eraser_detail, mic_type, has_ppt, notes, email) VALUES ('엄소연', 'PERSONAL', NULL, NULL, 'PERSONAL', false, NULL, NULL);
+
+-- 엄소연 -> 염소연 (수정됨)
+INSERT INTO teacher (name, chalk_type, chalk_detail, eraser_detail, mic_type, has_ppt, notes, email) VALUES ('염소연', 'PERSONAL', NULL, NULL, 'PERSONAL', false, NULL, NULL);
+
 INSERT INTO teacher (name, chalk_type, chalk_detail, eraser_detail, mic_type, has_ppt, notes, email) VALUES ('엄영대', 'MIXED', '학원분필+개인분필(6층 강사대기실 보관, 가져다 놓으면 직접 세팅하심)', '쉬는시간 패브릭 지우개로 정리', 'ACADEMY', true, '포인터 세팅, 문항분석표만 뽑기', NULL);
 INSERT INTO teacher (name, chalk_type, chalk_detail, eraser_detail, mic_type, has_ppt, notes, email) VALUES ('오택민', 'PERSONAL', '직접 가져와서 세팅하심 (남은 분필 50% 이하시 버리기, 이상은 연강시 사용 또는 보관함)', '쉬는시간에 패브릭 지우개로 지우기', 'ACADEMY', false, '남은 분필 상태에 따른 처리 규정 확인', NULL);
 INSERT INTO teacher (name, chalk_type, chalk_detail, eraser_detail, mic_type, has_ppt, notes, email) VALUES ('우주설', 'PERSONAL', '6층 강사대기실 보관', NULL, 'ACADEMY', false, NULL, NULL);
@@ -167,6 +180,10 @@ INSERT INTO teacher (name, chalk_type, chalk_detail, eraser_detail, mic_type, ha
 INSERT INTO teacher (name, chalk_type, chalk_detail, eraser_detail, mic_type, has_ppt, notes, email) VALUES ('황석진', 'PERSONAL', NULL, NULL, 'ACADEMY', true, NULL, NULL);
 INSERT INTO teacher (name, chalk_type, chalk_detail, eraser_detail, mic_type, has_ppt, notes, email) VALUES ('황용일', 'PERSONAL', '직접 세팅', NULL, 'ACADEMY', true, '직접 세팅', NULL);
 
--- 기타 (송지광T, 손정민T)
+-- 기타 (송지광T~ )
 INSERT INTO teacher (name, chalk_type, chalk_detail, eraser_detail, mic_type, has_ppt, notes, email) VALUES ('송지광', 'PERSONAL', '선생님 오시면 분필 받아서 세팅하기', NULL, 'PERSONAL', false, NULL, NULL);
 INSERT INTO teacher (name, chalk_type, chalk_detail, eraser_detail, mic_type, has_ppt, notes, email) VALUES ('손정민', NULL, NULL, NULL, NULL, false, NULL, NULL);
+INSERT INTO teacher (name, chalk_type, chalk_detail, eraser_detail, mic_type, has_ppt, notes, email) VALUES ('권경수', null, null, NULL, null, false, null, NULL);
+INSERT INTO teacher (name, chalk_type, chalk_detail, eraser_detail, mic_type, has_ppt, notes, email) VALUES ('김성묵', NULL, NULL, NULL, NULL, false, NULL, NULL);
+INSERT INTO teacher (name, chalk_type, chalk_detail, eraser_detail, mic_type, has_ppt, notes, email) VALUES ('이서준', NULL, NULL, NULL, NULL, false, NULL, NULL);
+INSERT INTO teacher (name, chalk_type, chalk_detail, eraser_detail, mic_type, has_ppt, notes, email) VALUES ('이태민', NULL, NULL, NULL, NULL, false, NULL, NULL);
