@@ -37,7 +37,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
             /* token management */
             HttpEndpoint.exact("/api/v1/auth/refresh", HttpMethod.POST),
-            HttpEndpoint.exact("/api/v1/auth/logout", HttpMethod.POST)
+            HttpEndpoint.exact("/api/v1/auth/logout", HttpMethod.POST),
+
+            /* actuator */
+            HttpEndpoint.prefix("/actuator", HttpMethod.POST)
     );
 
     private static final String AUTHORIZATION_HEADER = "Authorization";
