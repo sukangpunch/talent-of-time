@@ -79,6 +79,17 @@ token:
     storage-key-prefix: "refreshToken:"
     expire-time: 14d
 
+management:
+  server:
+    port: 8081
+  endpoints:
+    web:
+      exposure:
+        include: health, prometheus
+  endpoint:
+    health:
+      show-details: never
+
 app:
   cookie:
     secure: true
