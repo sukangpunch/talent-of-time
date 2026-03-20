@@ -1,0 +1,104 @@
+livedebugging {
+  enabled = true
+}
+
+logging {
+  level  = "info"
+  format = "logfmt"
+}
+
+// <1. 각 로그 레벨별로 파일 매칭
+local.file_match "spring_info" {
+  path_targets = [{
+    __path__ = "/var/log/spring/info/*.log",
+    level = "info",
+  }]
+}
+
+local.file_match "spring_warn" {
+  path_targets = [{
+    __path__ = "/var/log/spring/warn/*.log",
+    level = "warn",
+  }]
+}
+
+local.file_match "spring_error" {
+  path_targets = [{
+    __path__ = "/var/log/spring/error/*.log",
+    level = "error",
+  }]
+}
+
+// 1>
+
+// <2. 각 소스 정의
+loki.source.file "spring_info" {
+  targets = local.file_match.spring_info.targets
+  forward_to = [loki.process.spring_info_labels.receiver]
+}
+
+loki.source.file "spring_warn" {
+  targets = local.file_match.spring_warn.targets
+  forward_to = [loki.process.spring_warn_labels.receiver]
+}
+
+loki.source.file "spring_error" {
+  targets = local.file_match.spring_error.targets
+  forward_to = [loki.process.spring_error_labels.receiver]
+}
+
+// 2>
+
+// <3. 각 프로세서 정의 (레벨별 라벨 추가)
+loki.process "spring_info_labels" {
+  forward_to = [loki.write.grafana_loki.receiver]
+
+  stage.static_labels {
+    values = {
+      service = "backend",
+      env = sys.env("ALLOY_ENV"),
+      instance = sys.env("HOSTNAME"),
+      level = "info",
+      log_type = "application",
+    }
+  }
+}
+
+loki.process "spring_warn_labels" {
+  forward_to = [loki.write.grafana_loki.receiver]
+
+  stage.static_labels {
+    values = {
+      service = "backend",
+      env = sys.env("ALLOY_ENV"),
+      instance = sys.env("HOSTNAME"),
+      level = "warn",
+      log_type = "application",
+    }
+  }
+}
+
+loki.process "spring_error_labels" {
+  forward_to = [loki.write.grafana_loki.receiver]
+
+  stage.static_labels {
+    values = {
+      service = "backend",
+      env = sys.env("ALLOY_ENV"),
+      instance = sys.env("HOSTNAME"),
+      level = "error",
+      log_type = "application",
+    }
+  }
+}
+
+// 3>
+
+loki.write "grafana_loki" {
+  endpoint {
+    url = "http://" + sys.env("LOKI_IP") + ":3100/loki/api/v1/push"
+    tenant_id = "fake"  // Loki 테넌트 ID (싱글 테넌시이기에 fake로 설정)
+    batch_wait = "1s"  // 로그 배치 전송 대기 시간
+    batch_size = "1MB"  // 로그 배치 크기
+  }
+}

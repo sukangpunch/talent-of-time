@@ -6,6 +6,7 @@ services:
     container_name: talent-of-time
     ports:
       - "8080:8080"
+      - "8081:8081"
     environment:
       - SPRING_PROFILES_ACTIVE=prod
       - DB_URL=${DB_URL}
@@ -22,3 +23,20 @@ services:
     volumes:
       - ./logs:/var/log/spring
     restart: unless-stopped
+
+  alloy:
+    image: grafana/alloy:latest
+    container_name: alloy
+    ports:
+      - "12345:12345"
+    environment:
+      - ALLOY_ENV=prod
+      # .env 파일에 작성해둔 HOSTNAME(예: spring-server-1)을 주입
+      - HOSTNAME=${HOSTNAME}
+      - LOKI_IP=${REDIS_SERVER_HOST}
+    volumes:
+      - ./logs:/var/log/spring
+      - ./infra/config.alloy:/etc/alloy/config.alloy:ro
+    restart: unless-stopped
+    depends_on:
+      - talent-of-time

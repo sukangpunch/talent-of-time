@@ -103,6 +103,7 @@ jobs:
         with:
           sparse-checkout: |
             docker-compose.prod.yml
+            infra/config.alloy
           sparse-checkout-cone-mode: false
 
       - name: SSH 키 설정
@@ -116,7 +117,7 @@ jobs:
             -o StrictHostKeyChecking=no \
             -p ${{ secrets.DEPLOY_PORT }} \
             ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }} \
-            "mkdir -p /home/${{ secrets.DEPLOY_USER }}/talent-of-time"
+            "mkdir -p /home/${{ secrets.DEPLOY_USER }}/talent-of-time/infra"
 
       - name: Copy compose file to remote
         run: |
@@ -125,6 +126,14 @@ jobs:
             -P ${{ secrets.DEPLOY_PORT }} \
             ./docker-compose.prod.yml \
             ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }}:/home/${{ secrets.DEPLOY_USER }}/talent-of-time/
+
+      - name: Copy alloy config to remote
+        run: |
+          scp -i deploy_key.pem \
+            -o StrictHostKeyChecking=no \
+            -P ${{ secrets.DEPLOY_PORT }} \
+            ./infra/config.alloy \
+            ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }}:/home/${{ secrets.DEPLOY_USER }}/talent-of-time/infra/
 
       - name: Run deployment on server
         run: |
@@ -148,6 +157,7 @@ jobs:
               export REDIS_PORT="${{ secrets.REDIS_PORT }}"
               export REDIS_PASSWORD="${{ secrets.REDIS_PASSWORD }}"
               export GEMINI_API_KEY="${{ secrets.GEMINI_API_KEY }}"
+              export HOSTNAME="spring-server-1"
 
               echo "Cleaning up old tagged images (keeping last 2)..."
               docker images "${DOCKERHUB_USERNAME}/talent-of-time" --format "{{.Tag}}" | \
@@ -181,6 +191,7 @@ jobs:
         with:
           sparse-checkout: |
             docker-compose.prod.yml
+            infra/config.alloy
           sparse-checkout-cone-mode: false
 
       - name: SSH 키 설정
@@ -194,7 +205,7 @@ jobs:
             -o StrictHostKeyChecking=no \
             -p ${{ secrets.DEPLOY_PORT }} \
             ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST_2 }} \
-            "mkdir -p /home/${{ secrets.DEPLOY_USER }}/talent-of-time"
+            "mkdir -p /home/${{ secrets.DEPLOY_USER }}/talent-of-time/infra"
 
       - name: Copy compose file to remote
         run: |
@@ -203,6 +214,14 @@ jobs:
             -P ${{ secrets.DEPLOY_PORT }} \
             ./docker-compose.prod.yml \
             ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST_2 }}:/home/${{ secrets.DEPLOY_USER }}/talent-of-time/
+
+      - name: Copy alloy config to remote
+        run: |
+          scp -i deploy_key.pem \
+            -o StrictHostKeyChecking=no \
+            -P ${{ secrets.DEPLOY_PORT }} \
+            ./infra/config.alloy \
+            ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST_2 }}:/home/${{ secrets.DEPLOY_USER }}/talent-of-time/infra/
 
       - name: Run deployment on server
         run: |
@@ -226,7 +245,8 @@ jobs:
               export REDIS_PORT="${{ secrets.REDIS_PORT }}"
               export REDIS_PASSWORD="${{ secrets.REDIS_PASSWORD }}"
               export GEMINI_API_KEY="${{ secrets.GEMINI_API_KEY }}"
-              
+              export HOSTNAME="spring-server-2"
+
               echo "Cleaning up old tagged images (keeping last 2)..."
               docker images "${DOCKERHUB_USERNAME}/talent-of-time" --format "{{.Tag}}" | \
               sort -r | \
