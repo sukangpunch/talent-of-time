@@ -1,0 +1,2 @@
+DROP TABLE IF EXISTS schedule;
+DROP TABLE IF EXISTS count;
