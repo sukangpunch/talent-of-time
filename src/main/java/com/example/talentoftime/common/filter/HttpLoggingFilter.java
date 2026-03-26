@@ -30,30 +30,32 @@ public class HttpLoggingFilter extends OncePerRequestFilter {
     private static final String MASK_VALUE = "****";
 
     @Override
-    protected boolean shouldNotFilter(HttpServletRequest request) {
-        String path = request.getRequestURI();
-        return EXCLUDE_PATTERNS.stream()
-                .anyMatch(pattern -> PATH_MATCHER.match(pattern, path));
-    }
-
-    @Override
     protected void doFilterInternal(
             HttpServletRequest request,
             HttpServletResponse response,
             FilterChain filterChain
     ) throws ServletException, IOException {
-
-        String traceId = generateTraceId();
-        MDC.put("traceId", traceId);
-
-        printRequestUri(request);
-
         try {
+            if (isExcluded(request)) {
+                filterChain.doFilter(request, response);
+                return;
+            }
+
+            String traceId = generateTraceId();
+            MDC.put("traceId", traceId);
+
+            printRequestUri(request);
             filterChain.doFilter(request, response);
             printResponse(request, response);
         } finally {
             MDC.clear();
         }
+    }
+
+    private boolean isExcluded(HttpServletRequest request) {
+        String path = request.getRequestURI();
+        return EXCLUDE_PATTERNS.stream()
+                .anyMatch(pattern -> PATH_MATCHER.match(pattern, path));
     }
 
     private String generateTraceId() {
