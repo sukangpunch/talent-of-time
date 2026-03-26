@@ -1,7 +1,6 @@
 package com.example.talentoftime.crew.controller;
 
 import com.example.talentoftime.auth.domain.LoginUser;
-import com.example.talentoftime.count.dto.MyCountResponse;
 import com.example.talentoftime.crew.dto.CrewHeaderResponse;
 import com.example.talentoftime.crew.dto.CrewResponse;
 import com.example.talentoftime.crew.dto.FcmTokenRequest;
@@ -52,11 +51,6 @@ public class MyController implements MyControllerDocs {
     @GetMapping("/profile")
     public ResponseEntity<CrewResponse> getProfile(@AuthenticationPrincipal LoginUser loginUser) {
         return ResponseEntity.ok(myService.getProfile(loginUser.getId()));
-    }
-
-    @GetMapping("/counts")
-    public ResponseEntity<List<MyCountResponse>> getMyCounts(@AuthenticationPrincipal LoginUser loginUser) {
-        return ResponseEntity.ok(myService.getMyCounts(loginUser.getId()));
     }
 
     @PostMapping("/onboarding")

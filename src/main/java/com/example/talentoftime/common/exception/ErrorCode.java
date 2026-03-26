@@ -26,16 +26,6 @@ public enum ErrorCode {
     PERIOD_NOT_FOUND(HttpStatus.NOT_FOUND, "P001", "존재하지 않는 교시입니다."),
     PERIOD_NUMBER_DUPLICATED(HttpStatus.BAD_REQUEST, "P002", "이미 등록된 교시 번호입니다."),
 
-    // Count
-    COUNT_NOT_FOUND(HttpStatus.NOT_FOUND, "CT001", "count 정보를 찾을 수 없습니다."),
-
-    // Schedule
-    SCHEDULE_NOT_FOUND(HttpStatus.NOT_FOUND, "S001", "존재하지 않는 스케줄입니다."),
-    SCHEDULE_ALREADY_ASSIGNED(HttpStatus.CONFLICT, "S002", "이미 배정된 스케줄입니다."),
-    SCHEDULE_INVALID_CREW_TYPE(HttpStatus.BAD_REQUEST, "S003", "해당 교시에 배정할 수 없는 크루 유형입니다."),
-    SCHEDULE_NO_ELIGIBLE_CREW(HttpStatus.BAD_REQUEST, "S004", "배정 가능한 크루가 없습니다."),
-    SCHEDULE_NOT_OWNER(HttpStatus.FORBIDDEN, "S006", "본인의 스케줄만 삭제할 수 있습니다."),
-
     // ClassSession
     CLASS_SESSION_NOT_FOUND(HttpStatus.NOT_FOUND, "CS001", "존재하지 않는 수업 일정입니다."),
     CLASS_SESSION_DUPLICATED(HttpStatus.CONFLICT, "CS002", "수업 일정이 중복됩니다."),

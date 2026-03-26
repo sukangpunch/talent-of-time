@@ -11,16 +11,10 @@ import com.example.talentoftime.classsession.dto.DayByClassSessionResponse;
 import com.example.talentoftime.classsession.repository.ClassSessionRepository;
 import com.example.talentoftime.classroom.domain.Classroom;
 import com.example.talentoftime.classroom.repository.ClassroomRepository;
-import com.example.talentoftime.common.domain.TaskType;
 import com.example.talentoftime.common.exception.BusinessException;
 import com.example.talentoftime.common.exception.ErrorCode;
-import com.example.talentoftime.count.domain.Count;
-import com.example.talentoftime.count.repository.CountRepository;
-import com.example.talentoftime.crew.domain.Crew;
 import com.example.talentoftime.period.domain.Period;
 import com.example.talentoftime.period.repository.PeriodRepository;
-import com.example.talentoftime.schedule.domain.Schedule;
-import com.example.talentoftime.schedule.repository.ScheduleRepository;
 import com.example.talentoftime.teacher.domain.Teacher;
 import com.example.talentoftime.teacher.repository.TeacherRepository;
 import java.time.LocalDate;
@@ -43,8 +37,6 @@ public class ClassSessionService {
     private final ClassSessionRepository classSessionRepository;
     private final PeriodRepository periodRepository;
     private final ClassroomRepository classroomRepository;
-    private final ScheduleRepository scheduleRepository;
-    private final CountRepository countRepository;
     private final TeacherRepository teacherRepository;
 
     @DefaultCaching(key = "class-session:{0}", cacheManager = CACHE_MANAGER, ttlSec = 3600)
@@ -142,7 +134,6 @@ public class ClassSessionService {
                     }
                 });
 
-        deleteLinkedSchedules(classSession);
         classSession.update(newPeriod, newClassroom);
         log.info("수업 일정 수정 완료: classSessionId={}", classSessionId);
         return ClassSessionResponse.from(classSession);
@@ -158,27 +149,9 @@ public class ClassSessionService {
             throw new BusinessException(ErrorCode.CLASS_SESSION_ALREADY_CANCELLED);
         }
 
-        deleteLinkedSchedules(classSession);
         classSession.cancel();
         log.info("수업 일정 휴강 처리 완료: classSessionId={}", classSessionId);
         return ClassSessionResponse.from(classSession);
-    }
-
-    private void deleteLinkedSchedules(ClassSession classSession) {
-        List<Schedule> linkedSchedules = scheduleRepository.findByClassSession(classSession);
-        for (Schedule schedule : linkedSchedules) {
-            recoverCount(schedule.getCrew(), schedule.getTaskType());
-        }
-        scheduleRepository.deleteByClassSession(classSession);
-        if (!linkedSchedules.isEmpty()) {
-            log.info("연결된 스케줄 삭제 및 count 복구 완료: classSessionId={}, scheduleCount={}",
-                    classSession.getId(), linkedSchedules.size());
-        }
-    }
-
-    private void recoverCount(Crew crew, TaskType taskType) {
-        countRepository.findByCrewAndTaskType(crew, taskType)
-                .ifPresent(Count::decrement);
     }
 
     private Period findPeriodOrThrow(int periodNumber) {
