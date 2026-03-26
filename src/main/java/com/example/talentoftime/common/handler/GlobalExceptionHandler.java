@@ -21,6 +21,9 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(BusinessException.class)
     public ResponseEntity<ErrorResponse<String>> handleBusinessException(BusinessException e) {
         ErrorCode errorCode = e.getErrorCode();
+        if (e.getDetail() != null) {
+            return handleExceptionInternal(errorCode, e.getDetail());
+        }
         return handleExceptionInternal(errorCode);
     }
 
@@ -57,6 +60,11 @@ public class GlobalExceptionHandler {
                 .body(makeErrorResponse(errorCode));
     }
 
+    private ResponseEntity<ErrorResponse<String>> handleExceptionInternal(ErrorCode errorCode, String detail) {
+        return ResponseEntity.status(errorCode.getHttpStatus())
+                .body(makeErrorResponse(errorCode, detail));
+    }
+
     private ResponseEntity<ErrorResponse<List<String>>> handleExceptionInternal(List<String> message) {
         return ResponseEntity.status(ErrorCode.INVALID_PARAMS.getHttpStatus())
                 .body(makeErrorResponse(message));
@@ -66,6 +74,13 @@ public class GlobalExceptionHandler {
         return ErrorResponse.<String>builder()
                 .error(errorCode.getCode())
                 .message(errorCode.getMessage())
+                .build();
+    }
+
+    private ErrorResponse<String> makeErrorResponse(ErrorCode errorCode, String detail) {
+        return ErrorResponse.<String>builder()
+                .error(errorCode.getCode())
+                .message(errorCode.getMessage() + " [" + detail + "]")
                 .build();
     }
 

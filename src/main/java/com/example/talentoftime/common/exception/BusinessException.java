@@ -1,11 +1,20 @@
 package com.example.talentoftime.common.exception;
 
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 
 @Getter
-@RequiredArgsConstructor
 public class BusinessException extends RuntimeException {
 
     private final ErrorCode errorCode;
+    private final String detail;
+
+    public BusinessException(ErrorCode errorCode) {
+        this.errorCode = errorCode;
+        this.detail = null;
+    }
+
+    public BusinessException(ErrorCode errorCode, String detail) {
+        this.errorCode = errorCode;
+        this.detail = detail;
+    }
 }

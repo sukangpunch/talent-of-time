@@ -176,7 +176,7 @@ public class ClassSessionService {
             return null;
         }
         return teacherRepository.findFirstByName(teacherName)
-                .orElseThrow(() -> new BusinessException(ErrorCode.TEACHER_NOT_FOUND));
+                .orElseThrow(() -> new BusinessException(ErrorCode.TEACHER_NOT_FOUND, teacherName));
     }
 
     private void validateNoDuplicateInRequest(List<ClassSessionCreateRequest> sessions) {
