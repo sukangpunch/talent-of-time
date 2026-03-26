@@ -24,7 +24,9 @@ public class HttpLoggingFilter extends OncePerRequestFilter {
     private static final AntPathMatcher PATH_MATCHER = new AntPathMatcher();
     private static final List<String> EXCLUDE_PATTERNS = List.of(
             "/actuator/**",
-            "/health"
+            "/health",
+            "/swagger-ui/**",
+            "/v3/api-docs/**"
     );
     private static final List<String> EXCLUDE_QUERIES = List.of("token");
     private static final String MASK_VALUE = "****";

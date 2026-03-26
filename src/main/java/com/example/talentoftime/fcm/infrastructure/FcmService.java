@@ -6,7 +6,6 @@ import com.example.talentoftime.fcm.dto.FcmDataRequest;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.FirebaseMessagingException;
 import com.google.firebase.messaging.Message;
-import com.google.firebase.messaging.Notification;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -20,7 +19,8 @@ public class FcmService {
 
     public void sendMessage(FcmDataRequest request) {
         Message message = Message.builder()
-                .setNotification(new Notification(request.title(), request.body()))
+                .putData("title", request.title())
+                .putData("body", request.body())
                 .setToken(request.targetToken())
                 .build();
 
