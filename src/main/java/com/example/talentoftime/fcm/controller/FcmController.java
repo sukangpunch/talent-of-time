@@ -1,5 +1,6 @@
 package com.example.talentoftime.fcm.controller;
 
+import com.example.talentoftime.fcm.dto.FcmBroadcastRequest;
 import com.example.talentoftime.fcm.dto.FcmDataRequest;
 import com.example.talentoftime.fcm.infrastructure.FcmService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -34,6 +35,20 @@ public class FcmController {
     @PostMapping("/send")
     public ResponseEntity<Void> sendMessage(@Valid @RequestBody FcmDataRequest request) {
         fcmService.sendMessage(request);
+        return ResponseEntity.ok().build();
+    }
+
+    @Operation(
+            summary = "[TEST] 전체 사용자 FCM 푸시 알림 전송",
+            description = "등록된 모든 FCM 토큰으로 푸시 알림을 전송합니다. 테스트 전용 API입니다."
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "전송 성공"),
+            @ApiResponse(responseCode = "500", description = "FCM 전송 실패")
+    })
+    @PostMapping("/send-all")
+    public ResponseEntity<Void> sendToAll(@Valid @RequestBody FcmBroadcastRequest request) {
+        fcmService.sendToAll(request);
         return ResponseEntity.ok().build();
     }
 }
