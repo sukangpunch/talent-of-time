@@ -16,6 +16,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -69,6 +70,13 @@ public class ClassSessionController implements ClassSessionControllerDocs {
     public ResponseEntity<ClassSessionResponse> cancelClassSession(
             @PathVariable Long classSessionId) {
         return ResponseEntity.ok(classSessionService.cancelClassSession(classSessionId));
+    }
+
+    @DeleteMapping
+    public ResponseEntity<Void> deleteClassSessionsByDate(
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
+        classSessionService.deleteClassSessionsByDate(date);
+        return ResponseEntity.noContent().build();
     }
 
     @PostMapping(value = "/extract", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)

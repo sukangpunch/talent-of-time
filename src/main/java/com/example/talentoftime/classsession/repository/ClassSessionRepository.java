@@ -8,6 +8,7 @@ import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -29,13 +30,7 @@ public interface ClassSessionRepository extends JpaRepository<ClassSession, Long
             Classroom classroom
     );
 
-    @Query("SELECT cs FROM ClassSession cs " +
-           "WHERE cs.date = :date " +
-           "AND cs.period.startTime BETWEEN :from AND :to " +
-           "AND cs.status <> com.example.talentoftime.classsession.domain.ClassStatus.CANCELLED")
-    List<ClassSession> findUpcomingSessionsStartingBetween(
-            @Param("date") LocalDate date,
-            @Param("from") LocalTime from,
-            @Param("to") LocalTime to
-    );
+    @Modifying
+    @Query("DELETE FROM ClassSession cs WHERE cs.date = :date")
+    void deleteByDate(@Param("date") LocalDate date);
 }
