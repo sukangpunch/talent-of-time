@@ -16,6 +16,7 @@ import java.time.LocalDate;
 import java.util.List;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -192,6 +193,15 @@ public interface ClassSessionControllerDocs {
     @PatchMapping("/{classSessionId}/cancel")
     ResponseEntity<ClassSessionResponse> cancelClassSession(
             @Parameter(description = "수업 일정 ID", example = "1") Long classSessionId);
+
+    @Operation(
+            summary = "날짜별 수업 일정 일괄 삭제",
+            description = "특정 날짜의 수업 일정을 전부 삭제합니다."
+    )
+    @ApiResponse(responseCode = "204", description = "삭제 성공")
+    @DeleteMapping
+    ResponseEntity<Void> deleteClassSessionsByDate(
+            @Parameter(description = "삭제 날짜 (yyyy-MM-dd)", example = "2026-03-26") LocalDate date);
 
     @Operation(
             summary = "시간표 이미지 분석 (Gemini)",

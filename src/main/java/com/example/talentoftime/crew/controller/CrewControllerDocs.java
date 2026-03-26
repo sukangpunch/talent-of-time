@@ -1,7 +1,9 @@
 package com.example.talentoftime.crew.controller;
 
 import com.example.talentoftime.crew.dto.CrewResponse;
+import com.example.talentoftime.crew.dto.CrewSummaryResponse;
 import io.swagger.v3.oas.annotations.Operation;
+import java.util.List;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
@@ -13,6 +15,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 @Tag(name = "크루", description = "크루(알바생) 조회 API")
 public interface CrewControllerDocs {
+
+    @Operation(
+            summary = "크루 전체 조회",
+            description = "등록된 모든 크루의 목록을 반환합니다."
+    )
+    @ApiResponse(responseCode = "200", description = "조회 성공")
+    @GetMapping
+    ResponseEntity<List<CrewSummaryResponse>> findAllCrews();
 
     @Operation(
             summary = "크루 이름으로 조회",

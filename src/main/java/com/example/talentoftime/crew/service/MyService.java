@@ -2,8 +2,6 @@ package com.example.talentoftime.crew.service;
 
 import com.example.talentoftime.common.exception.BusinessException;
 import com.example.talentoftime.common.exception.ErrorCode;
-import com.example.talentoftime.count.dto.MyCountResponse;
-import com.example.talentoftime.count.repository.CountRepository;
 import com.example.talentoftime.crew.domain.Crew;
 import com.example.talentoftime.crew.dto.CrewHeaderResponse;
 import com.example.talentoftime.crew.dto.CrewResponse;
@@ -23,7 +21,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class MyService {
 
     private final CrewRepository crewRepository;
-    private final CountRepository countRepository;
     private final FcmTokenRepository fcmTokenRepository;
 
     @Transactional
@@ -56,15 +53,6 @@ public class MyService {
         Crew crew = crewRepository.findById(crewId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.CREW_NOT_FOUND));
         return CrewResponse.from(crew);
-    }
-
-    @Transactional(readOnly = true)
-    public List<MyCountResponse> getMyCounts(Long crewId) {
-        Crew crew = crewRepository.findById(crewId)
-                .orElseThrow(() -> new BusinessException(ErrorCode.CREW_NOT_FOUND));
-        return countRepository.findByCrew(crew).stream()
-                .map(MyCountResponse::from)
-                .toList();
     }
 
     @Transactional

@@ -1,7 +1,6 @@
 package com.example.talentoftime.crew.controller;
 
 import com.example.talentoftime.auth.domain.LoginUser;
-import com.example.talentoftime.count.dto.MyCountResponse;
 import com.example.talentoftime.crew.dto.CrewHeaderResponse;
 import com.example.talentoftime.crew.dto.CrewResponse;
 import com.example.talentoftime.crew.dto.FcmTokenRequest;
@@ -165,25 +164,4 @@ public interface MyControllerDocs {
     @GetMapping("/profile")
     ResponseEntity<CrewResponse> getProfile(@AuthenticationPrincipal LoginUser loginUser);
 
-    @Operation(
-            summary = "내 카운트 조회",
-            description = "로그인한 크루의 작업 유형별 수행 횟수를 반환합니다."
-    )
-    @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "조회 성공"),
-            @ApiResponse(
-                    responseCode = "401",
-                    description = "인증 필요",
-                    content = @Content(
-                            mediaType = "application/json",
-                            examples = @ExampleObject(
-                                    name = "A002",
-                                    summary = "A002 - 토큰 없음 또는 유효하지 않은 토큰",
-                                    value = "{\"error\": \"A002\", \"message\": \"인증이 필요합니다.\"}"
-                            )
-                    )
-            )
-    })
-    @GetMapping("/counts")
-    ResponseEntity<List<MyCountResponse>> getMyCounts(@AuthenticationPrincipal LoginUser loginUser);
 }
