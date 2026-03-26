@@ -1,7 +1,9 @@
 package com.example.talentoftime.crew.controller;
 
 import com.example.talentoftime.crew.dto.CrewResponse;
+import com.example.talentoftime.crew.dto.CrewSummaryResponse;
 import com.example.talentoftime.crew.service.CrewService;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,6 +18,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class CrewController implements CrewControllerDocs {
 
     private final CrewService crewService;
+
+    @GetMapping
+    public ResponseEntity<List<CrewSummaryResponse>> findAllCrews() {
+        return ResponseEntity.ok(crewService.findAllCrews());
+    }
 
     @GetMapping("/{crewId}")
     public ResponseEntity<CrewResponse> findCrew(@PathVariable("crewId") Long crewId) {
