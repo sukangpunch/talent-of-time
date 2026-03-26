@@ -204,6 +204,29 @@ public interface ClassSessionControllerDocs {
             @Parameter(description = "삭제 날짜 (yyyy-MM-dd)", example = "2026-03-26") LocalDate date);
 
     @Operation(
+            summary = "수업 일정 단건 삭제",
+            description = "수업 일정 ID로 단건 삭제합니다."
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "204", description = "삭제 성공"),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "존재하지 않는 수업 일정",
+                    content = @Content(
+                            mediaType = "application/json",
+                            examples = @ExampleObject(
+                                    name = "CS001",
+                                    summary = "CS001 - 존재하지 않는 수업 일정",
+                                    value = "{\"error\": \"CS001\", \"message\": \"존재하지 않는 수업 일정입니다.\"}"
+                            )
+                    )
+            )
+    })
+    @DeleteMapping("/{classSessionId}")
+    ResponseEntity<Void> deleteClassSession(
+            @Parameter(description = "수업 일정 ID", example = "1") Long classSessionId);
+
+    @Operation(
             summary = "시간표 이미지 분석 (Gemini)",
             description = "주간 시간표 이미지를 업로드하면 Gemini AI가 분석하여 수업 정보 목록을 JSON으로 반환합니다."
     )

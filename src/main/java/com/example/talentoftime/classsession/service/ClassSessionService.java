@@ -148,6 +148,15 @@ public class ClassSessionService {
 
     @DefaultCacheOut(key = {CLASS_SESSION_KEY_PREFIX}, cacheManager = CACHE_MANAGER, prefix = true)
     @Transactional
+    public void deleteClassSession(Long classSessionId) {
+        ClassSession classSession = classSessionRepository.findById(classSessionId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.CLASS_SESSION_NOT_FOUND));
+        classSessionRepository.delete(classSession);
+        log.info("수업 일정 단건 삭제 완료: classSessionId={}", classSessionId);
+    }
+
+    @DefaultCacheOut(key = {CLASS_SESSION_KEY_PREFIX}, cacheManager = CACHE_MANAGER, prefix = true)
+    @Transactional
     public ClassSessionResponse cancelClassSession(Long classSessionId) {
         ClassSession classSession = classSessionRepository.findById(classSessionId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.CLASS_SESSION_NOT_FOUND));

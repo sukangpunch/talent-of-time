@@ -79,6 +79,13 @@ public class ClassSessionController implements ClassSessionControllerDocs {
         return ResponseEntity.noContent().build();
     }
 
+    @DeleteMapping("/{classSessionId}")
+    public ResponseEntity<Void> deleteClassSession(
+            @PathVariable Long classSessionId) {
+        classSessionService.deleteClassSession(classSessionId);
+        return ResponseEntity.noContent().build();
+    }
+
     @PostMapping(value = "/extract", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<List<ClassSessionParseResultResponse>> extractClassSession(
             @RequestParam("file") MultipartFile file) {
