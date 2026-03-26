@@ -35,16 +35,26 @@ public class HttpLoggingFilter extends OncePerRequestFilter {
             HttpServletResponse response,
             FilterChain filterChain
     ) throws ServletException, IOException {
-        try {
-            if (isExcluded(request)) {
+
+        // 1) traceId 부여
+        String traceId = generateTraceId();
+        MDC.put("traceId", traceId);
+
+        boolean excluded = isExcluded(request);
+
+        // 2) 로깅 제외 대상이면 그냥 통과 (traceId는 유지: 추후 하위 레이어 로그에도 붙음)
+        if (excluded) {
+            try {
                 filterChain.doFilter(request, response);
-                return;
+            } finally {
+                MDC.clear();
             }
+            return;
+        }
 
-            String traceId = generateTraceId();
-            MDC.put("traceId", traceId);
+        printRequestUri(request);
 
-            printRequestUri(request);
+        try {
             filterChain.doFilter(request, response);
             printResponse(request, response);
         } finally {
@@ -52,10 +62,14 @@ public class HttpLoggingFilter extends OncePerRequestFilter {
         }
     }
 
-    private boolean isExcluded(HttpServletRequest request) {
-        String path = request.getRequestURI();
-        return EXCLUDE_PATTERNS.stream()
-                .anyMatch(pattern -> PATH_MATCHER.match(pattern, path));
+    private boolean isExcluded(HttpServletRequest req) {
+        String path = req.getRequestURI();
+        for (String p : EXCLUDE_PATTERNS) {
+            if (PATH_MATCHER.match(p, path)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private String generateTraceId() {
