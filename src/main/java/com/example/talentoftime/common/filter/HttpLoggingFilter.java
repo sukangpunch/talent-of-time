@@ -22,9 +22,19 @@ import org.springframework.web.filter.OncePerRequestFilter;
 public class HttpLoggingFilter extends OncePerRequestFilter {
 
     private static final AntPathMatcher PATH_MATCHER = new AntPathMatcher();
-    private static final List<String> EXCLUDE_PATTERNS = List.of("/actuator/**");
+    private static final List<String> EXCLUDE_PATTERNS = List.of(
+            "/actuator/**",
+            "/health"
+    );
     private static final List<String> EXCLUDE_QUERIES = List.of("token");
     private static final String MASK_VALUE = "****";
+
+    @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) {
+        String path = request.getRequestURI();
+        return EXCLUDE_PATTERNS.stream()
+                .anyMatch(pattern -> PATH_MATCHER.match(pattern, path));
+    }
 
     @Override
     protected void doFilterInternal(
@@ -33,21 +43,8 @@ public class HttpLoggingFilter extends OncePerRequestFilter {
             FilterChain filterChain
     ) throws ServletException, IOException {
 
-        // 1) traceId 부여
         String traceId = generateTraceId();
         MDC.put("traceId", traceId);
-
-        boolean excluded = isExcluded(request);
-
-        // 2) 로깅 제외 대상이면 그냥 통과 (traceId는 유지: 추후 하위 레이어 로그에도 붙음)
-        if (excluded) {
-            try {
-                filterChain.doFilter(request, response);
-            } finally {
-                MDC.clear();
-            }
-            return;
-        }
 
         printRequestUri(request);
 
@@ -57,16 +54,6 @@ public class HttpLoggingFilter extends OncePerRequestFilter {
         } finally {
             MDC.clear();
         }
-    }
-
-    private boolean isExcluded(HttpServletRequest req) {
-        String path = req.getRequestURI();
-        for (String p : EXCLUDE_PATTERNS) {
-            if (PATH_MATCHER.match(p, path)) {
-                return true;
-            }
-        }
-        return false;
     }
 
     private String generateTraceId() {
