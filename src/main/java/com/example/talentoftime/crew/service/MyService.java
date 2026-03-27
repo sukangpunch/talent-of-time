@@ -27,9 +27,9 @@ public class MyService {
     public void saveFcmToken(Long crewId, FcmTokenRequest request) {
         Crew crew = crewRepository.findById(crewId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.CREW_NOT_FOUND));
-        fcmTokenRepository.findByToken(request.fcmToken())
+        fcmTokenRepository.findByCrewId(crewId)
                 .ifPresentOrElse(
-                        existing -> existing.updateCrew(crew),
+                        existing -> existing.updateToken(request.fcmToken()),
                         () -> fcmTokenRepository.save(new FcmToken(crew, request.fcmToken()))
                 );
     }

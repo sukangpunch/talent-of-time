@@ -12,6 +12,8 @@ public interface FcmTokenRepository extends JpaRepository<FcmToken, Long> {
 
     Optional<FcmToken> findByToken(String token);
 
+    Optional<FcmToken> findByCrewId(Long crewId);
+
     List<FcmToken> findAllByCrewId(Long crewId);
 
     List<FcmToken> findAllByCrewCrewTypeIn(List<CrewType> crewTypes);

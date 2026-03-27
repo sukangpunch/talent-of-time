@@ -40,4 +40,8 @@ public class FcmToken {
     public void updateCrew(Crew crew) {
         this.crew = crew;
     }
+
+    public void updateToken(String token) {
+        this.token = token;
+    }
 }
