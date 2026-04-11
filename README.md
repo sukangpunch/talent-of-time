@@ -114,43 +114,32 @@ Redis Cache (AOP 기반)
 
 ## 핵심 기능
 
-### 1. 크루 스케줄 자동 배정 (현재 제외된 기능입니다)
-
-- 교시(0~6교시) × 작업 유형(입실·조그·퇴실·세팅·시험) 조합별로 배정 가능한 크루 풀을 결정
-- 풀 내에서 **누적 count가 가장 낮은 크루를 우선 배정**
-- 동일 count 시 이름 오름차순(가나다순) 정렬로 결정론적 배정
-
-### 2. 인증 (Kakao OAuth 2.0 + JWT)
+### 1. 인증 (Kakao OAuth 2.0 + JWT)
 
 - Kakao 소셜 로그인으로 크루 인증
 - Access Token (단기) + Refresh Token (Redis 저장) 이중 토큰 전략
 - Spring Security 기반 역할(ADMIN/USER) 접근 제어
 
-### 3. Redis 캐싱 (AOP 기반)
+### 2. Redis 캐싱 (AOP 기반)
 
 - `@DefaultCaching`, `@DefaultCacheOut` 커스텀 어노테이션으로 선언적 캐시 적용
 - AOP를 통해 서비스 계층 캐싱 로직 분리
 
-### 4. 강사별 세팅 정보 관리
+### 3. 강사별 세팅 정보 관리
 
 - 분필 종류, 수량, 마이크 종류, PPT 여부 등 강사별 세팅 정보 저장 및 조회
 - 조교들이 강의 전 세팅 준비 시 즉시 참조 가능
 
-### 5. 수업 일정 관리 (ClassSession)
+### 4. 수업 일정 관리 (ClassSession)
 
 - 날짜 + 교시 + 강의실 + 강사 조합으로 주간 수업 일정 등록
 - 일정 수정/삭제 시 연결된 스케줄 자동 삭제 + Count 복구
 
-### 6. Count 관리 (현재 제외된 기능입니다)
-
-- 크루별 작업 유형별 수행 횟수 추적
-- 작업 자기 등록/취소, 교환 시 Count 자동 조정
-
-### 7. FCM 푸시 알림
+### 5. FCM 푸시 알림
 
 - Firebase Cloud Messaging을 이용한 크루 대상 푸시 알림
 
-### 8. API 문서
+### 6. API 문서
 
 - Swagger UI (`/swagger-ui/index.html`)를 통한 REST API 자동 문서화
 
