@@ -12,11 +12,13 @@ import java.util.Base64;
 import java.util.List;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.multipart.MultipartFile;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class GeminiExtractionService implements ClassSessionExtractFromImageService {
@@ -57,6 +59,7 @@ public class GeminiExtractionService implements ClassSessionExtractFromImageServ
         } catch (BusinessException e) {
             throw e;
         } catch (Exception e) {
+            log.error("Gemini 응답 파싱 실패. extractedText: {}", e.getMessage(), e);
             throw new BusinessException(ErrorCode.IMAGE_EXTRACTION_FAILED);
         }
     }
@@ -98,6 +101,7 @@ public class GeminiExtractionService implements ClassSessionExtractFromImageServ
             throw new BusinessException(ErrorCode.EMPTY_CONTENT_RESPONSE);
         }
 
-        return parts.getFirst().text();
+        String rawText = parts.getFirst().text();
+        return rawText.replaceAll("(?s)```json\\s*", "").replaceAll("```", "").trim();
     }
 }
